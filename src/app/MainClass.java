@@ -12,6 +12,7 @@ public class MainClass
 		AdventureMap myMap=null;
 		Character character=new CharacterImpl();
 		new Thread ((CharacterImpl) character).start();
+		//tretretert
 	}
 
 }
