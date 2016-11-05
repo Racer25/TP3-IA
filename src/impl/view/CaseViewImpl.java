@@ -2,7 +2,6 @@ package impl.view;
 
 import java.util.Observable;
 import java.util.Observer;
-
 import contract.model.CaseMap;
 import contract.view.CaseView;
 import impl.model.CharacterImpl;
