@@ -1,15 +1,12 @@
 package impl.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import contract.model.AdventureMap;
 import contract.model.CaseMap;
 
 public class AdventureMapImpl implements AdventureMap
 {
 	private int[] changeReference;
-	private List<CaseImpl> cases;
+	private CaseImpl[][] cases;
 
 	@Override
 	public CaseImpl getSpawnPoint()
@@ -34,25 +31,15 @@ public class AdventureMapImpl implements AdventureMap
 	}
 
 	@Override
-	public List<CaseMap> getCasesMap()
+	public CaseMap[][] getCasesMap()
 	{
-		List<CaseMap> list2=new ArrayList<CaseMap>();
-		for(CaseImpl maCase : this.cases)
-		{
-			list2.add(maCase);
-		}
-		return list2;
+		return (CaseMap[][])this.cases;
 	}
 
 	@Override
-	public void setCasesMap(List<CaseMap> cases)
+	public void setCasesMap(CaseMap[][] cases)
 	{
-		List<CaseImpl> list2=new ArrayList<CaseImpl>();
-		for(CaseMap maCase : cases)
-		{
-			list2.add((CaseImpl) maCase);
-		}
-		this.cases=list2;
+		this.cases=(CaseImpl[][]) cases;
 	}
 
 }

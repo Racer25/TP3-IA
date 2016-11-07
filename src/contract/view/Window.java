@@ -1,6 +1,6 @@
 package contract.view;
 
-public interface CaseView
+public interface Window
 {
 
 }

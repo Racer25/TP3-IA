@@ -1,28 +1,17 @@
 package impl.view;
 
-import java.util.Observable;
-import java.util.Observer;
+
+import javax.swing.JPanel;
 
 import contract.model.CaseMap;
 import contract.view.CaseView;
-import impl.model.CharacterImpl;
 
-public class CaseViewImpl implements CaseView, Observer
+public class CaseViewImpl extends JPanel implements CaseView
 {
-	private CaseMap maCase;
-	private Character character;
+	private static final long serialVersionUID = -3853422303860566481L;
 
-	@Override
-	public void update(Observable arg0, Object arg1)
+	public CaseViewImpl(CaseMap caseMap)
 	{
-		if(arg0 instanceof CharacterImpl)
-		{
-			//appear/diseappear character
-		}
-		else if(arg0 instanceof CaseMap)
-		{
-			//Change caseView Visual
-		}
-		
+		//Creation with caseMap attributes
 	}
 }
