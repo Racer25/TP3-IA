@@ -1,6 +1,5 @@
 package contract.model;
 
-
 public interface AdventureMap 
 {
 	public int[] getChangeReference();

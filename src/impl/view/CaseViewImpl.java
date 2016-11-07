@@ -1,6 +1,5 @@
 package impl.view;
 
-
 import javax.swing.JPanel;
 
 import contract.model.CaseMap;

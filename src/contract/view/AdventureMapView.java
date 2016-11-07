@@ -1,6 +1,5 @@
 package contract.view;
 
-
 public interface AdventureMapView
 {
 	public CaseView[][] getCasesView();
