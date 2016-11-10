@@ -2,6 +2,8 @@ package app;
 
 import contract.model.AdventureMap;
 import contract.view.Window;
+import impl.model.AdventureMapGeneratorImpl;
+import impl.model.AdventureMapImpl;
 import impl.model.CharacterImpl;
 import impl.view.WindowImpl;
 

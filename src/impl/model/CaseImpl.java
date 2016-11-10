@@ -18,6 +18,17 @@ public class CaseImpl extends Observable implements CaseCharacter, CaseMap
 	private boolean putrid;
 	private boolean windy;
 	
+	public CaseImpl()
+	{
+		//Lors de la creation de la case,  on set tous les booleens a false
+		this.spawnPoint = false;
+		this.portalPoint = false;
+		this.monstruous = false;
+		this.fall = false;
+		this.putrid = false;
+		this.windy = false;
+	}
+	
 	//Give possible directions
 	private HashMap<String, Boolean> possibleDirections;//key: up -> value:true
 	
