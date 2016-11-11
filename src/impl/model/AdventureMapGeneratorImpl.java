@@ -32,7 +32,7 @@ public class AdventureMapGeneratorImpl
 	
 	public AdventureMapImpl createMap()
 	{
-		//On verifie que la Map peut être generee
+		//On verifie que la Map peut ï¿½tre generee
 		if((taille*taille)-2 > nbFall+nbMonstruous)
 		{
 			//Creation de l'entite adventureMapImpl
@@ -64,7 +64,7 @@ public class AdventureMapGeneratorImpl
 			SetWindyCases();
 			SetPutridCases();
 			
-			//Test à supprimer
+			//Test ï¿½ supprimer
 			printMap();
 			
 			//On verifie si la map est faisable
@@ -80,7 +80,7 @@ public class AdventureMapGeneratorImpl
 		}
 		else
 		{
-			(new JOptionPane()).showMessageDialog(null, "Le nombre de monstres/chutes est trop élevé !","ATTENTION !",JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Le nombre de monstres/chutes est trop ï¿½levï¿½ !","ATTENTION !",JOptionPane.WARNING_MESSAGE);
 			return null;
 		}
 	
