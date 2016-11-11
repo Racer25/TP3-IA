@@ -7,11 +7,20 @@ public class AdventureMapImpl implements AdventureMap
 {
 	private int[] changeReference;
 	private CaseImpl[][] cases;
+	private int taille;
 
 	@Override
 	public CaseImpl getSpawnPoint()
 	{
-		return null;
+		CaseImpl spawnPoint=null;
+		for(int i=0; i < this.cases.length; i++)
+		{
+			for(int j=0; j < this.cases[i].length; j++)
+			{
+				
+			}
+		}
+		return spawnPoint;
 	}
 
 	@Override
@@ -40,6 +49,12 @@ public class AdventureMapImpl implements AdventureMap
 	public void setCasesMap(CaseMap[][] cases)
 	{
 		this.cases=(CaseImpl[][]) cases;
+	}
+
+	@Override
+	public int getTaille()
+	{
+		return this.taille;
 	}
 
 }

@@ -15,11 +15,10 @@ public class AdventureMapViewImpl extends JPanel implements AdventureMapView
 	private static final long serialVersionUID = 5650978771844115866L;
 	
 	private CaseView[][] casesView;
-	private static int DIM=3;
 
 	public AdventureMapViewImpl(AdventureMap myMap, CharacterImpl character)
 	{
-		this.casesView=new CaseView[DIM][DIM];
+		this.casesView=new CaseView[myMap.getTaille()][myMap.getTaille()];
 		for(int i=0; i<myMap.getCasesMap().length; i++)
 		{
 			for(int j=0; j<myMap.getCasesMap()[i].length; j++)

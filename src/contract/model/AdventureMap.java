@@ -11,4 +11,5 @@ public interface AdventureMap
 	public CaseMap getSpawnPoint();
 	public CaseMap getPortalPoint();
 	
+	public int getTaille();
 }
