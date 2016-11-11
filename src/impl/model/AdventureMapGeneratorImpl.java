@@ -21,17 +21,18 @@ public class AdventureMapGeneratorImpl
 	private ArrayList<CaseImpl> monstruousPoints;
 	private CaseImpl spawnPoint;
 	
-	public AdventureMapGeneratorImpl(int taille, int nbFall, int nbMonstruous)
+	public AdventureMapGeneratorImpl()
 	{
-		this.taille = taille;
-		this.nbFall = nbFall;
-		this.nbMonstruous = nbMonstruous;
 		this.fallPoints = new ArrayList<CaseImpl>();
 		this.monstruousPoints = new ArrayList<CaseImpl>();
 	}
 	
-	public AdventureMapImpl createMap()
+	public AdventureMapImpl createMap(int taille, int nbFall, int nbMonstruous)
 	{
+		//Initiation des variables
+		this.taille = taille;
+		this.nbFall = nbFall;
+		this.nbMonstruous = nbMonstruous;
 		//On verifie que la Map peut être generee
 		if((taille*taille)-2 > nbFall+nbMonstruous)
 		{
@@ -75,7 +76,7 @@ public class AdventureMapGeneratorImpl
 			}
 			else
 			{
-				return createMap();
+				return createMap(this.taille,this.nbFall,this.nbMonstruous);
 			}
 		}
 		else
