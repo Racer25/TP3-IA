@@ -39,6 +39,7 @@ public class AdventureMapGeneratorImpl implements AdventureMapGenerator
 		{
 			//Creation de l'entite adventureMapImpl
 			adventureMap = new AdventureMapImpl();
+			adventureMap.setTaille(this.taille);
 			//On creer son tableau de cases
 			adventureMap.setCasesMap(new CaseImpl[taille][taille]);
 			//Et on l'implemente

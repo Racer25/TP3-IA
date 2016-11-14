@@ -9,26 +9,6 @@ public class AdventureMapImpl implements AdventureMap
 	private CaseImpl[][] cases;
 	private int taille;
 
-	@Override
-	public CaseImpl getSpawnPoint()
-	{
-		CaseImpl spawnPoint=null;
-		for(int i=0; i < this.cases.length; i++)
-		{
-			for(int j=0; j < this.cases[i].length; j++)
-			{
-				
-			}
-		}
-		return spawnPoint;
-	}
-
-	@Override
-	public CaseImpl getPortalPoint()
-	{
-		return null;
-	}
-
 	public int[] getChangeReference()
 	{
 		return changeReference;
@@ -55,6 +35,12 @@ public class AdventureMapImpl implements AdventureMap
 	public int getTaille()
 	{
 		return this.taille;
+	}
+
+	@Override
+	public void setTaille(int taille)
+	{
+		this.taille=taille;
 	}
 
 }

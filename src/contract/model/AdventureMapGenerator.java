@@ -10,4 +10,6 @@ public interface AdventureMapGenerator
 	public AdventureMap getAdventureMap();
 	public void setAdventureMap(AdventureMap adventureMap);
 	public CaseImpl getSpawnPoint();
+	
+	public void printMap();
 }

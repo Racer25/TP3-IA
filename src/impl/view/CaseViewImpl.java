@@ -1,5 +1,14 @@
 package impl.view;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 import contract.model.CaseMap;
@@ -22,5 +31,17 @@ public class CaseViewImpl extends JPanel implements CaseView
 	public CaseViewImpl(CaseMap caseMap)
 	{
 		//Creation with caseMap attributes
+		//paintComponent(null);
+		this.setBackground(Color.WHITE);
+		this.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.GRAY));
+		
+	}
+
+	@Override
+	protected void paintComponent(Graphics g) 
+	{
+		super.paintComponent(g);
+		Image background = Toolkit.getDefaultToolkit().createImage("img/bedrock.png");
+	    g.drawImage(background, 0, 0, null);
 	}
 }

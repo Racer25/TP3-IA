@@ -16,7 +16,6 @@ public class MainClass
 		LevelHandler levelHandler=new LevelHandlerImpl(character);
 		//LevelHandler observe character
 		character.addObserver((Observer) levelHandler);
-		
 		new WindowImpl(levelHandler.getGenerator().getAdventureMap(), character);
 		new Thread ((CharacterImpl) character).start();
 	}

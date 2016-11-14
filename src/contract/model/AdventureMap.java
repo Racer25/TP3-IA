@@ -8,8 +8,6 @@ public interface AdventureMap
 	CaseMap[][] getCasesMap();
 	public void setCasesMap(CaseMap[][] cases);
 	
-	public CaseMap getSpawnPoint();
-	public CaseMap getPortalPoint();
-	
 	public int getTaille();
+	public void setTaille(int taille);
 }
