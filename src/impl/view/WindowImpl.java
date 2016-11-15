@@ -3,7 +3,10 @@ package impl.view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Graphics;
+import java.awt.GraphicsEnvironment;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -11,7 +14,6 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -19,7 +21,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
 import contract.model.AdventureMap;
 import contract.view.Window;
 import impl.model.CharacterImpl;
@@ -56,59 +57,152 @@ public class WindowImpl extends JFrame implements Window
 			}
 		};
 		center1.setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.BLACK));
+		center1.setBackground(Color.BLACK);
 		this.getContentPane().add(center1, BorderLayout.CENTER);
 		center1.setLayout(new GridBagLayout());
 		
+		//We add the map to the panel center1
 		GridBagConstraints mapConstraints = new GridBagConstraints();
 		mapConstraints.gridx = 0;
 		mapConstraints.gridy = 0;
 		//mapConstraints.insets = new Insets(10,10,20,20);
-		
 		AdventureMapViewImpl map=new AdventureMapViewImpl(myMap, character);
-		
-		//Rajouté eugé
+		map.setBackground(Color.BLACK);
 		map.setPreferredSize(new Dimension(500,500));
-		map.setMinimumSize(new Dimension(300,300));
-		
+		map.setMinimumSize(new Dimension(250,250));
 		center1.add(map,mapConstraints);
 		
-		JPanel rigth=new JPanel();
-		this.getContentPane().add(rigth, BorderLayout.EAST);
-		rigth.setLayout(new GridLayout(3, 1));
+		//RIGHT PANEL
+		JPanel right=new JPanel();
+		right.setBackground(Color.BLACK);
+		GridBagConstraints rightConstraints = new GridBagConstraints();
+		rightConstraints.gridx = 1;
+		rightConstraints.gridy = 0;
+		right.setPreferredSize(new Dimension(300,500));
+		map.setMinimumSize(new Dimension(150,250));
+		center1.add(right);
+		right.setLayout(new GridLayout(3, 1));
 		
 		JPanel stats =new JPanel();
+		stats.setBackground(Color.WHITE);
 		stats.setLayout(new GridLayout(2, 1));
 		
 		//Panel healthbar
 		JPanel life=new JPanel();
-		JLabel heart=new JLabel();
+		life.setLayout(new GridBagLayout());
+		life.setBackground(Color.WHITE);
+		life.setBorder(BorderFactory.createMatteBorder(3, 0, 0, 3, Color.BLACK));
 		
+		JLabel heart=new JLabel();
+		ImageIcon heartIcon = new ImageIcon("img/heart.jpg");
+		heart.setIcon(heartIcon);
+		heart.setBackground(Color.WHITE);
+		GridBagConstraints heartConstraints = new GridBagConstraints();
+		heartConstraints.gridx = 0;
+		heartConstraints.gridy = 0;
+		
+		JLabel healthbar=new JLabel();
+		healthbar.setPreferredSize(new Dimension(200,20));
+		healthbar.setBackground(Color.GREEN);
+		healthbar.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.BLACK));
+		GridBagConstraints healthbarConstraints = new GridBagConstraints();
+		healthbarConstraints.gridx = 1;
+		healthbarConstraints.gridy = 0;
+		
+		life.add(heart);
+		life.add(healthbar);
+		
+		//panel score
 		JPanel score=new JPanel();
+		score.setLayout(new GridBagLayout());
+		score.setBackground(Color.WHITE);
+		score.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 3, Color.BLACK));
+		
+		JLabel cup=new JLabel();
+		ImageIcon cupIcon = new ImageIcon("img/cup.jpg");
+		cup.setIcon(cupIcon);
+		cup.setBackground(Color.WHITE);
+		GridBagConstraints cupConstraints = new GridBagConstraints();
+		cupConstraints.gridx = 0;
+		cupConstraints.gridy = 0;
+		
+		JLabel scorebar=new JLabel("NEW HIGHTSCORE !");
+		Font font;
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		try {
+			font = Font.createFont(Font.TRUETYPE_FONT,new File("./fonts/Pixeled.ttf"));
+			ge.registerFont(font);
+			font = font.deriveFont(Font.TRUETYPE_FONT,10);
+			scorebar.setFont(font);
+		} 
+		catch (FontFormatException | IOException e2) 
+		{
+			e2.printStackTrace();
+		}
+		scorebar.setPreferredSize(new Dimension(200,20));
+		scorebar.setBackground(Color.WHITE);
+		GridBagConstraints scorebarConstraints = new GridBagConstraints();
+		scorebarConstraints.gridx = 1;
+		scorebarConstraints.gridy = 0;
+		
+		score.add(cup);
+		score.add(scorebar);
 		
 		stats.add(life);
 		stats.add(score);
 		
 		JPanel actions=new JPanel();
-		actions.setLayout(new GridLayout(2, 1));
-		JLabel instructions= new JLabel("Click on MOVE to resolve the level");
+		actions.setBackground(Color.WHITE);
+		actions.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 3, Color.BLACK));
+		actions.setLayout(new GridLayout(2,1));
+		JPanel instructions=new JPanel();
+		instructions.setBackground(Color.WHITE);
+		instructions.setLayout(new GridBagLayout());
+		JLabel instructions1= new JLabel("CLICK ON MOVE TO");
+		instructions1.setHorizontalAlignment(0);
+		GridBagConstraints instructions1Constraints = new GridBagConstraints();
+		instructions1Constraints.gridx = 0;
+		instructions1Constraints.gridy = 0;
+		JLabel instructions2= new JLabel("RESOLVE THE LEVEL !");
+		instructions2.setHorizontalAlignment(0);
+		GridBagConstraints instructions2Constraints = new GridBagConstraints();
+		instructions2Constraints.gridx = 0;
+		instructions2Constraints.gridy = 1;
+		try {
+			font = Font.createFont(Font.TRUETYPE_FONT,new File("./fonts/Pixeled.ttf"));
+			ge.registerFont(font);
+			font = font.deriveFont(Font.TRUETYPE_FONT,10);
+			instructions1.setFont(font);
+			instructions2.setFont(font);
+		} 
+		catch (FontFormatException | IOException e2) 
+		{
+			e2.printStackTrace();
+		}
 		JPanel panelButton=new JPanel();
 		panelButton.setLayout(new GridBagLayout());
+		panelButton.setBackground(Color.WHITE);
 		JButton buttonMove=new JButton("MOVE");
 		panelButton.add(buttonMove);
 		
+		instructions.add(instructions1,instructions1Constraints);
+		instructions.add(instructions2,instructions2Constraints);
 		actions.add(instructions);
 		actions.add(panelButton);
 		
 		JPanel faceView=new JPanel();
-		ImageIcon img= new ImageIcon("img/giphy.gif");
-		img=new ImageIcon(img.getImage().getScaledInstance(150, 150, Image.SCALE_DEFAULT));
+		faceView.setBackground(Color.WHITE);
+		faceView.setBorder(BorderFactory.createMatteBorder(0, 0, 3, 3, Color.BLACK));
+		ImageIcon img= new ImageIcon("img/walk.gif");
+		img=new ImageIcon(img.getImage().getScaledInstance(250, 150, Image.SCALE_DEFAULT));
 		JLabel gifLabel=new JLabel(img);
+		gifLabel.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.BLACK));
 		faceView.add(gifLabel);
 		
 		
-		rigth.add(stats);
-		rigth.add(actions);
-		rigth.add(faceView);
+		right.add(stats);
+		right.add(actions);
+		right.add(faceView);
 		
 		
 		this.setVisible(true);
