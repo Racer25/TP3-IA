@@ -5,7 +5,7 @@ import java.util.List;
 import contract.model.AdventureMapCharacter;
 import contract.model.CaseCharacter;
 
-public class AdventuremapCharacterImpl implements AdventureMapCharacter
+public class AdventureMapCharacterImpl implements AdventureMapCharacter
 {
 	private List<CaseCharacter> cases;
 

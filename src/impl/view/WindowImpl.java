@@ -1,9 +1,12 @@
 package impl.view;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Insets;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -35,8 +38,18 @@ public class WindowImpl extends JFrame implements Window
 		this.getContentPane().add(center1, BorderLayout.CENTER);
 		center1.setLayout(new GridBagLayout());
 		
+		GridBagConstraints mapConstraints = new GridBagConstraints();
+		mapConstraints.gridx = 0;
+		mapConstraints.gridy = 0;
+		//mapConstraints.insets = new Insets(10,10,20,20);
+		
 		AdventureMapViewImpl map=new AdventureMapViewImpl(myMap, character);
-		center1.add(map);
+		
+		//Rajouté eugé
+		map.setPreferredSize(new Dimension(500,500));
+		map.setMinimumSize(new Dimension(300,300));
+		
+		center1.add(map,mapConstraints);
 		
 		JPanel rigth=new JPanel();
 		this.getContentPane().add(rigth, BorderLayout.EAST);

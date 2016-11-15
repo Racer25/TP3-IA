@@ -9,8 +9,8 @@ public interface Character
 	public void setAlive(boolean alive);
 	public int getScore();
 	public void setScore(int score);
-	public String getOrientation();
-	public void setOrientation(String orientation);
+	public Integer getOrientation();
+	public void setOrientation(Integer orientation);
 	public CaseCharacter getCurrentCase();
 	public void setCurrentCase(CaseCharacter currentCase);
 }

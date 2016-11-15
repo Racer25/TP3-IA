@@ -1,5 +1,8 @@
 package impl.view;
 
+
+import java.awt.GridLayout;
+
 import javax.swing.JPanel;
 
 import contract.controller.CaseController;
@@ -15,14 +18,14 @@ public class AdventureMapViewImpl extends JPanel implements AdventureMapView
 	private static final long serialVersionUID = 5650978771844115866L;
 	
 	private CaseView[][] casesView;
-	private static int DIM=3;
 
 	public AdventureMapViewImpl(AdventureMap myMap, CharacterImpl character)
 	{
-		this.casesView=new CaseView[DIM][DIM];
-		for(int i=0; i<DIM; i++)
+		this.setLayout(new GridLayout(myMap.getTaille(), myMap.getTaille()));
+		this.casesView=new CaseView[myMap.getTaille()][myMap.getTaille()];
+		for(int i=0; i<myMap.getTaille(); i++)
 		{
-			for(int j=0; j<DIM; j++)
+			for(int j=0; j<myMap.getTaille(); j++)
 			{
 				casesView[i][j]=new CaseViewImpl(myMap.getCasesMap()[i][j]);
 				@SuppressWarnings("unused")
@@ -30,6 +33,7 @@ public class AdventureMapViewImpl extends JPanel implements AdventureMapView
 						(CaseImpl) myMap.getCasesMap()[i][j],
 						(CaseViewImpl)casesView[i][j], 
 						character);
+				this.add((CaseViewImpl) casesView[i][j]);
 			}
 		}
 	}

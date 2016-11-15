@@ -6,8 +6,9 @@ import java.util.Random;
 import javax.swing.JOptionPane;
 
 import contract.model.AdventureMap;
+import contract.model.AdventureMapGenerator;
 
-public class AdventureMapGeneratorImpl
+public class AdventureMapGeneratorImpl implements AdventureMapGenerator
 {
 	
 	private AdventureMap adventureMap;
@@ -20,7 +21,7 @@ public class AdventureMapGeneratorImpl
 	private ArrayList<CaseImpl> fallPoints;
 	private ArrayList<CaseImpl> monstruousPoints;
 	private CaseImpl spawnPoint;
-	
+
 	public AdventureMapGeneratorImpl()
 	{
 		this.fallPoints = new ArrayList<CaseImpl>();
@@ -33,11 +34,12 @@ public class AdventureMapGeneratorImpl
 		this.taille = taille;
 		this.nbFall = nbFall;
 		this.nbMonstruous = nbMonstruous;
-		//On verifie que la Map peut être generee
+		//On verifie que la Map peut ï¿½tre generee
 		if((taille*taille)-2 > nbFall+nbMonstruous)
 		{
 			//Creation de l'entite adventureMapImpl
 			adventureMap = new AdventureMapImpl();
+			adventureMap.setTaille(this.taille);
 			//On creer son tableau de cases
 			adventureMap.setCasesMap(new CaseImpl[taille][taille]);
 			//Et on l'implemente
@@ -65,7 +67,7 @@ public class AdventureMapGeneratorImpl
 			SetWindyCases();
 			SetPutridCases();
 			
-			//Test à supprimer
+			//Test ï¿½ supprimer
 			printMap();
 			
 			//On verifie si la map est faisable
@@ -81,7 +83,7 @@ public class AdventureMapGeneratorImpl
 		}
 		else
 		{
-			(new JOptionPane()).showMessageDialog(null, "Le nombre de monstres/chutes est trop élevé !","ATTENTION !",JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Le nombre de monstres/chutes est trop ï¿½levï¿½ !","ATTENTION !",JOptionPane.WARNING_MESSAGE);
 			return null;
 		}
 	
@@ -326,5 +328,24 @@ public class AdventureMapGeneratorImpl
 			return false;
 		}
 	}
+	
+	public AdventureMap getAdventureMap()
+	{
+		return adventureMap;
+	}
 
+	public void setAdventureMap(AdventureMap adventureMap)
+	{
+		this.adventureMap = adventureMap;
+	}
+	
+	public CaseImpl getSpawnPoint()
+	{
+		return spawnPoint;
+	}
+
+	public void setSpawnPoint(CaseImpl spawnPoint)
+	{
+		this.spawnPoint = spawnPoint;
+	}
 }
