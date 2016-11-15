@@ -20,9 +20,9 @@ public class AdventureMapViewImpl extends JPanel implements AdventureMapView
 	public AdventureMapViewImpl(AdventureMap myMap, CharacterImpl character)
 	{
 		this.casesView=new CaseView[DIM][DIM];
-		for(int i=0; i<myMap.getCasesMap().length; i++)
+		for(int i=0; i<DIM; i++)
 		{
-			for(int j=0; j<myMap.getCasesMap()[i].length; j++)
+			for(int j=0; j<DIM; j++)
 			{
 				casesView[i][j]=new CaseViewImpl(myMap.getCasesMap()[i][j]);
 				@SuppressWarnings("unused")
