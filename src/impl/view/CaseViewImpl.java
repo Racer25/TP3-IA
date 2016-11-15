@@ -33,6 +33,7 @@ public class CaseViewImpl extends JPanel implements CaseView
 		//Creation with caseMap attributes
 		//paintComponent(null);
 		this.setBackground(Color.WHITE);
+		this.setSize(50, 50);
 		this.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.GRAY));
 		
 	}
