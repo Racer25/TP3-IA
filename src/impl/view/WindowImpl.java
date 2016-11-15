@@ -1,13 +1,19 @@
 package impl.view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -34,7 +40,22 @@ public class WindowImpl extends JFrame implements Window
 		//this.setIconImage(icon);
 		
 		//BIG CENTERED PANEL
-		JPanel center1=new JPanel();
+		JPanel center1=new JPanel(){
+			@Override
+			protected void paintComponent(Graphics g) 
+			{
+				super.paintComponent(g);
+				Image background = null;
+				try {
+					background = ImageIO.read(new File("img/herbe.jpg"));
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			    g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
+			}
+		};
+		center1.setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.BLACK));
 		this.getContentPane().add(center1, BorderLayout.CENTER);
 		center1.setLayout(new GridBagLayout());
 		
