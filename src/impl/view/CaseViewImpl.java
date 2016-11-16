@@ -4,12 +4,14 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import contract.model.CaseMap;
@@ -32,10 +34,16 @@ public class CaseViewImpl extends JPanel implements CaseView
 	public CaseViewImpl(CaseMap caseMap)
 	{
 		//Creation with caseMap attributes
-		//paintComponent(null);
+		fall = caseMap.isFall();
+		monstruous = caseMap.isMonstruous();
 		this.setBackground(Color.WHITE);
 		this.setSize(50, 50);
 		this.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
+		
+		if(caseMap.isMonstruous())
+		{
+			
+		}
 		
 	}
 
@@ -45,7 +53,18 @@ public class CaseViewImpl extends JPanel implements CaseView
 		super.paintComponent(g);
 		Image background = null;
 		try {
-			background = ImageIO.read(new File("img/bedrock.jpg"));
+			if(monstruous == true)
+			{
+				background = ImageIO.read(new File("img/zombi.jpg"));
+			}
+			else if(fall == true)
+			{
+				background = ImageIO.read(new File("img/fall.jpg"));
+			}
+			else
+			{
+				background = ImageIO.read(new File("img/bedrock.jpg"));
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
