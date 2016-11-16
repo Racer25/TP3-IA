@@ -2,6 +2,7 @@ package impl.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
@@ -11,9 +12,10 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.Insets;
 import java.io.File;
 import java.io.IOException;
+import java.util.Observer;
+
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -22,7 +24,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import contract.model.AdventureMap;
+import contract.view.LifeView;
+import contract.view.ScoreView;
 import contract.view.Window;
+import impl.controller.MoveButtonListenerImpl;
 import impl.model.CharacterImpl;
 
 public class WindowImpl extends JFrame implements Window
@@ -41,7 +46,10 @@ public class WindowImpl extends JFrame implements Window
 		//this.setIconImage(icon);
 		
 		//BIG CENTERED PANEL
-		JPanel center1=new JPanel(){
+		JPanel center1=new JPanel()
+		{
+			private static final long serialVersionUID = -1206593738493049332L;
+
 			@Override
 			protected void paintComponent(Graphics g) 
 			{
@@ -88,68 +96,29 @@ public class WindowImpl extends JFrame implements Window
 		stats.setLayout(new GridLayout(2, 1));
 		
 		//Panel healthbar
-		JPanel life=new JPanel();
-		life.setLayout(new GridBagLayout());
-		life.setBackground(Color.WHITE);
-		life.setBorder(BorderFactory.createMatteBorder(3, 0, 0, 3, Color.BLACK));
+		LifeView life=new LifeViewImpl();
+		character.addObserver((LifeViewImpl) life);
 		
-		JLabel heart=new JLabel();
-		ImageIcon heartIcon = new ImageIcon("img/heart.jpg");
-		heart.setIcon(heartIcon);
-		heart.setBackground(Color.WHITE);
-		GridBagConstraints heartConstraints = new GridBagConstraints();
-		heartConstraints.gridx = 0;
-		heartConstraints.gridy = 0;
-		
-		JLabel healthbar=new JLabel();
-		healthbar.setPreferredSize(new Dimension(200,20));
-		healthbar.setBackground(Color.GREEN);
-		healthbar.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.BLACK));
-		GridBagConstraints healthbarConstraints = new GridBagConstraints();
-		healthbarConstraints.gridx = 1;
-		healthbarConstraints.gridy = 0;
-		
-		life.add(heart);
-		life.add(healthbar);
-		
-		//panel score
-		JPanel score=new JPanel();
-		score.setLayout(new GridBagLayout());
-		score.setBackground(Color.WHITE);
-		score.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 3, Color.BLACK));
-		
-		JLabel cup=new JLabel();
-		ImageIcon cupIcon = new ImageIcon("img/cup.jpg");
-		cup.setIcon(cupIcon);
-		cup.setBackground(Color.WHITE);
-		GridBagConstraints cupConstraints = new GridBagConstraints();
-		cupConstraints.gridx = 0;
-		cupConstraints.gridy = 0;
-		
-		JLabel scorebar=new JLabel("NEW HIGHTSCORE !");
-		Font font;
+		//Font
+		Font font = null;
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		try {
 			font = Font.createFont(Font.TRUETYPE_FONT,new File("./fonts/Pixeled.ttf"));
 			ge.registerFont(font);
 			font = font.deriveFont(Font.TRUETYPE_FONT,10);
-			scorebar.setFont(font);
 		} 
 		catch (FontFormatException | IOException e2) 
 		{
 			e2.printStackTrace();
 		}
-		scorebar.setPreferredSize(new Dimension(200,20));
-		scorebar.setBackground(Color.WHITE);
-		GridBagConstraints scorebarConstraints = new GridBagConstraints();
-		scorebarConstraints.gridx = 1;
-		scorebarConstraints.gridy = 0;
 		
-		score.add(cup);
-		score.add(scorebar);
+		//panel score
+		/*****************************/
+		ScoreView score=new ScoreViewImpl(font);
+		character.addObserver((ScoreViewImpl)score);
 		
-		stats.add(life);
-		stats.add(score);
+		stats.add((LifeViewImpl)life);
+		stats.add((ScoreViewImpl) score);
 		
 		JPanel actions=new JPanel();
 		actions.setBackground(Color.WHITE);
@@ -183,6 +152,7 @@ public class WindowImpl extends JFrame implements Window
 		panelButton.setLayout(new GridBagLayout());
 		panelButton.setBackground(Color.WHITE);
 		JButton buttonMove=new JButton("MOVE");
+		buttonMove.addActionListener(new MoveButtonListenerImpl(character));
 		panelButton.add(buttonMove);
 		
 		instructions.add(instructions1,instructions1Constraints);

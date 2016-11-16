@@ -13,7 +13,7 @@ public class CharacterImpl extends Observable implements Character, Runnable
 	private final static Integer ORIENTATION_DOWN = 2;
 	private final static Integer ORIENTATION_LEFT = 3;
 	
-	private boolean alive;
+	private Boolean alive;
 	private Integer score;
 	private Integer orientation;
 	private CaseCharacter currentCase;
@@ -44,14 +44,16 @@ public class CharacterImpl extends Observable implements Character, Runnable
 		
 	}
 	
-	public boolean isAlive()
+	public Boolean isAlive()
 	{
 		return alive;
 	}
 
-	public void setAlive(boolean alive)
+	public void setAlive(Boolean alive)
 	{
 		this.alive = alive;
+		notifyObservers(alive);
+		setChanged();
 	}
 
 	public int getScore()
