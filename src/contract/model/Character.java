@@ -5,8 +5,8 @@ public interface Character
 	//Change currentCase and update memory of the agent
 	public void move(String direction);
 	
-	public boolean isAlive();
-	public void setAlive(boolean alive);
+	public Boolean isAlive();
+	public void setAlive(Boolean alive);
 	public int getScore();
 	public void setScore(int score);
 	public Integer getOrientation();

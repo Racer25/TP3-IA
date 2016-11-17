@@ -30,15 +30,19 @@ public class CaseControllerImpl implements CaseController, Observer
 	{
 		if(arg0 instanceof CharacterImpl)
 		{
-			//appear/diseappear character
-			if((boolean)arg1)
+			if(arg1 instanceof Boolean)
 			{
-				//maCaseView.setPlayerVisible(true)
+				//appear/diseappear character
+				if((boolean)arg1)
+				{
+					//maCaseView.setPlayerVisible(true)
+				}
+				else
+				{
+					//maCaseView.setPlayerVisible(false)
+				}
 			}
-			else
-			{
-				//maCaseView.setPlayerVisible(false)
-			}
+			
 		}
 		else if(arg0 instanceof CaseImpl)
 		{
