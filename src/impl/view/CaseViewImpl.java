@@ -26,6 +26,7 @@ public class CaseViewImpl extends JPanel implements CaseView
 	private boolean portalPoint;
 	private boolean monstruous;
 	private boolean fall;
+	private boolean portal;
 	
 	//Combinable attributes
 	private boolean putrid;
@@ -36,6 +37,7 @@ public class CaseViewImpl extends JPanel implements CaseView
 		//Creation with caseMap attributes
 		fall = caseMap.isFall();
 		monstruous = caseMap.isMonstruous();
+		portal = caseMap.isPortalPoint();
 		this.setBackground(Color.WHITE);
 		this.setSize(50, 50);
 		this.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
@@ -55,6 +57,10 @@ public class CaseViewImpl extends JPanel implements CaseView
 			else if(fall == true)
 			{
 				background = ImageIO.read(new File("img/fall.jpg"));
+			}
+			else if(portal == true)
+			{
+				background = ImageIO.read(new File("img/portal.jpg"));
 			}
 			else
 			{

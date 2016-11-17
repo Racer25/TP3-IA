@@ -26,7 +26,7 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 		Object[] object=(Object[])arg1;
 		if(object[0].equals("levelComplete"))
 		{
-			if((Boolean)object[1] ==true)
+			if((Boolean)object[1])
 			{
 				this.level++;
 				generateLevel();
@@ -34,9 +34,9 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 		}
 		else if(object[0].equals("alive"))
 		{
-			if((Boolean)object[1] ==false)
+			if(!(Boolean)object[1])
 			{
-				
+				generateLevel();
 			}
 		}
 	}
