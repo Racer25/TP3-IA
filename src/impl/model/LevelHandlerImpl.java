@@ -22,13 +22,21 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 
 	@Override
 	public void update(Observable arg0, Object arg1)
-	{	
-		if(arg1 instanceof Boolean)
+	{
+		Object[] object=(Object[])arg1;
+		if(object[0].equals("levelComplete"))
 		{
-			if((Boolean)arg1 ==true)
+			if((Boolean)object[1] ==true)
 			{
 				this.level++;
 				generateLevel();
+			}
+		}
+		else if(object[0].equals("alive"))
+		{
+			if((Boolean)object[1] ==false)
+			{
+				
 			}
 		}
 	}

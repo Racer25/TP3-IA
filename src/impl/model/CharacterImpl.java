@@ -52,7 +52,7 @@ public class CharacterImpl extends Observable implements Character, Runnable
 	public void setAlive(Boolean alive)
 	{
 		this.alive = alive;
-		notifyObservers(alive);
+		notifyObservers(new Object[]{"alive", alive});
 		setChanged();
 	}
 
@@ -112,7 +112,7 @@ public class CharacterImpl extends Observable implements Character, Runnable
 	public void setLevelComplete(boolean levelComplete)
 	{
 		this.levelComplete = levelComplete;
-		notifyObservers(levelComplete);
+		notifyObservers(new Object[]{"levelComplete", levelComplete});
 		setChanged();
 	}
 }
