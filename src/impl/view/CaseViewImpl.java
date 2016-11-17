@@ -40,11 +40,6 @@ public class CaseViewImpl extends JPanel implements CaseView
 		this.setSize(50, 50);
 		this.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 		
-		if(caseMap.isMonstruous())
-		{
-			
-		}
-		
 	}
 
 	@Override
