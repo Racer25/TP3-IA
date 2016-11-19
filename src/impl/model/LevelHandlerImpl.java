@@ -23,22 +23,31 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 	@Override
 	public void update(Observable arg0, Object arg1)
 	{
-		Object[] object=(Object[])arg1;
-		if(object[0].equals("levelComplete"))
+		if(arg0 instanceof CharacterImpl)
 		{
-			if((Boolean)object[1])
+			if(arg1 instanceof Object[])
 			{
-				this.level++;
-				generateLevel();
+				Object[] object=(Object[])arg1;
+				if(object[0].equals("levelComplete"))
+				{
+					if((Boolean)object[1])
+					{
+						this.level++;
+						generateLevel();
+					}
+				}
+				else if(object[0].equals("alive"))
+				{
+					/*
+					if(!(Boolean)object[1])
+					{
+						generateLevel();
+					}
+					*/
+				}
 			}
 		}
-		else if(object[0].equals("alive"))
-		{
-			if(!(Boolean)object[1])
-			{
-				generateLevel();
-			}
-		}
+		
 	}
 	
 	public void generateLevel()
