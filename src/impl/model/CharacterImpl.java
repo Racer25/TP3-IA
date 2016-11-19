@@ -2,6 +2,10 @@ package impl.model;
 
 import java.util.Observable;
 
+import org.jpl7.Atom;
+import org.jpl7.Query;
+import org.jpl7.Term;
+
 import contract.model.AdventureMapCharacter;
 import contract.model.CaseCharacter;
 import contract.model.Character;
@@ -42,6 +46,11 @@ public class CharacterImpl extends Observable implements Character, Runnable
 	{
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public boolean ConsultPrologFile() {
+		Query q1=new Query("consult", new Term[]{new Atom("Etat_Interne/ForetEnchante.pl")});
+		return q1.hasSolution();
 	}
 	
 	public Boolean isAlive()

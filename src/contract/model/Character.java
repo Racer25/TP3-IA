@@ -13,4 +13,6 @@ public interface Character
 	public void setOrientation(Integer orientation);
 	public CaseCharacter getCurrentCase();
 	public void setCurrentCase(CaseCharacter currentCase);
+	
+	public boolean ConsultPrologFile();
 }
