@@ -2,20 +2,20 @@ package impl.model;
 
 import java.util.Observable;
 
+import org.jpl7.Atom;
+import org.jpl7.Query;
+import org.jpl7.Term;
+
 import contract.model.AdventureMapCharacter;
 import contract.model.CaseCharacter;
 import contract.model.Character;
+import utils.OrientationEnum;
 
 public class CharacterImpl extends Observable implements Character, Runnable
-{
-	private final static Integer ORIENTATION_UP = 0;
-	private final static Integer ORIENTATION_RIGHT = 1;
-	private final static Integer ORIENTATION_DOWN = 2;
-	private final static Integer ORIENTATION_LEFT = 3;
-	
+{	
 	private Boolean alive;
 	private Integer score;
-	private Integer orientation;
+	private OrientationEnum orientation;
 	private CaseCharacter currentCase;
 	private boolean levelComplete;
 	
@@ -26,7 +26,7 @@ public class CharacterImpl extends Observable implements Character, Runnable
 	{
 		this.alive=true;
 		this.score=0;
-		this.orientation=ORIENTATION_RIGHT;
+		this.orientation=OrientationEnum.RIGHT;
 		this.currentCase=null;
 		this.setLevelComplete(false);
 	}
@@ -42,6 +42,11 @@ public class CharacterImpl extends Observable implements Character, Runnable
 	{
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public boolean ConsultPrologFile() {
+		Query q1=new Query("consult", new Term[]{new Atom("Etat_Interne/ForetEnchante.pl")});
+		return q1.hasSolution();
 	}
 	
 	public Boolean isAlive()
@@ -68,12 +73,12 @@ public class CharacterImpl extends Observable implements Character, Runnable
 		setChanged();
 	}
 
-	public Integer getOrientation()
+	public OrientationEnum getOrientation()
 	{
 		return orientation;
 	}
 
-	public void setOrientation(Integer orientation)
+	public void setOrientation(OrientationEnum orientation)
 	{
 		this.orientation = orientation;
 	}

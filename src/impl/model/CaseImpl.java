@@ -5,6 +5,7 @@ import java.util.Observable;
 
 import contract.model.CaseCharacter;
 import contract.model.CaseMap;
+import utils.DirectionEnum;
 
 public class CaseImpl extends Observable implements CaseCharacter, CaseMap
 {
@@ -30,7 +31,8 @@ public class CaseImpl extends Observable implements CaseCharacter, CaseMap
 	}
 	
 	//Give possible directions
-	private HashMap<String, Boolean> possibleDirections;//key: up -> value:true
+	private HashMap<DirectionEnum, Boolean> possibleDirections;
+	//key: UP/RIGHT/DOWN/LEFT -> value:true
 	
 	private int[] coordMap;
 	private int[] coordForCharacter;
@@ -103,11 +105,11 @@ public class CaseImpl extends Observable implements CaseCharacter, CaseMap
 	{
 		this.coordForCharacter = coordForCharacter;
 	}
-	public HashMap<String, Boolean> getPossibleDirections()
+	public HashMap<DirectionEnum, Boolean> getPossibleDirections()
 	{
 		return possibleDirections;
 	}
-	public void setPossibleDirections(HashMap<String, Boolean> possibleDirections)
+	public void setPossibleDirections(HashMap<DirectionEnum, Boolean> possibleDirections)
 	{
 		this.possibleDirections = possibleDirections;
 	}

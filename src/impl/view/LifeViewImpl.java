@@ -64,55 +64,56 @@ public class LifeViewImpl extends JPanel implements LifeView, Observer
 	@Override
 	public void update(Observable o, Object arg)
 	{
-		if (arg instanceof Boolean)
+		if (arg instanceof Object[])
 		{
-			if ((Boolean) arg)
+			Object[] object=(Object[])arg;
+			if(object[0].equals("alive"))
 			{
-				part1.setBackground(Color.GREEN);
-				part2.setBackground(Color.GREEN);
-				part3.setBackground(Color.GREEN);
-				part4.setBackground(Color.GREEN);
-			} 
-			else
-			{
-
-				Runnable die = new Runnable()
+				if ((Boolean) object[1])
 				{
-
-					@Override
-					public void run()
+					part1.setBackground(Color.GREEN);
+					part2.setBackground(Color.GREEN);
+					part3.setBackground(Color.GREEN);
+					part4.setBackground(Color.GREEN);
+				} 
+				else
+				{
+					Runnable die = new Runnable()
 					{
-						try
+						@Override
+						public void run()
 						{
-							part1.setBackground(Color.YELLOW);
-							part2.setBackground(Color.YELLOW);
-							part3.setBackground(Color.YELLOW);
-							part4.setBackground(Color.WHITE);
-	
-							Thread.sleep(500);
-	
-							part1.setBackground(Color.ORANGE);
-							part2.setBackground(Color.ORANGE);
-							part3.setBackground(Color.WHITE);
-	
-							Thread.sleep(500);
-	
-							part1.setBackground(Color.RED);
-							part2.setBackground(Color.WHITE);
-	
-							Thread.sleep(500);
-	
-							part1.setBackground(Color.WHITE);
-						} 
-						catch (InterruptedException e)
-						{
-							e.printStackTrace();
+							try
+							{
+								part1.setBackground(Color.YELLOW);
+								part2.setBackground(Color.YELLOW);
+								part3.setBackground(Color.YELLOW);
+								part4.setBackground(Color.WHITE);
+		
+								Thread.sleep(500);
+		
+								part1.setBackground(Color.ORANGE);
+								part2.setBackground(Color.ORANGE);
+								part3.setBackground(Color.WHITE);
+		
+								Thread.sleep(500);
+		
+								part1.setBackground(Color.RED);
+								part2.setBackground(Color.WHITE);
+		
+								Thread.sleep(500);
+		
+								part1.setBackground(Color.WHITE);
+							} 
+							catch (InterruptedException e)
+							{
+								e.printStackTrace();
+							}
 						}
-					}
+					};
+					new Thread (die).start();
 
-				};
-				new Thread (die).start();
-
+				}
 			}
 		}
 	}

@@ -5,6 +5,7 @@ import java.util.Observer;
 
 import contract.model.AdventureMapGenerator;
 import contract.model.LevelHandler;
+import utils.OrientationEnum;
 
 public class LevelHandlerImpl implements LevelHandler, Observer
 {
@@ -24,26 +25,30 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 	@Override
 	public void update(Observable arg0, Object arg1)
 	{
-		Object[] object=(Object[])arg1;
-		if(object[0].equals("levelComplete"))
+		if(arg0 instanceof CharacterImpl)
 		{
-			if((Boolean)object[1])
+			if(arg1 instanceof Object[])
 			{
-				this.level++;
-				generateLevel();
-			}
-		}
-		else if(object[0].equals("alive"))
-		{
-			if(!(Boolean)object[1])
-			{
-				generateLevel();
-			}
-		}
-		else if(object[0].equals("coordonnees"))
-		{
-			generator.getAdventureMap().
-		}
+				Object[] object=(Object[])arg1;
+				if(object[0].equals("levelComplete"))
+				{
+					if((Boolean)object[1])
+					{
+						this.level++;
+						generateLevel();
+					}
+				}
+				else if(object[0].equals("alive"))
+				{
+					if(!(Boolean)object[1])
+					{
+						generateLevel();
+					}
+				}
+				else if(object[0].equals("coordonnees"))
+				{
+					generator.getAdventureMap().
+				}
 	}
 	
 	public void generateLevel()
@@ -56,7 +61,7 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 		//Character configuration
 		this.character.setLevelComplete(false);
 		this.character.setMapDiscovered(null);
-		this.character.setOrientation(1);
+		this.character.setOrientation(OrientationEnum.RIGHT);
 		this.character.setAlive(true);
 		this.character.setCurrentCase(this.generator.getSpawnPoint());
 	}

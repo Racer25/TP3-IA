@@ -1,5 +1,7 @@
 package contract.model;
 
+import utils.OrientationEnum;
+
 public interface Character
 {	
 	//Change currentCase and update memory of the agent
@@ -9,8 +11,10 @@ public interface Character
 	public void setAlive(Boolean alive);
 	public int getScore();
 	public void setScore(int score);
-	public Integer getOrientation();
-	public void setOrientation(Integer orientation);
+	public OrientationEnum getOrientation();
+	public void setOrientation(OrientationEnum orientation);
 	public CaseCharacter getCurrentCase();
 	public void setCurrentCase(CaseCharacter currentCase);
+	
+	public boolean ConsultPrologFile();
 }
