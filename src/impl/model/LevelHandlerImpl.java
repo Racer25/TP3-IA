@@ -5,6 +5,7 @@ import java.util.Observer;
 
 import contract.model.AdventureMapGenerator;
 import contract.model.LevelHandler;
+import utils.OrientationEnum;
 
 public class LevelHandlerImpl implements LevelHandler, Observer
 {
@@ -60,7 +61,7 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 		//Character configuration
 		this.character.setLevelComplete(false);
 		this.character.setMapDiscovered(null);
-		this.character.setOrientation(1);
+		this.character.setOrientation(OrientationEnum.RIGHT);
 		this.character.setAlive(true);
 		this.character.setCurrentCase(this.generator.getSpawnPoint());
 	}
