@@ -9,6 +9,12 @@ import org.jpl7.Term;
 import contract.model.AdventureMapCharacter;
 import contract.model.CaseCharacter;
 import contract.model.Character;
+import contract.model.Effector;
+import contract.model.Sensor;
+import impl.model.effector.EffectorExit;
+import impl.model.sensor.SensorLightImpl;
+import impl.model.sensor.SensorPutridImpl;
+import impl.model.sensor.SensorWindyImpl;
 import utils.OrientationEnum;
 
 public class CharacterImpl extends Observable implements Character, Runnable
@@ -18,6 +24,20 @@ public class CharacterImpl extends Observable implements Character, Runnable
 	private OrientationEnum orientation;
 	private CaseCharacter currentCase;
 	private boolean levelComplete;
+	
+	//Effectors
+	private Effector effectorUp;
+	private Effector effectorRight;
+	private Effector effectorDown;
+	private Effector effectorLeft;
+	
+	private Effector effectorStone;
+	private Effector effectorExit;
+	
+	//Sensors
+	private Sensor sensorPutrid;
+	private Sensor sensorWindy;
+	private Sensor sensorLight;
 	
 	//Memory
 	private AdventureMapCharacter mapDiscovered;
@@ -29,6 +49,15 @@ public class CharacterImpl extends Observable implements Character, Runnable
 		this.orientation=OrientationEnum.RIGHT;
 		this.currentCase=null;
 		this.setLevelComplete(false);
+		
+		//Sensors initialisation
+		this.sensorWindy=new SensorWindyImpl(this);
+		this.sensorPutrid=new SensorPutridImpl(this);
+		this.sensorLight=new SensorLightImpl(this);
+		
+		//Effector initialisation
+		this.effectorExit=new EffectorExit(this);
+		//TODO OTHERS EFFECTORS
 	}
 
 	@Override
@@ -93,10 +122,6 @@ public class CharacterImpl extends Observable implements Character, Runnable
 		this.currentCase = currentCase;
 		notifyObservers(currentCase.getCoordForCharacter());
 		setChanged();
-		if(this.currentCase.isPortalPoint())
-		{
-			setLevelComplete(true);
-		}
 	}
 
 	public AdventureMapCharacter getMapDiscovered()
