@@ -27,6 +27,7 @@ public class CaseViewImpl extends JPanel implements CaseView
 	private boolean monstruous;
 	private boolean fall;
 	private boolean portal;
+	private boolean character;
 	
 	//Combinable attributes
 	private boolean putrid;
@@ -40,8 +41,7 @@ public class CaseViewImpl extends JPanel implements CaseView
 		portal = caseMap.isPortalPoint();
 		this.setBackground(Color.WHITE);
 		this.setSize(50, 50);
-		this.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		
+		this.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));		
 	}
 
 	@Override
