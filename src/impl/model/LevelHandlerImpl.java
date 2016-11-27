@@ -47,8 +47,10 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 				}
 				else if(object[0].equals("coordonnees"))
 				{
-					generator.getAdventureMap().
+					
 				}
+			}
+		}
 	}
 	
 	public void generateLevel()
