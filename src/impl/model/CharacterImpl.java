@@ -11,7 +11,6 @@ import contract.model.CaseCharacter;
 import contract.model.Character;
 import contract.model.Effector;
 import contract.model.Sensor;
-import impl.model.effector.EffectorExitImpl;
 import utils.OrientationEnum;
 
 public class CharacterImpl extends Observable implements Character, Runnable
