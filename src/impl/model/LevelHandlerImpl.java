@@ -28,7 +28,7 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 	
 	public LevelHandlerImpl(CharacterImpl character)
 	{
-		this.level=50;
+		this.level=1;
 		this.character=character;
 		this.generator=new AdventureMapGeneratorImpl();
 		generateLevel();
