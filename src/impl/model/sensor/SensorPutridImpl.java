@@ -1,15 +1,12 @@
 package impl.model.sensor;
 
 import contract.model.CaseMap;
-import contract.model.Sensor;
 
-public class SensorPutridImpl implements Sensor
+public class SensorPutridImpl extends SensorImpl
 {
-	private CaseMap caseMap;
-	
 	public SensorPutridImpl(CaseMap caseMap)
 	{
-		this.caseMap=caseMap;
+		super(caseMap);
 	}
 	
 	@Override

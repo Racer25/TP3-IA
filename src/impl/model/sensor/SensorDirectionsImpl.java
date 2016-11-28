@@ -1,15 +1,12 @@
 package impl.model.sensor;
 
 import contract.model.CaseMap;
-import contract.model.Sensor;
 
-public class SensorDirectionsImpl implements Sensor
+public class SensorDirectionsImpl extends SensorImpl
 {
-	private CaseMap caseMap;
-	
 	public SensorDirectionsImpl(CaseMap caseMap)
 	{
-		this.caseMap=caseMap;
+		super(caseMap);
 	}
 	
 	@Override
@@ -17,5 +14,4 @@ public class SensorDirectionsImpl implements Sensor
 	{
 		return caseMap.getPossibleDirections();
 	}
-
 }

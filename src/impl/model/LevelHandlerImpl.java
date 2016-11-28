@@ -3,7 +3,6 @@ package impl.model;
 import java.util.Observable;
 import java.util.Observer;
 
-import contract.model.AdventureMap;
 import contract.model.AdventureMapCharacter;
 import contract.model.AdventureMapGenerator;
 import contract.model.CaseCharacter;
@@ -15,6 +14,7 @@ import impl.model.effector.EffectorLeftImpl;
 import impl.model.effector.EffectorRightImpl;
 import impl.model.effector.EffectorStoneImpl;
 import impl.model.effector.EffectorUpImpl;
+import impl.model.sensor.SensorDirectionsImpl;
 import impl.model.sensor.SensorLightImpl;
 import impl.model.sensor.SensorPutridImpl;
 import impl.model.sensor.SensorWindyImpl;
@@ -60,7 +60,16 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 				}
 				else if(object[0].equals("coordonnees"))
 				{
+					//We take the new CaseMap for sensors
+					int lineCaseMap=this.character.getCurrentCase().getCoords()[0]+this.generator.getAdventureMap().getChangeReference()[0];
+					int columnCaseMap=this.character.getCurrentCase().getCoords()[1]+this.generator.getAdventureMap().getChangeReference()[1];
+					CaseMap newCase=this.generator.getAdventureMap().getCasesMap()[lineCaseMap][columnCaseMap];
 					
+					//Update
+					this.character.getSensorPutrid().setCaseMap(newCase);
+					this.character.getSensorWindy().setCaseMap(newCase);
+					this.character.getSensorLight().setCaseMap(newCase);
+					this.character.getSensorDirections().setCaseMap(newCase);
 				}
 			}
 		}
@@ -72,9 +81,9 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 		int nbFall=dim*dim*15/100;
 		int nbMonstruous=dim*dim*15/100;
 		//Generate Map
-		AdventureMap map=this.generator.createMap(dim, nbFall, nbMonstruous);
+		this.generator.createMap(dim, nbFall, nbMonstruous);
 		//Character configuration
-		configureCharacter(map);
+		configureCharacter();
 		
 	}
 	
@@ -98,7 +107,7 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 		this.generator = generator;
 	}
 	
-	private void configureCharacter(AdventureMap map)
+	private void configureCharacter()
 	{
 		this.character.setLevelComplete(false);
 		AdventureMapCharacter mapCharacter=new AdventureMapCharacterImpl();
@@ -117,12 +126,13 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 		this.character.setSensorPutrid(new SensorPutridImpl(spawnPointMap));
 		this.character.setSensorWindy(new SensorWindyImpl(spawnPointMap));
 		this.character.setSensorLight(new SensorLightImpl(spawnPointMap));
+		this.character.setSensorDirections(new SensorDirectionsImpl(spawnPointMap));
 		//Implies an update method for each movement
 		this.character.setEffectorUp(new EffectorUpImpl(character));
 		this.character.setEffectorRight(new EffectorRightImpl(character));
 		this.character.setEffectorDown(new EffectorDownImpl(character));
 		this.character.setEffectorLeft(new EffectorLeftImpl(character));
-		this.character.setEffectorStone(new EffectorStoneImpl(character, map));
+		this.character.setEffectorStone(new EffectorStoneImpl(character, this.generator.getAdventureMap()));
 		this.character.setEffectorExit(new EffectorExitImpl(character));
 	}
 
