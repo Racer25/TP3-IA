@@ -7,7 +7,7 @@ import contract.model.CaseCharacter;
 import contract.model.CaseMap;
 import utils.DirectionEnum;
 
-public class CaseImpl extends Observable implements CaseCharacter, CaseMap
+public class CaseMapImpl extends Observable implements CaseMap
 {
 	//Independant attributes between them
 	private boolean spawnPoint;
@@ -19,7 +19,7 @@ public class CaseImpl extends Observable implements CaseCharacter, CaseMap
 	private boolean putrid;
 	private boolean windy;
 	
-	public CaseImpl()
+	public CaseMapImpl()
 	{
 		//Lors de la creation de la case,  on set tous les booleens a false
 		this.spawnPoint = false;

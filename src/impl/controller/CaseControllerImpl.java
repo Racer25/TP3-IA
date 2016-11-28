@@ -4,17 +4,17 @@ import java.util.Observable;
 import java.util.Observer;
 
 import contract.controller.CaseController;
-import impl.model.CaseImpl;
+import impl.model.CaseMapImpl;
 import impl.model.CharacterImpl;
 import impl.view.CaseViewImpl;
 
 public class CaseControllerImpl implements CaseController, Observer
 {
-	private CaseImpl maCase;
+	private CaseMapImpl maCase;
 	private CaseViewImpl maCaseView;
 	private CharacterImpl character;
 
-	public CaseControllerImpl(CaseImpl maCase, CaseViewImpl maCaseview, CharacterImpl character)
+	public CaseControllerImpl(CaseMapImpl maCase, CaseViewImpl maCaseview, CharacterImpl character)
 	{
 		this.maCase=maCase;
 		this.maCaseView=maCaseview;
@@ -44,7 +44,7 @@ public class CaseControllerImpl implements CaseController, Observer
 			}
 			
 		}
-		else if(arg0 instanceof CaseImpl)
+		else if(arg0 instanceof CaseMapImpl)
 		{
 			//Change caseView Visual
 			if((boolean)arg1)

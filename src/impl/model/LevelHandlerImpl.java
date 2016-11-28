@@ -65,7 +65,8 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 		this.character.setMapDiscovered(null);
 		this.character.setOrientation(OrientationEnum.RIGHT);
 		this.character.setAlive(true);
-		this.character.setCurrentCase(this.generator.getSpawnPoint());
+		//this.character.setCurrentCase(this.generator.getSpawnPoint());
+		//Replace by capteur utilisation
 	}
 	
 	public int getLevel()

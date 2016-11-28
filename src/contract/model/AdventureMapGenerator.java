@@ -1,7 +1,7 @@
 package contract.model;
 
 import impl.model.AdventureMapImpl;
-import impl.model.CaseImpl;
+import impl.model.CaseMapImpl;
 
 public interface AdventureMapGenerator
 {
@@ -9,7 +9,7 @@ public interface AdventureMapGenerator
 	
 	public AdventureMap getAdventureMap();
 	public void setAdventureMap(AdventureMap adventureMap);
-	public CaseImpl getSpawnPoint();
+	public CaseMapImpl getSpawnPoint();
 	
 	public void printMap();
 }
