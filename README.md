@@ -8,4 +8,4 @@ A bien comprendre:
  - Une Case a enormement d'attributs...
  - CaseView observe un CaseMap qui lui est lie ainsi que le personnage : elle pourra ainsi se mettre a jour en fonction
  - Le Character n'a pas acces a la VRAIE carte, mais a AdventureMapCharacter
- - Character a son propre systeme de coordonnees a travers l'attribut coordForCharacter dans les CaseCharacter
+ - Les cases du character et de la map ont leur propre systeme de coordonnees
