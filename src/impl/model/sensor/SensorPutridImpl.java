@@ -1,20 +1,20 @@
 package impl.model.sensor;
 
+import contract.model.CaseMap;
 import contract.model.Sensor;
-import impl.model.CharacterImpl;
 
 public class SensorPutridImpl implements Sensor
 {
-	private CharacterImpl character;
+	private CaseMap caseMap;
 	
-	public SensorPutridImpl(CharacterImpl character)
+	public SensorPutridImpl(CaseMap caseMap)
 	{
-		this.character=character;
+		this.caseMap=caseMap;
 	}
 	
 	@Override
 	public Object answer()
 	{
-		return character.getCurrentCase().isPutrid();
+		return caseMap.isPutrid();
 	}
 }

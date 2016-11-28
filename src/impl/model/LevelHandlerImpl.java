@@ -1,10 +1,24 @@
 package impl.model;
 
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+import contract.model.AdventureMap;
+import contract.model.AdventureMapCharacter;
 import contract.model.AdventureMapGenerator;
+import contract.model.CaseCharacter;
+import contract.model.CaseMap;
 import contract.model.LevelHandler;
+import impl.model.effector.EffectorDownImpl;
+import impl.model.effector.EffectorExitImpl;
+import impl.model.effector.EffectorLeftImpl;
+import impl.model.effector.EffectorRightImpl;
+import impl.model.effector.EffectorStoneImpl;
+import impl.model.effector.EffectorUpImpl;
+import impl.model.sensor.SensorLightImpl;
+import impl.model.sensor.SensorPutridImpl;
+import impl.model.sensor.SensorWindyImpl;
 import utils.OrientationEnum;
 
 public class LevelHandlerImpl implements LevelHandler, Observer
@@ -19,7 +33,7 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 		this.character=character;
 		this.generator=new AdventureMapGeneratorImpl();
 		generateLevel();
-		generator.getAdventureMap().setChangeReference(generator.getSpawnPoint().getCoordMap());
+		generator.getAdventureMap().setChangeReference(generator.getSpawnPoint().getCoords());
 	}
 
 	@Override
@@ -59,14 +73,10 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 		int nbFall=dim*dim*15/100;
 		int nbMonstruous=dim*dim*15/100;
 		//Generate Map
-		this.generator.createMap(dim, nbFall, nbMonstruous);
+		AdventureMap map=this.generator.createMap(dim, nbFall, nbMonstruous);
 		//Character configuration
-		this.character.setLevelComplete(false);
-		this.character.setMapDiscovered(null);
-		this.character.setOrientation(OrientationEnum.RIGHT);
-		this.character.setAlive(true);
-		//this.character.setCurrentCase(this.generator.getSpawnPoint());
-		//Replace by capteur utilisation
+		configureCharacter(map);
+		
 	}
 	
 	public int getLevel()
@@ -87,6 +97,31 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 	public void setGenerator(AdventureMapGenerator generator)
 	{
 		this.generator = generator;
+	}
+	
+	private void configureCharacter(AdventureMap map)
+	{
+		this.character.setLevelComplete(false);
+		this.character.setMapDiscovered(new AdventureMapCharacterImpl());
+		this.character.setOrientation(OrientationEnum.RIGHT);
+		this.character.setAlive(true);
+		int[] tab={0,0};
+		CaseCharacter spawnPointCharacter=new CaseCharacterImpl(tab, true, false, false, false, false, false);
+		this.character.setCurrentCase(spawnPointCharacter);
+		this.character.getMapDiscovered().addCase(spawnPointCharacter);
+		//Initailize sensors and effectors
+		CaseMap spawnPointMap=this.generator.getSpawnPoint();
+		this.character.setSensorPutrid(new SensorPutridImpl(spawnPointMap));
+		this.character.setSensorWindy(new SensorWindyImpl(spawnPointMap));
+		this.character.setSensorLight(new SensorLightImpl(spawnPointMap));
+		//Implies an update method for each movement
+		
+		this.character.setEffectorUp(new EffectorUpImpl(character, map));
+		this.character.setEffectorRight(new EffectorRightImpl(character, map));
+		this.character.setEffectorDown(new EffectorDownImpl(character, map));
+		this.character.setEffectorLeft(new EffectorLeftImpl(character, map));
+		this.character.setEffectorStone(new EffectorStoneImpl(character, map));
+		this.character.setEffectorExit(new EffectorExitImpl(character));
 	}
 
 }

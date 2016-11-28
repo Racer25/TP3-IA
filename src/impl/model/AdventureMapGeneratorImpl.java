@@ -51,7 +51,7 @@ public class AdventureMapGeneratorImpl implements AdventureMapGenerator
 					int[] coordonnees = new int[2];
 					coordonnees[0]=i;
 					coordonnees[1]=j;
-					adventureMap.getCasesMap()[i][j].setCoordMap(coordonnees);
+					adventureMap.getCasesMap()[i][j].setCoords(coordonnees);
 				}
 			}
 			//On definit les attributs independants
@@ -170,8 +170,8 @@ public class AdventureMapGeneratorImpl implements AdventureMapGenerator
 	{
 		for(int a = 0 ; a < fallPoints.size() ; a++)
 		{
-			int i = fallPoints.get(a).getCoordMap()[0];
-			int j = fallPoints.get(a).getCoordMap()[1];
+			int i = fallPoints.get(a).getCoords()[0];
+			int j = fallPoints.get(a).getCoords()[1];
 			if(i > 0)
 			{
 				adventureMap.getCasesMap()[i - 1][j].setWindy(true);
@@ -195,8 +195,8 @@ public class AdventureMapGeneratorImpl implements AdventureMapGenerator
 	{
 		for(int b = 0 ; b < monstruousPoints.size() ; b++)
 		{
-			int i = monstruousPoints.get(b).getCoordMap()[0];
-			int j = monstruousPoints.get(b).getCoordMap()[1];
+			int i = monstruousPoints.get(b).getCoords()[0];
+			int j = monstruousPoints.get(b).getCoords()[1];
 			if(i > 0)
 			{
 				adventureMap.getCasesMap()[i - 1][j].setPutrid(true);
@@ -288,33 +288,33 @@ public class AdventureMapGeneratorImpl implements AdventureMapGenerator
 				CaseMapImpl down = new CaseMapImpl();
 				CaseMapImpl left = new CaseMapImpl();
 				CaseMapImpl right = new CaseMapImpl();
-				if(c.getCoordMap()[0]>0)
+				if(c.getCoords()[0]>0)
 				{
-					up = (CaseMapImpl) adventureMap.getCasesMap()[c.getCoordMap()[0]-1][c.getCoordMap()[1]];
+					up = (CaseMapImpl) adventureMap.getCasesMap()[c.getCoords()[0]-1][c.getCoords()[1]];
 				}
 				else
 				{
 					up.setFall(true);
 				}
-				if(c.getCoordMap()[0]< taille - 1)
+				if(c.getCoords()[0]< taille - 1)
 				{
-					down = (CaseMapImpl) adventureMap.getCasesMap()[c.getCoordMap()[0]+1][c.getCoordMap()[1]];
+					down = (CaseMapImpl) adventureMap.getCasesMap()[c.getCoords()[0]+1][c.getCoords()[1]];
 				}
 				else
 				{
 					down.setFall(true);
 				}
-				if(c.getCoordMap()[1]< taille - 1)
+				if(c.getCoords()[1]< taille - 1)
 				{
-					right = (CaseMapImpl) adventureMap.getCasesMap()[c.getCoordMap()[0]][c.getCoordMap()[1]+1];
+					right = (CaseMapImpl) adventureMap.getCasesMap()[c.getCoords()[0]][c.getCoords()[1]+1];
 				}
 				else
 				{
 					right.setFall(true);
 				}
-				if(c.getCoordMap()[1]>0)
+				if(c.getCoords()[1]>0)
 				{
-					left = (CaseMapImpl) adventureMap.getCasesMap()[c.getCoordMap()[0]][c.getCoordMap()[1]-1];
+					left = (CaseMapImpl) adventureMap.getCasesMap()[c.getCoords()[0]][c.getCoords()[1]-1];
 				}
 				else
 				{

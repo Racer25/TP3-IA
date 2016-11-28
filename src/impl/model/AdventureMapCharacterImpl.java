@@ -21,4 +21,10 @@ public class AdventureMapCharacterImpl implements AdventureMapCharacter
 		this.cases=cases;
 	}
 
+	@Override
+	public void addCase(CaseCharacter maCase)
+	{
+		cases.add(maCase);
+	}
+
 }

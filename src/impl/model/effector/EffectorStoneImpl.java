@@ -20,32 +20,34 @@ public class EffectorStoneImpl implements Effector
 	public void doIt()
 	{
 		CaseCharacter caseAttacked = null;
+		int lineCurrentCase=character.getCurrentCase().getCoords()[0]+map.getChangeReference()[0];
+		int columnCurrentCase=character.getCurrentCase().getCoords()[1]+map.getChangeReference()[1];
 		//case attacked depends on the character orientation!!!
 		 switch (character.getOrientation()) 
 		 {
          case UP: 
         	 caseAttacked=(CaseCharacter) 
-				map.getCasesMap()
-				[character.getCurrentCase().getCoordForCharacter()[0]-1]
-				[character.getCurrentCase().getCoordForCharacter()[1]];
+        			 map.getCasesMap()
+     				[lineCurrentCase-1]
+     				[columnCurrentCase];
         	 break;
          case RIGHT:  
         	 caseAttacked=(CaseCharacter) 
-				map.getCasesMap()
-				[character.getCurrentCase().getCoordForCharacter()[0]]
-				[character.getCurrentCase().getCoordForCharacter()[1]+1];
+        			 map.getCasesMap()
+        			 [lineCurrentCase]
+        				[columnCurrentCase+1];
         	 break;
          case DOWN:  
         	 caseAttacked=(CaseCharacter) 
-				map.getCasesMap()
-				[character.getCurrentCase().getCoordForCharacter()[0]+1]
-				[character.getCurrentCase().getCoordForCharacter()[1]];
+        			 map.getCasesMap()
+        			 [lineCurrentCase+1]
+        	     	[columnCurrentCase];
              break;
          case LEFT:  
         	 caseAttacked=(CaseCharacter) 
-				map.getCasesMap()
-				[character.getCurrentCase().getCoordForCharacter()[0]]
-				[character.getCurrentCase().getCoordForCharacter()[1]-1];
+        			 map.getCasesMap()
+        			 [lineCurrentCase]
+        	     	[columnCurrentCase-1];
         	 break;
          default:
         	 System.err.println("Bad Orientation");

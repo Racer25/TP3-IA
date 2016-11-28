@@ -1,6 +1,10 @@
 package contract.model;
 
-public interface CaseMap 
+import java.util.HashMap;
+
+import utils.DirectionEnum;
+
+public interface CaseMap
 {
 	public boolean isSpawnPoint();
 	public void setSpawnPoint(boolean spawnPoint);
@@ -15,9 +19,9 @@ public interface CaseMap
 	public boolean isFall();
 	public void setFall(boolean fall);
 	
-	public int[] getCoordMap();
-	public void setCoordMap(int[] coordCharacter);
+	public int[] getCoords();
+	public void setCoords(int[] coords);
 	
-	public int[] getCoordForCharacter();
-	public void setCoordForCharacter(int[] coordCharacter);
+	public HashMap<DirectionEnum, Boolean> getPossibleDirections();
+	public void setPossibleDirections(HashMap<DirectionEnum, Boolean> possibleDirections);
 }

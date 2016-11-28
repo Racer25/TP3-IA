@@ -11,10 +11,7 @@ import contract.model.CaseCharacter;
 import contract.model.Character;
 import contract.model.Effector;
 import contract.model.Sensor;
-import impl.model.effector.EffectorExit;
-import impl.model.sensor.SensorLightImpl;
-import impl.model.sensor.SensorPutridImpl;
-import impl.model.sensor.SensorWindyImpl;
+import impl.model.effector.EffectorExitImpl;
 import utils.OrientationEnum;
 
 public class CharacterImpl extends Observable implements Character, Runnable
@@ -38,6 +35,7 @@ public class CharacterImpl extends Observable implements Character, Runnable
 	private Sensor sensorPutrid;
 	private Sensor sensorWindy;
 	private Sensor sensorLight;
+	private Sensor sensorDirections;
 	
 	//Memory
 	private AdventureMapCharacter mapDiscovered;
@@ -49,15 +47,6 @@ public class CharacterImpl extends Observable implements Character, Runnable
 		this.orientation=OrientationEnum.RIGHT;
 		this.currentCase=null;
 		this.setLevelComplete(false);
-		
-		//Sensors initialisation
-		this.sensorWindy=new SensorWindyImpl(this);
-		this.sensorPutrid=new SensorPutridImpl(this);
-		this.sensorLight=new SensorLightImpl(this);
-		
-		//Effector initialisation
-		this.effectorExit=new EffectorExit(this);
-		//TODO OTHERS EFFECTORS
 	}
 
 	@Override
@@ -120,7 +109,7 @@ public class CharacterImpl extends Observable implements Character, Runnable
 	public void setCurrentCase(CaseCharacter currentCase)
 	{
 		this.currentCase = currentCase;
-		notifyObservers(currentCase.getCoordForCharacter());
+		notifyObservers(currentCase.getCoords());
 		setChanged();
 	}
 
@@ -145,4 +134,106 @@ public class CharacterImpl extends Observable implements Character, Runnable
 		notifyObservers(new Object[]{"levelComplete", levelComplete});
 		setChanged();
 	}
+
+	public Effector getEffectorUp()
+	{
+		return effectorUp;
+	}
+
+	public void setEffectorUp(Effector effectorUp)
+	{
+		this.effectorUp = effectorUp;
+	}
+
+	public Effector getEffectorRight()
+	{
+		return effectorRight;
+	}
+
+	public void setEffectorRight(Effector effectorRight)
+	{
+		this.effectorRight = effectorRight;
+	}
+
+	public Effector getEffectorDown()
+	{
+		return effectorDown;
+	}
+
+	public void setEffectorDown(Effector effectorDown)
+	{
+		this.effectorDown = effectorDown;
+	}
+
+	public Effector getEffectorLeft()
+	{
+		return effectorLeft;
+	}
+
+	public void setEffectorLeft(Effector effectorLeft)
+	{
+		this.effectorLeft = effectorLeft;
+	}
+
+	public Effector getEffectorStone()
+	{
+		return effectorStone;
+	}
+
+	public void setEffectorStone(Effector effectorStone)
+	{
+		this.effectorStone = effectorStone;
+	}
+
+	public Effector getEffectorExit()
+	{
+		return effectorExit;
+	}
+
+	public void setEffectorExit(Effector effectorExit)
+	{
+		this.effectorExit = effectorExit;
+	}
+
+	public Sensor getSensorPutrid()
+	{
+		return sensorPutrid;
+	}
+
+	public void setSensorPutrid(Sensor sensorPutrid)
+	{
+		this.sensorPutrid = sensorPutrid;
+	}
+
+	public Sensor getSensorWindy()
+	{
+		return sensorWindy;
+	}
+
+	public void setSensorWindy(Sensor sensorWindy)
+	{
+		this.sensorWindy = sensorWindy;
+	}
+
+	public Sensor getSensorLight()
+	{
+		return sensorLight;
+	}
+
+	public void setSensorLight(Sensor sensorLight)
+	{
+		this.sensorLight = sensorLight;
+	}
+
+	public Sensor getSensorDirections()
+	{
+		return sensorDirections;
+	}
+
+	public void setSensorDirections(Sensor sensorDirections)
+	{
+		this.sensorDirections = sensorDirections;
+	}
+	
+	
 }

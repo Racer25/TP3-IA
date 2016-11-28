@@ -5,7 +5,7 @@ import contract.model.CaseMap;
 
 public class AdventureMapImpl implements AdventureMap
 {
-	private int[] changeReference;
+	private int[] changeReference;//pass from CoordCharacter to CoordMap
 	private CaseMapImpl[][] cases;
 	private int taille;
 

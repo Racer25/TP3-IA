@@ -21,8 +21,8 @@ public class EffectorDownImpl implements Effector
 	{
 		CaseCharacter newCase=(CaseCharacter) 
 				map.getCasesMap()
-				[character.getCurrentCase().getCoordForCharacter()[0]+1]
-				[character.getCurrentCase().getCoordForCharacter()[1]];
+				[character.getCurrentCase().getCoords()[0]+map.getChangeReference()[0]+1]
+				[character.getCurrentCase().getCoords()[1]+map.getChangeReference()[1]];
 		character.setCurrentCase(newCase);
 	}
 }

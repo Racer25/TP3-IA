@@ -3,11 +3,11 @@ package impl.model.sensor;
 import contract.model.CaseMap;
 import contract.model.Sensor;
 
-public class SensorWindyImpl implements Sensor
+public class SensorDirectionsImpl implements Sensor
 {
 	private CaseMap caseMap;
 	
-	public SensorWindyImpl(CaseMap caseMap)
+	public SensorDirectionsImpl(CaseMap caseMap)
 	{
 		this.caseMap=caseMap;
 	}
@@ -15,6 +15,7 @@ public class SensorWindyImpl implements Sensor
 	@Override
 	public Object answer()
 	{
-		return caseMap.isWindy();
+		return caseMap.getPossibleDirections();
 	}
+
 }

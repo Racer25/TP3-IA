@@ -1,20 +1,20 @@
 package impl.model.sensor;
 
+import contract.model.CaseMap;
 import contract.model.Sensor;
-import impl.model.CharacterImpl;
 
 public class SensorLightImpl implements Sensor
 {
-	private CharacterImpl character;
+	private CaseMap caseMap;
 	
-	public SensorLightImpl(CharacterImpl character)
+	public SensorLightImpl(CaseMap caseMap)
 	{
-		this.character=character;
+		this.caseMap=caseMap;
 	}
 	
 	@Override
 	public Object answer()
 	{
-		return character.getCurrentCase().isPortalPoint();
+		return caseMap.isPortalPoint();
 	}
 }

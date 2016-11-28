@@ -3,12 +3,14 @@ package impl.model;
 import java.util.HashMap;
 import java.util.Observable;
 
-import contract.model.CaseCharacter;
 import contract.model.CaseMap;
 import utils.DirectionEnum;
 
 public class CaseMapImpl extends Observable implements CaseMap
 {
+	//Coord
+	private int[] coords;
+	
 	//Independant attributes between them
 	private boolean spawnPoint;
 	private boolean portalPoint;
@@ -18,6 +20,10 @@ public class CaseMapImpl extends Observable implements CaseMap
 	//Combinable attributes
 	private boolean putrid;
 	private boolean windy;
+	
+	//Give possible directions
+	private HashMap<DirectionEnum, Boolean> possibleDirections;
+	//key: UP/RIGHT/DOWN/LEFT -> value:true
 	
 	public CaseMapImpl()
 	{
@@ -29,13 +35,6 @@ public class CaseMapImpl extends Observable implements CaseMap
 		this.putrid = false;
 		this.windy = false;
 	}
-	
-	//Give possible directions
-	private HashMap<DirectionEnum, Boolean> possibleDirections;
-	//key: UP/RIGHT/DOWN/LEFT -> value:true
-	
-	private int[] coordMap;
-	private int[] coordForCharacter;
 	
 	public boolean isSpawnPoint()
 	{
@@ -89,21 +88,13 @@ public class CaseMapImpl extends Observable implements CaseMap
 	{
 		this.fall = fall;
 	}
-	public int[] getCoordMap()
+	public int[] getCoords()
 	{
-		return coordMap;
+		return coords;
 	}
-	public void setCoordMap(int[] coordMap)
+	public void setCoords(int[] coords)
 	{
-		this.coordMap = coordMap;
-	}
-	public int[] getCoordForCharacter()
-	{
-		return coordForCharacter;
-	}
-	public void setCoordForCharacter(int[] coordForCharacter)
-	{
-		this.coordForCharacter = coordForCharacter;
+		this.coords = coords;
 	}
 	public HashMap<DirectionEnum, Boolean> getPossibleDirections()
 	{
