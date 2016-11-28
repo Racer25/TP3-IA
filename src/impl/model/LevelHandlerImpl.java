@@ -1,6 +1,5 @@
 package impl.model;
 
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -102,24 +101,27 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 	private void configureCharacter(AdventureMap map)
 	{
 		this.character.setLevelComplete(false);
-		this.character.setMapDiscovered(new AdventureMapCharacterImpl());
+		AdventureMapCharacter mapCharacter=new AdventureMapCharacterImpl();
+		this.character.setMapDiscovered(mapCharacter);
 		this.character.setOrientation(OrientationEnum.RIGHT);
 		this.character.setAlive(true);
+		
+		//Spawnpoint impact
 		int[] tab={0,0};
 		CaseCharacter spawnPointCharacter=new CaseCharacterImpl(tab, true, false, false, false, false, false);
-		this.character.setCurrentCase(spawnPointCharacter);
-		this.character.getMapDiscovered().addCase(spawnPointCharacter);
+		this.character.setCurrentCase(spawnPointCharacter);//Current Case
+		this.character.getMapDiscovered().addCase(spawnPointCharacter);//Memory
+		
 		//Initailize sensors and effectors
 		CaseMap spawnPointMap=this.generator.getSpawnPoint();
 		this.character.setSensorPutrid(new SensorPutridImpl(spawnPointMap));
 		this.character.setSensorWindy(new SensorWindyImpl(spawnPointMap));
 		this.character.setSensorLight(new SensorLightImpl(spawnPointMap));
 		//Implies an update method for each movement
-		
-		this.character.setEffectorUp(new EffectorUpImpl(character, map));
-		this.character.setEffectorRight(new EffectorRightImpl(character, map));
-		this.character.setEffectorDown(new EffectorDownImpl(character, map));
-		this.character.setEffectorLeft(new EffectorLeftImpl(character, map));
+		this.character.setEffectorUp(new EffectorUpImpl(character));
+		this.character.setEffectorRight(new EffectorRightImpl(character));
+		this.character.setEffectorDown(new EffectorDownImpl(character));
+		this.character.setEffectorLeft(new EffectorLeftImpl(character));
 		this.character.setEffectorStone(new EffectorStoneImpl(character, map));
 		this.character.setEffectorExit(new EffectorExitImpl(character));
 	}

@@ -1,28 +1,27 @@
 package impl.model.effector;
 
-import contract.model.AdventureMap;
 import contract.model.CaseCharacter;
 import contract.model.Effector;
+import impl.model.CaseCharacterImpl;
 import impl.model.CharacterImpl;
 
 public class EffectorLeftImpl implements Effector
 {
 	private CharacterImpl character;
-	private AdventureMap map;
 
-	public EffectorLeftImpl(CharacterImpl character, AdventureMap map)
+	public EffectorLeftImpl(CharacterImpl character)
 	{
 		this.character=character;
-		this.map=map;
 	}
 	
 	@Override
 	public void doIt()
 	{
-		CaseCharacter newCase=(CaseCharacter) 
-				map.getCasesMap()
-				[character.getCurrentCase().getCoords()[0]+map.getChangeReference()[0]]
-				[character.getCurrentCase().getCoords()[1]+map.getChangeReference()[1]-1];
-		character.setCurrentCase(newCase);
+		int[] newCoord={
+				this.character.getCurrentCase().getCoords()[0],
+				this.character.getCurrentCase().getCoords()[1]-1};
+		CaseCharacter newCase=new CaseCharacterImpl(newCoord, false, false, false, false, false, false);
+		this.character.setCurrentCase(newCase);
+		this.character.getMapDiscovered().addCase(newCase);
 	}
 }
