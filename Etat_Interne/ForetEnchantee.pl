@@ -29,8 +29,3 @@ update_internal_state(CooXCurrentCase, CooYCurrentCase, Putrid, Windy, BordureDr
 	%Ajout de la case actuelle dans les cases parcourues
 	asserta(caseCovered(CooXCurrentCase, CooYCurrentCase)).
 
-
-take_decision(Reponse):-
-	.
-
-
