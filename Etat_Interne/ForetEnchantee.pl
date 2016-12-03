@@ -31,24 +31,24 @@ update_internal_state(CooXCurrentCase, CooYCurrentCase, Putrid, Windy, BordureDr
 	    (\+BordureHaut
 	     ->	(\+caseCovered(Haut, CooYCurrentCase)
 		->  asserta(riskMonstruous(Haut, CooYCurrentCase))
-		;    writeln(""))
-	    ;    writeln("")),
+		;    !)
+	    ;    !),
 	    (\+BordureDroite
 	     ->	(\+caseCovered(CooXCurrentCase, Droite)
 		->  asserta(riskMonstruous(CooXCurrentCase, Droite))
-		;    writeln(""))
-	    ;    writeln("")),
+		;    !)
+	    ;    !),
 	    (\+BordureBas
 	     ->	(\+caseCovered(Bas, CooYCurrentCase)
 		->  asserta(riskMonstruous(Bas, CooYCurrentCase))
-		;    writeln(""))
-	    ;    writeln("")),
+		;    !)
+	    ;    !),
 	    (\+BordureGauche
 	     ->	(\+caseCovered(CooXCurrentCase, Gauche)
 		->  asserta(riskMonstruous(CooXCurrentCase, Gauche))
-		;    writeln(""))
-	    ;    writeln(""))
-	;    writeln("")),
+		;    !)
+	    ;    !)
+	;    !),
 
 	%Ajout de la case si la case est venteuse
 	(Windy == true
@@ -56,34 +56,34 @@ update_internal_state(CooXCurrentCase, CooYCurrentCase, Putrid, Windy, BordureDr
 	    (\+BordureHaut
 	     ->	(\+caseCovered(CooXCurrentCase-1, CooYCurrentCase)
 		->  asserta(riskWindy(CooXCurrentCase-1, CooYCurrentCase))
-		;    writeln(""))
-	    ;    writeln("")),
+		;    !)
+	    ;   !),
 	    (\+BordureDroite
 	     ->	(\+caseCovered(CooXCurrentCase, CooYCurrentCase+1)
 		->  asserta(riskWindy(CooXCurrentCase, CooYCurrentCase+1))
-		;    writeln(""))
-	    ;    writeln("")),
+		;    !)
+	    ;    !),
 	    (\+BordureBas
 	     ->	(\+caseCovered(CooXCurrentCase+1, CooYCurrentCase)
 		->  asserta(riskWindy(CooXCurrentCase+1, CooYCurrentCase))
-		;    writeln(""))
-	    ;    writeln("")),
+		;    !)
+	    ;    !),
 	    (\+BordureGauche
 	     ->	(\+caseCovered(CooXCurrentCase, CooYCurrentCase-1)
 		->  asserta(riskWindy(CooXCurrentCase, CooYCurrentCase-1))
-		;    writeln(""))
-	    ;    writeln(""))
-	;    writeln("")),
+		;    !)
+	    ;    !)
+	;    !),
 
 	%Mise a jours des bordures pour la case actuelle
 	((BordureDroite == true, BordureGauche == true, BordureHaut == true, BordureBas ==true)
 	->  asserta(border(CooXCurrentCase, CooYCurrentCase, BordureHaut, BordureDroite, BordureBas, BordureGauche))
-	;    writeln("")),
+	;    !),
 	%Ajout de la case actuelle dans les cases parcourues
 	asserta(caseCovered(CooXCurrentCase, CooYCurrentCase)),
 	(currentCase(_,_)
 	->  retract(currentCase(_,_))
-	;   writeln("")),
+	;   !),
 	asserta(currentCase(CooXCurrentCase, CooYCurrentCase)).
 
 
