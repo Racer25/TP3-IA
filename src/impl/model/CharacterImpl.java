@@ -69,7 +69,7 @@ public class CharacterImpl extends Observable implements Character, Runnable
 	public void setScore(int score)
 	{
 		this.score = score;
-		notifyObservers(score);
+		notifyObservers(new Object[]{"score", score});
 		setChanged();
 	}
 
@@ -81,6 +81,8 @@ public class CharacterImpl extends Observable implements Character, Runnable
 	public void setOrientation(OrientationEnum orientation)
 	{
 		this.orientation = orientation;
+		notifyObservers(new Object[]{"orientation", orientation});
+		setChanged();
 	}
 
 	public CaseCharacter getCurrentCase()
@@ -97,6 +99,8 @@ public class CharacterImpl extends Observable implements Character, Runnable
 		{
 			setLevelComplete(true);
 		}
+		notifyObservers(new Object[]{"case", currentCase});
+		setChanged();
 	}
 
 	public AdventureMapCharacter getMapDiscovered()

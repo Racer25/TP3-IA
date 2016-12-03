@@ -45,10 +45,6 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 						generateLevel();
 					}
 				}
-				else if(object[0].equals("coordonnees"))
-				{
-					
-				}
 			}
 		}
 	}

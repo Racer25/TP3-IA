@@ -216,6 +216,8 @@ public class AdventureMapGeneratorImpl implements AdventureMapGenerator
 		}
 	}
 	
+
+	
 	public void printMap()
 	{
 		for(int i = 0 ; i < taille ; i++)
