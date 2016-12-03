@@ -30,6 +30,7 @@ update_internal_state(CooXCurrentCase, CooYCurrentCase, Putrid, Windy, BordureDr
 	asserta(caseCovered(CooXCurrentCase, CooYCurrentCase)).
 
 
-
+take_decision(Reponse):-
+	.
 
 

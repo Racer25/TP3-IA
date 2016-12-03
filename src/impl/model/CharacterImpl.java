@@ -1,12 +1,16 @@
 package impl.model;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Observable;
 
 import org.jpl7.Atom;
+import org.jpl7.Compound;
 import org.jpl7.Query;
 import org.jpl7.Term;
+import org.jpl7.Variable;
 
-import contract.model.AdventureMapCharacter;
 import contract.model.CaseCharacter;
 import contract.model.Character;
 import contract.model.Effector;
@@ -48,24 +52,54 @@ public class CharacterImpl extends Observable implements Character, Runnable
 	@Override
 	public void run()
 	{
+		consultPrologFile();
 		while(true)
 		{
 			while(this.alive)
 			{
+				List<Integer> actions=new ArrayList<Integer>();
+				Query q = new Query(new Compound("takeDecisions", new Term[] { new Variable("X")}));
+				while (q.hasMoreSolutions())
+				{
+					Map<String, Term> action = q.nextSolution();
+				    actions.add(Integer.valueOf(action.get("X").toString()));
+				}
 				
+				for(Integer action: actions)
+				{
+					switch (action) 
+					{
+						case 0:
+							System.out.println("Caillou");
+							this.effectorStone.doIt();
+							break;
+			            case 1:
+			            	System.out.println("Haut");
+			            	this.effectorUp.doIt();     
+			            	break;
+			            case 2:
+			            	System.out.println("Droite");
+			            	this.effectorRight.doIt();
+			                break;
+			            case 3:
+			            	System.out.println("Down");
+			            	this.effectorDown.doIt();
+			            	break;
+			            case 4:
+			            	System.out.println("Gauche");
+			            	this.effectorLeft.doIt();
+			                break;
+			            default: 
+			            	System.out.println("Erreur dans l'entier retourner par prolog");
+			                break;
+		            }
+				}
 			}
 		}
 	}
 	
-	@Override
-	public void move(String direction)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-	
-	public boolean ConsultPrologFile() {
-		Query q1=new Query("consult", new Term[]{new Atom("Etat_Interne/ForetEnchante.pl")});
+	public boolean consultPrologFile() {
+		Query q1=new Query("consult", new Term[]{new Atom("Etat_Interne/ForetEnchantee.pl")});
 		return q1.hasSolution();
 	}
 	
@@ -225,7 +259,5 @@ public class CharacterImpl extends Observable implements Character, Runnable
 	public void setSensorDirections(Sensor sensorDirections)
 	{
 		this.sensorDirections = sensorDirections;
-	}
-	
-	
+	}	
 }
