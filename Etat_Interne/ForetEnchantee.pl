@@ -86,3 +86,14 @@ update_internal_state(CooXCurrentCase, CooYCurrentCase, Putrid, Windy, BordureDr
 	;   writeln("")),
 	asserta(currentCase(CooXCurrentCase, CooYCurrentCase)).
 
+
+raz_internal_state():-
+	retractall(putrid(_)),
+	retractall(windy(_)),
+	retractall(caseCovered(_,_)),
+	retractall(border(_,_,_,_,_,_)),
+	retractall(fall(_,_)),
+	retractall(monstruous(_,_)),
+	retractall(riskMonstruous(_,_)),
+	retractall(riskFall(_,_)),
+	retractall(currentCase(_,_)).
