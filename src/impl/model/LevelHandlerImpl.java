@@ -1,9 +1,9 @@
 package impl.model;
 
+import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 
-import contract.model.AdventureMapCharacter;
 import contract.model.AdventureMapGenerator;
 import contract.model.CaseCharacter;
 import contract.model.CaseMap;
@@ -18,6 +18,7 @@ import impl.model.sensor.SensorDirectionsImpl;
 import impl.model.sensor.SensorLightImpl;
 import impl.model.sensor.SensorPutridImpl;
 import impl.model.sensor.SensorWindyImpl;
+import utils.DirectionEnum;
 import utils.OrientationEnum;
 
 public class LevelHandlerImpl implements LevelHandler, Observer
@@ -115,7 +116,7 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 		
 		//Spawnpoint impact
 		int[] tab={0,0};
-		CaseCharacter spawnPointCharacter=new CaseCharacterImpl(tab, true, false, false, false, false, false);
+		CaseCharacter spawnPointCharacter=new CaseCharacterImpl(tab, true, false, false, false, false, false, new HashMap<DirectionEnum, Boolean>());
 		this.character.setCurrentCase(spawnPointCharacter);//Current Case
 		
 		//Initailize sensors and effectors

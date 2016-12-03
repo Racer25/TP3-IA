@@ -1,6 +1,7 @@
 package impl.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
@@ -15,6 +16,7 @@ import contract.model.CaseCharacter;
 import contract.model.Character;
 import contract.model.Effector;
 import contract.model.Sensor;
+import utils.DirectionEnum;
 import utils.OrientationEnum;
 
 public class CharacterImpl extends Observable implements Character, Runnable
@@ -57,6 +59,22 @@ public class CharacterImpl extends Observable implements Character, Runnable
 		{
 			while(this.alive)
 			{
+				//MAJ case actuelle
+				updateCurrentCase();
+				//Envoie des informations à prolog
+				Query internalStateQuery = new Query(new Compound("update_internal_state", new Term[] 
+						{
+								new Atom(Integer.toString(this.currentCase.getCoords()[0])), 
+								new Atom(Integer.toString(this.currentCase.getCoords()[1])),
+								new Atom(Boolean.toString(this.currentCase.isPutrid())),
+								new Atom(Boolean.toString(this.currentCase.isWindy())),
+								new Atom(Boolean.toString(!this.currentCase.getPossibleDirections().get(DirectionEnum.RIGHT))),
+								new Atom(Boolean.toString(!this.currentCase.getPossibleDirections().get(DirectionEnum.LEFT))),
+								new Atom(Boolean.toString(!this.currentCase.getPossibleDirections().get(DirectionEnum.UP))),
+								new Atom(Boolean.toString(!this.currentCase.getPossibleDirections().get(DirectionEnum.DOWN)))
+						}));
+				internalStateQuery.hasSolution();
+				
 				List<Integer> actions=new ArrayList<Integer>();
 				Query q = new Query(new Compound("takeDecisions", new Term[] { new Variable("X")}));
 				while (q.hasMoreSolutions())
@@ -259,5 +277,13 @@ public class CharacterImpl extends Observable implements Character, Runnable
 	public void setSensorDirections(Sensor sensorDirections)
 	{
 		this.sensorDirections = sensorDirections;
-	}	
+	}
+	
+	private void updateCurrentCase()
+	{
+		this.currentCase.setPortalPoint((Boolean) this.sensorLight.answer());
+		this.currentCase.setPutrid((Boolean) this.sensorPutrid.answer());
+		this.currentCase.setWindy((Boolean) this.sensorWindy.answer());
+		this.currentCase.setPossibleDirections((HashMap<DirectionEnum, Boolean>) this.sensorDirections.answer());
+	}
 }
