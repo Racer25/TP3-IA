@@ -81,6 +81,7 @@ public class CharacterImpl extends Observable implements Character, Runnable
 							}));
 					internalStateQuery.hasSolution();
 					
+					
 					//Récupération des actions à réaliser
 					List<Integer> actions=new ArrayList<Integer>();
 					Query q = new Query(new Compound("takeDecisions", new Term[] { new Variable("Reponse")}));
