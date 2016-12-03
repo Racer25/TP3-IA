@@ -7,6 +7,7 @@
 :-dynamic(riskMonstruous/2).
 :-dynamic(riskFall/2).
 :-dynamic(currentCase/2).
+:-dynamic(voisin/2).
 
 % putrid(cooX, cooY).
 % windy(cooX, cooY).
@@ -95,9 +96,23 @@ update_internal_state(CooXCurrentCase, CooYCurrentCase, Putrid, Windy, BordureDr
 	;    !),
 
 	%Mise a jours des bordures pour la case actuelle
-	((BordureDroite == true, BordureGauche == true, BordureHaut == true, BordureBas ==true)
-	->  asserta(border(CooXCurrentCase, CooYCurrentCase, BordureHaut, BordureDroite, BordureBas, BordureGauche))
+	((BordureDroite == true; BordureGauche == true; BordureHaut == true; BordureBas ==true)
+	->  asserta(border(CooXCurrentCase, CooYCurrentCase, BordureHaut, BordureDroite, BordureBas, BordureGauche)),
+	    %Ajout des voisins
+	    (BordureHaut=\=true->
+	    NewCoord is CooXCurrentCase-1,
+	    asserta(voisin([CooXCurrentCase,CooYCurrentCase],[NewCoord,CooYCurrentCase]));!),
+	 (BordureDroite=\=true->
+	    NewCoord is CooYCurrentCase+1,
+	    asserta(voisin([CooXCurrentCase,CooYCurrentCase],[CooXCurrentCase,NewCoord]));!),
+	 (BordureBas=\=true->
+	    NewCoord is CooXCurrentCase+1,
+	    asserta(voisin([CooXCurrentCase,CooYCurrentCase],[NewCoord,CooYCurrentCase]));!),
+	  (BordureGauche=\=true->
+	    NewCoord is CooYCurrentCase-1,
+	    asserta(voisin([CooXCurrentCase,CooYCurrentCase],[CooXCurrentCase,NewCoord]));!)
 	;    !),
+
 	%Ajout de la case actuelle dans les cases parcourues
 	asserta(caseCovered(CooXCurrentCase, CooYCurrentCase)),
 	(currentCase(_,_)
