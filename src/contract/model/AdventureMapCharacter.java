@@ -5,6 +5,9 @@ import java.util.List;
 public interface AdventureMapCharacter
 {
 	//Give the CaseCharacter discovered
-	List<CaseCharacter> getCasesCharacter();
+	public List<CaseCharacter> getCasesCharacter();
 	public void setCasesCharacter(List<CaseCharacter> cases);
+	public void addCase(CaseCharacter maCase);
+	
+	
 }

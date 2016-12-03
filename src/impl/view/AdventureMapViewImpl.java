@@ -12,7 +12,7 @@ import contract.model.AdventureMap;
 import contract.view.AdventureMapView;
 import contract.view.CaseView;
 import impl.controller.CaseControllerImpl;
-import impl.model.CaseImpl;
+import impl.model.CaseMapImpl;
 import impl.model.CharacterImpl;
 
 public class AdventureMapViewImpl extends JPanel implements AdventureMapView, Observer
@@ -32,7 +32,7 @@ public class AdventureMapViewImpl extends JPanel implements AdventureMapView, Ob
 				casesView[i][j]=new CaseViewImpl(myMap.getCasesMap()[i][j]);
 				@SuppressWarnings("unused")
 				CaseController caseController=new CaseControllerImpl(
-						(CaseImpl) myMap.getCasesMap()[i][j],
+						(CaseMapImpl) myMap.getCasesMap()[i][j],
 						(CaseViewImpl)casesView[i][j], 
 						character);
 				this.add((CaseViewImpl) casesView[i][j]);

@@ -15,17 +15,17 @@ public class AdventureMapGeneratorImpl implements AdventureMapGenerator
 	private int taille;
 	private int nbFall;
 	private int nbMonstruous;
-	private ArrayList<CaseImpl> casesList;
+	private ArrayList<CaseMapImpl> casesList;
 	
 	//Les cases remarquables 
-	private ArrayList<CaseImpl> fallPoints;
-	private ArrayList<CaseImpl> monstruousPoints;
-	private CaseImpl spawnPoint;
+	private ArrayList<CaseMapImpl> fallPoints;
+	private ArrayList<CaseMapImpl> monstruousPoints;
+	private CaseMapImpl spawnPoint;
 
 	public AdventureMapGeneratorImpl()
 	{
-		this.fallPoints = new ArrayList<CaseImpl>();
-		this.monstruousPoints = new ArrayList<CaseImpl>();
+		this.fallPoints = new ArrayList<CaseMapImpl>();
+		this.monstruousPoints = new ArrayList<CaseMapImpl>();
 	}
 	
 	public AdventureMapImpl createMap(int taille, int nbFall, int nbMonstruous)
@@ -41,17 +41,17 @@ public class AdventureMapGeneratorImpl implements AdventureMapGenerator
 			adventureMap = new AdventureMapImpl();
 			adventureMap.setTaille(this.taille);
 			//On creer son tableau de cases
-			adventureMap.setCasesMap(new CaseImpl[taille][taille]);
+			adventureMap.setCasesMap(new CaseMapImpl[taille][taille]);
 			//Et on l'implemente
 			for(int i = 0 ; i < taille ; i++)
 			{
 				for(int j = 0 ; j < taille ; j++)
 				{
-					adventureMap.getCasesMap()[i][j] = new CaseImpl();
+					adventureMap.getCasesMap()[i][j] = new CaseMapImpl();
 					int[] coordonnees = new int[2];
 					coordonnees[0]=i;
 					coordonnees[1]=j;
-					adventureMap.getCasesMap()[i][j].setCoordMap(coordonnees);
+					adventureMap.getCasesMap()[i][j].setCoords(coordonnees);
 				}
 			}
 			//On definit les attributs independants
@@ -100,7 +100,7 @@ public class AdventureMapGeneratorImpl implements AdventureMapGenerator
 		if(fall == false && portal == false && monstruous == false)
 		{
 			adventureMap.getCasesMap()[i][j].setSpawnPoint(true);
-			spawnPoint = (CaseImpl) adventureMap.getCasesMap()[i][j];
+			spawnPoint = (CaseMapImpl) adventureMap.getCasesMap()[i][j];
 		}
 		else
 		{
@@ -138,7 +138,7 @@ public class AdventureMapGeneratorImpl implements AdventureMapGenerator
 		if(spawn == false && portal == false && monstruous == false && fall == false)
 		{
 			adventureMap.getCasesMap()[i][j].setFall(true);
-			fallPoints.add((CaseImpl) adventureMap.getCasesMap()[i][j]);
+			fallPoints.add((CaseMapImpl) adventureMap.getCasesMap()[i][j]);
 		}
 		else
 		{
@@ -158,7 +158,7 @@ public class AdventureMapGeneratorImpl implements AdventureMapGenerator
 		if(spawn == false && fall == false && portal == false && monstruous == false)
 		{
 			adventureMap.getCasesMap()[i][j].setMonstruous(true);
-			monstruousPoints.add((CaseImpl) adventureMap.getCasesMap()[i][j]);
+			monstruousPoints.add((CaseMapImpl) adventureMap.getCasesMap()[i][j]);
 		}
 		else
 		{
@@ -170,8 +170,8 @@ public class AdventureMapGeneratorImpl implements AdventureMapGenerator
 	{
 		for(int a = 0 ; a < fallPoints.size() ; a++)
 		{
-			int i = fallPoints.get(a).getCoordMap()[0];
-			int j = fallPoints.get(a).getCoordMap()[1];
+			int i = fallPoints.get(a).getCoords()[0];
+			int j = fallPoints.get(a).getCoords()[1];
 			if(i > 0)
 			{
 				adventureMap.getCasesMap()[i - 1][j].setWindy(true);
@@ -195,8 +195,8 @@ public class AdventureMapGeneratorImpl implements AdventureMapGenerator
 	{
 		for(int b = 0 ; b < monstruousPoints.size() ; b++)
 		{
-			int i = monstruousPoints.get(b).getCoordMap()[0];
-			int j = monstruousPoints.get(b).getCoordMap()[1];
+			int i = monstruousPoints.get(b).getCoords()[0];
+			int j = monstruousPoints.get(b).getCoords()[1];
 			if(i > 0)
 			{
 				adventureMap.getCasesMap()[i - 1][j].setPutrid(true);
@@ -268,10 +268,10 @@ public class AdventureMapGeneratorImpl implements AdventureMapGenerator
 	
 	public void ReinitializeCasesList()
 	{
-		casesList = new ArrayList<CaseImpl>();
+		casesList = new ArrayList<CaseMapImpl>();
 	}
 	
-	public boolean isFeasible(CaseImpl c)
+	public boolean isFeasible(CaseMapImpl c)
 	{
 		if(!casesList.contains(c))
 		{
@@ -286,37 +286,37 @@ public class AdventureMapGeneratorImpl implements AdventureMapGenerator
 			}
 			else
 			{
-				CaseImpl up = new CaseImpl();
-				CaseImpl down = new CaseImpl();
-				CaseImpl left = new CaseImpl();
-				CaseImpl right = new CaseImpl();
-				if(c.getCoordMap()[0]>0)
+				CaseMapImpl up = new CaseMapImpl();
+				CaseMapImpl down = new CaseMapImpl();
+				CaseMapImpl left = new CaseMapImpl();
+				CaseMapImpl right = new CaseMapImpl();
+				if(c.getCoords()[0]>0)
 				{
-					up = (CaseImpl) adventureMap.getCasesMap()[c.getCoordMap()[0]-1][c.getCoordMap()[1]];
+					up = (CaseMapImpl) adventureMap.getCasesMap()[c.getCoords()[0]-1][c.getCoords()[1]];
 				}
 				else
 				{
 					up.setFall(true);
 				}
-				if(c.getCoordMap()[0]< taille - 1)
+				if(c.getCoords()[0]< taille - 1)
 				{
-					down = (CaseImpl) adventureMap.getCasesMap()[c.getCoordMap()[0]+1][c.getCoordMap()[1]];
+					down = (CaseMapImpl) adventureMap.getCasesMap()[c.getCoords()[0]+1][c.getCoords()[1]];
 				}
 				else
 				{
 					down.setFall(true);
 				}
-				if(c.getCoordMap()[1]< taille - 1)
+				if(c.getCoords()[1]< taille - 1)
 				{
-					right = (CaseImpl) adventureMap.getCasesMap()[c.getCoordMap()[0]][c.getCoordMap()[1]+1];
+					right = (CaseMapImpl) adventureMap.getCasesMap()[c.getCoords()[0]][c.getCoords()[1]+1];
 				}
 				else
 				{
 					right.setFall(true);
 				}
-				if(c.getCoordMap()[1]>0)
+				if(c.getCoords()[1]>0)
 				{
-					left = (CaseImpl) adventureMap.getCasesMap()[c.getCoordMap()[0]][c.getCoordMap()[1]-1];
+					left = (CaseMapImpl) adventureMap.getCasesMap()[c.getCoords()[0]][c.getCoords()[1]-1];
 				}
 				else
 				{
@@ -341,12 +341,12 @@ public class AdventureMapGeneratorImpl implements AdventureMapGenerator
 		this.adventureMap = adventureMap;
 	}
 	
-	public CaseImpl getSpawnPoint()
+	public CaseMapImpl getSpawnPoint()
 	{
 		return spawnPoint;
 	}
 
-	public void setSpawnPoint(CaseImpl spawnPoint)
+	public void setSpawnPoint(CaseMapImpl spawnPoint)
 	{
 		this.spawnPoint = spawnPoint;
 	}

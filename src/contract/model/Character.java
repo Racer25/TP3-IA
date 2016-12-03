@@ -4,9 +4,7 @@ import utils.OrientationEnum;
 
 public interface Character
 {	
-	//Change currentCase and update memory of the agent
-	public void move(String direction);
-	
+	//Change currentCase and update memory of the agent	
 	public Boolean isAlive();
 	public void setAlive(Boolean alive);
 	public int getScore();
@@ -16,5 +14,5 @@ public interface Character
 	public CaseCharacter getCurrentCase();
 	public void setCurrentCase(CaseCharacter currentCase);
 	
-	public boolean ConsultPrologFile();
+	public boolean consultPrologFile();
 }

@@ -4,23 +4,25 @@ import java.util.Observable;
 import java.util.Observer;
 
 import contract.controller.CaseController;
-import impl.model.CaseImpl;
+import contract.model.CaseMap;
+import contract.view.CaseView;
+import impl.model.CaseMapImpl;
 import impl.model.CharacterImpl;
 import impl.view.CaseViewImpl;
 
 public class CaseControllerImpl implements CaseController, Observer
 {
-	private CaseImpl maCase;
-	private CaseViewImpl maCaseView;
+	private CaseMap maCase;
+	private CaseView maCaseView;
 	private CharacterImpl character;
 
-	public CaseControllerImpl(CaseImpl maCase, CaseViewImpl maCaseview, CharacterImpl character)
+	public CaseControllerImpl(CaseMap maCase, CaseView maCaseview, CharacterImpl character)
 	{
 		this.maCase=maCase;
 		this.maCaseView=maCaseview;
 		this.character=character;
 		
-		maCase.addObserver(this);
+		((CaseMapImpl) maCase).addObserver(this);
 		character.addObserver(this);
 		
 	}
@@ -44,7 +46,7 @@ public class CaseControllerImpl implements CaseController, Observer
 			}
 			
 		}
-		else if(arg0 instanceof CaseImpl)
+		else if(arg0 instanceof CaseMapImpl)
 		{
 			//Change caseView Visual
 			if((boolean)arg1)
