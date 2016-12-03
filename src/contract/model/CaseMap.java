@@ -24,4 +24,5 @@ public interface CaseMap
 	
 	public HashMap<DirectionEnum, Boolean> getPossibleDirections();
 	public void setPossibleDirections(HashMap<DirectionEnum, Boolean> possibleDirections);
+	public void addPossibleDirection(DirectionEnum dir, Boolean state);
 }
