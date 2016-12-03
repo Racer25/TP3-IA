@@ -44,7 +44,7 @@ public class CharacterImpl extends Observable implements Character, Runnable
 	
 	public CharacterImpl()
 	{
-		this.alive=true;
+		this.alive=false;
 		this.score=0;
 		this.orientation=OrientationEnum.RIGHT;
 		this.currentCase=null;
