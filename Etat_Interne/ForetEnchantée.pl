@@ -13,6 +13,9 @@
 % border(cooX, cooY, bordureHaut,
 % bordureDroite, bordureBas, bordureGauche).
 
+takeDecisions(X):-
+	X=2.
+
 update_internal_state(CooXCurrentCase, CooYCurrentCase, Putrid, Windy, BordureDroite, BordureGauche, BordureHaut, BordureBas):-
         %Ajout de la case si la case est putride
 	(Putrid== true
@@ -20,7 +23,7 @@ update_internal_state(CooXCurrentCase, CooYCurrentCase, Putrid, Windy, BordureDr
 	%Ajout de la case si la case est venteuse
 	(Windy == true
 	 -> asserta(windy(CooXCurrentCase, CooYCurrentCase))),
-	%Mise à jours des bordures pour la case actuelle
+	%Mise ï¿½ jours des bordures pour la case actuelle
 	((BordureDroite == true, BordureGauche == true, BordureHaut == true, BordureBas ==true)
 	->  asserta(border(CooXCurrentCase, CooYCurrentCase, BordureHaut, BordureDroite, BordureBas, BordureGauche))),
 	%Ajout de la case actuelle dans les cases parcourues
