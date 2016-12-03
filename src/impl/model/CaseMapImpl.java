@@ -34,6 +34,7 @@ public class CaseMapImpl extends Observable implements CaseMap
 		this.fall = false;
 		this.putrid = false;
 		this.windy = false;
+		this.possibleDirections=new HashMap<DirectionEnum, Boolean>();
 	}
 	
 	public boolean isSpawnPoint()
@@ -103,5 +104,9 @@ public class CaseMapImpl extends Observable implements CaseMap
 	public void setPossibleDirections(HashMap<DirectionEnum, Boolean> possibleDirections)
 	{
 		this.possibleDirections = possibleDirections;
+	}
+	public void addPossibleDirection(DirectionEnum dir, Boolean state)
+	{
+		this.possibleDirections.put(dir, state);
 	}
 }

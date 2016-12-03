@@ -24,37 +24,76 @@ update_internal_state(CooXCurrentCase, CooYCurrentCase, Putrid, Windy, BordureDr
         %Ajout de la case si la case est putride
 	(Putrid== true
 	->  asserta(putrid(CooXCurrentCase, CooYCurrentCase)),
+	    Haut is CooXCurrentCase+1,
+	    Droite is CooYCurrentCase+1,
+	    Bas is CooXCurrentCase+1,
+	    Gauche is CooYCurrentCase-1,
 	    (\+BordureHaut
-	     ->	(\+caseCovered(CooXCurrentCase-1, CooYCurrentCase)
-		->  asserta(riskMonstruous(CooXCurrentCase-1, CooYCurrentCase)))),
+	     ->	(\+caseCovered(Haut, CooYCurrentCase)
+		->  asserta(riskMonstruous(Haut, CooYCurrentCase))
+		;    !)
+	    ;    !),
 	    (\+BordureDroite
-	     ->	(\+caseCovered(CooXCurrentCase, CooYCurrentCase+1)
-		->  asserta(riskMonstruous(CooXCurrentCase, CooYCurrentCase+1)))),
+	     ->	(\+caseCovered(CooXCurrentCase, Droite)
+		->  asserta(riskMonstruous(CooXCurrentCase, Droite))
+		;    !)
+	    ;    !),
 	    (\+BordureBas
-	     ->	(\+caseCovered(CooXCurrentCase+1, CooYCurrentCase)
-		->  asserta(riskMonstruous(CooXCurrentCase+1, CooYCurrentCase)))),
+	     ->	(\+caseCovered(Bas, CooYCurrentCase)
+		->  asserta(riskMonstruous(Bas, CooYCurrentCase))
+		;    !)
+	    ;    !),
 	    (\+BordureGauche
-	     ->	(\+caseCovered(CooXCurrentCase+1, CooYCurrentCase)
-		->  asserta(riskMonstruous(CooXCurrentCase+1, CooYCurrentCase))))),		%Ajout de la case si la case est venteuse
+	     ->	(\+caseCovered(CooXCurrentCase, Gauche)
+		->  asserta(riskMonstruous(CooXCurrentCase, Gauche))
+		;    !)
+	    ;    !)
+	;    !),
+
+	%Ajout de la case si la case est venteuse
 	(Windy == true
 	 -> asserta(windy(CooXCurrentCase, CooYCurrentCase)),
 	    (\+BordureHaut
 	     ->	(\+caseCovered(CooXCurrentCase-1, CooYCurrentCase)
-		->  asserta(riskMonstruous(CooXCurrentCase-1, CooYCurrentCase)))),
+		->  asserta(riskWindy(CooXCurrentCase-1, CooYCurrentCase))
+		;    !)
+	    ;   !),
 	    (\+BordureDroite
 	     ->	(\+caseCovered(CooXCurrentCase, CooYCurrentCase+1)
-		->  asserta(riskMonstruous(CooXCurrentCase, CooYCurrentCase+1)))),
+		->  asserta(riskWindy(CooXCurrentCase, CooYCurrentCase+1))
+		;    !)
+	    ;    !),
 	    (\+BordureBas
 	     ->	(\+caseCovered(CooXCurrentCase+1, CooYCurrentCase)
-		->  asserta(riskMonstruous(CooXCurrentCase+1, CooYCurrentCase)))),
+		->  asserta(riskWindy(CooXCurrentCase+1, CooYCurrentCase))
+		;    !)
+	    ;    !),
 	    (\+BordureGauche
-	     ->	(\+caseCovered(CooXCurrentCase+1, CooYCurrentCase)
-		->  asserta(riskMonstruous(CooXCurrentCase+1, CooYCurrentCase))))),
+	     ->	(\+caseCovered(CooXCurrentCase, CooYCurrentCase-1)
+		->  asserta(riskWindy(CooXCurrentCase, CooYCurrentCase-1))
+		;    !)
+	    ;    !)
+	;    !),
+
 	%Mise a jours des bordures pour la case actuelle
 	((BordureDroite == true, BordureGauche == true, BordureHaut == true, BordureBas ==true)
-	->  asserta(border(CooXCurrentCase, CooYCurrentCase, BordureHaut, BordureDroite, BordureBas, BordureGauche))),
+	->  asserta(border(CooXCurrentCase, CooYCurrentCase, BordureHaut, BordureDroite, BordureBas, BordureGauche))
+	;    !),
 	%Ajout de la case actuelle dans les cases parcourues
 	asserta(caseCovered(CooXCurrentCase, CooYCurrentCase)),
-	retract(currentCase(_)),
+	(currentCase(_,_)
+	->  retract(currentCase(_,_))
+	;   !),
 	asserta(currentCase(CooXCurrentCase, CooYCurrentCase)).
 
+
+raz_internal_state():-
+	retractall(putrid(_)),
+	retractall(windy(_)),
+	retractall(caseCovered(_,_)),
+	retractall(border(_,_,_,_,_,_)),
+	retractall(fall(_,_)),
+	retractall(monstruous(_,_)),
+	retractall(riskMonstruous(_,_)),
+	retractall(riskFall(_,_)),
+	retractall(currentCase(_,_)).

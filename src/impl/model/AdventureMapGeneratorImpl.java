@@ -7,6 +7,8 @@ import javax.swing.JOptionPane;
 
 import contract.model.AdventureMap;
 import contract.model.AdventureMapGenerator;
+import contract.model.CaseMap;
+import utils.DirectionEnum;
 
 public class AdventureMapGeneratorImpl implements AdventureMapGenerator
 {
@@ -66,6 +68,7 @@ public class AdventureMapGeneratorImpl implements AdventureMapGenerator
 			//On definit les attributs combinables 
 			SetWindyCases();
 			SetPutridCases();
+			SetPossibleDirections();
 			
 			//Test � supprimer
 			printMap();
@@ -217,6 +220,51 @@ public class AdventureMapGeneratorImpl implements AdventureMapGenerator
 	}
 	
 
+	
+	public void SetPossibleDirections()
+	{
+		for(int i = 0 ; i < adventureMap.getTaille(); i++)
+		{
+			for(int j = 0 ; j < adventureMap.getTaille(); j++)
+			{
+				CaseMap maCase=this.adventureMap.getCasesMap()[i][j];
+				if(i==0)
+				{
+					maCase.addPossibleDirection(DirectionEnum.UP, true);
+				}
+				else
+				{
+					maCase.addPossibleDirection(DirectionEnum.UP, false);
+				}
+				
+				if(i==adventureMap.getTaille()-1)
+				{
+					maCase.addPossibleDirection(DirectionEnum.DOWN, true);
+				}
+				else
+				{
+					maCase.addPossibleDirection(DirectionEnum.DOWN, false);
+				}
+				if(j==0)
+				{
+					maCase.addPossibleDirection(DirectionEnum.LEFT, true);
+				}
+				else
+				{
+					maCase.addPossibleDirection(DirectionEnum.LEFT, false);
+				}
+				
+				if(j==adventureMap.getTaille()-1)
+				{
+					maCase.addPossibleDirection(DirectionEnum.RIGHT, true);
+				}
+				else
+				{
+					maCase.addPossibleDirection(DirectionEnum.RIGHT, false);
+				}
+			}
+		}
+	}
 	
 	public void printMap()
 	{
