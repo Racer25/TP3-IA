@@ -219,6 +219,8 @@ public class AdventureMapGeneratorImpl implements AdventureMapGenerator
 		}
 	}
 	
+
+	
 	public void SetPossibleDirections()
 	{
 		for(int i = 0 ; i < adventureMap.getTaille(); i++)

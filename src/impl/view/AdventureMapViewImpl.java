@@ -2,6 +2,8 @@ package impl.view;
 
 
 import java.awt.GridLayout;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.JPanel;
 
@@ -13,7 +15,7 @@ import impl.controller.CaseControllerImpl;
 import impl.model.CaseMapImpl;
 import impl.model.CharacterImpl;
 
-public class AdventureMapViewImpl extends JPanel implements AdventureMapView
+public class AdventureMapViewImpl extends JPanel implements AdventureMapView, Observer
 {
 	private static final long serialVersionUID = 5650978771844115866L;
 	
@@ -46,5 +48,21 @@ public class AdventureMapViewImpl extends JPanel implements AdventureMapView
 	public void setCasesView(CaseView[][] casesView)
 	{
 		this.casesView = casesView;
+	}
+
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		// TODO Auto-generated method stub
+		if(arg0 instanceof CharacterImpl)
+		{
+			if(arg1 instanceof Object[])
+			{
+				Object[] object=(Object[])arg1;
+				if(object[0].equals("case"))
+				{
+				}
+			}
+
+		}
 	}
 }

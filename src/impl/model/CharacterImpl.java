@@ -12,6 +12,7 @@ import org.jpl7.Query;
 import org.jpl7.Term;
 import org.jpl7.Variable;
 
+import contract.model.AdventureMapCharacter;
 import contract.model.CaseCharacter;
 import contract.model.Character;
 import contract.model.Effector;
@@ -179,7 +180,7 @@ public class CharacterImpl extends Observable implements Character, Runnable
 	public void setScore(int score)
 	{
 		this.score = score;
-		notifyObservers(score);
+		notifyObservers(new Object[]{"score", score});
 		setChanged();
 	}
 
@@ -191,6 +192,8 @@ public class CharacterImpl extends Observable implements Character, Runnable
 	public void setOrientation(OrientationEnum orientation)
 	{
 		this.orientation = orientation;
+		notifyObservers(new Object[]{"orientation", orientation});
+		setChanged();
 	}
 
 	public CaseCharacter getCurrentCase()
@@ -202,6 +205,12 @@ public class CharacterImpl extends Observable implements Character, Runnable
 	{
 		this.currentCase = currentCase;
 		notifyObservers(currentCase.getCoords());
+		setChanged();
+		if(this.currentCase.isPortalPoint())
+		{
+			setLevelComplete(true);
+		}
+		notifyObservers(new Object[]{"case", currentCase});
 		setChanged();
 	}
 
