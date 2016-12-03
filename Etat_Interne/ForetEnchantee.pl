@@ -48,7 +48,26 @@ update_internal_state(CooXCurrentCase, CooYCurrentCase, Putrid, Windy, BordureDr
 		->  update_risk_putrid_case(CooXCurrentCase, VoisinGauche)
 		;    !)
 	    ;    !)
-	;    !),
+	;   VoisinHaut is CooXCurrentCase+1,
+	    VoisinDroite is CooYCurrentCase+1,
+	    VoisinBas is CooXCurrentCase+1,
+	    VoisinGauche is CooYCurrentCase-1,
+	    (	riskMonstruous(VoisinHaut,CooYCurrentCase)
+	    ->	retract(riskMonstruous(VoisinHaut,CooYCurrentCase)),
+	        update_risk_not_putrid_case(VoisinHaut, CooYCurrentCase)
+	    ;	!),
+	    (	 riskMonstruous(CooXCurrentCase, VoisinDroite)
+	    ->	retract( riskMonstruous(CooXCurrentCase, VoisinDroite)),
+	        update_risk_not_putrid_case(CooXCurrentCase, VoisinDroite)
+	    ;	!),
+	    (	riskMonstruous(VoisinBas, CooYCurrentCase)
+	    ->	retract( riskMonstruous(VoisinBas, CooYCurrentCase)),
+	        update_risk_not_putrid_case(VoisinBas, CooYCurrentCase)
+	    ;	!),
+	    (	riskMonstruous(CooXCurrentCase, VoisinGauche)
+	    ->	retract(riskMonstruous(CooXCurrentCase, VoisinGauche)),
+	        update_risk_not_putrid_case(CooXCurrentCase, VoisinGauche)
+	    ;	!)),
 
 	%Ajout de la case si la case est venteuse
 	(Windy == true
@@ -157,3 +176,62 @@ update_risk_windy_case(CooX, CooY):-
         (   Continuer
 	-> asserta(riskFall(CooX, CooY))
 	; !).
+
+% Attention vérifier auparavant qu'il existe un risque sur la case
+% voisine et le supprimer avant de lancer cette méthode
+update_risk_not_putrid_case(CooX, CooY):-
+	VoisinHaut is CooX-1,
+	VoisinDroite is CooY+1,
+	VoisinBas is CooX+1,
+	VoisinGauche is CooY-1,
+	(   caseCovered(VoisinHaut, CooY)
+	->  (putrid(VoisinHaut, CooY)
+	    -> detection_monster(VoisinHaut, CooY)
+	    ;	!)),
+	(   caseCovered(CooX, VoisinDroite)
+	->  (putrid(CooX, VoisinDroite)
+	    ->	detection_monster(CooX, VoisinDroite)
+	    ;	!)),
+	(   caseCovered(VoisinBas, CooY)
+	->  (putrid(VoisinBas, CooY)
+	    ->	detection_monster(VoisinBas, CooY)
+	    ;	!)),
+	(   caseCovered(CooX, VoisinGauche)
+	->  (putrid(VoisinBas, CooY)
+	    ->	detection_monster(CooX, VoisinGauche)
+	    ;	!)).
+
+detection_monster(CooX, CooY):-
+	VoisinHaut is CooX-1,
+	VoisinDroite is CooY+1,
+	VoisinBas is CooX+1,
+	VoisinGauche is CooY-1,
+        Compteur=0,
+	(   riskMonstruous(VoisinHaut,CooY)
+	->  Compteur=Compteur+1
+	;   !),
+	(   riskMonstruous(CooX, VoisinDroite)
+	->  Compteur=Compteur+1
+	;   !),
+	(   riskMonstruous(VoisinBas, CooY)
+	->  Compteur=Compteur+1
+	;   !),
+	(   riskMonstruous(CooX, VoisinGauche)
+	->  Compteur=Compteur+1
+	;   !),
+	(   Compteur==1
+	->  (riskMonstruous(VoisinHaut,CooY)
+	    ->	retract(riskMonstruous(VoisinHaut,CooY)),
+		asserta(monstruous(VoisinHaut, CooY))
+	    ;	(riskMonstruous(CooX, VoisinDroite)
+		->  retract(riskMonstruous(CooX, VoisinDroite)),
+		    asserta(monstruous(CooX, VoisinDroite))
+		;   (riskMonstruous(VoisinBas, CooY)
+		      ->  retract(riskMonstruous(VoisinBas,CooY)),
+			  asserta(monstruous(VoisinBas,CooY))
+		      ;	  (riskMonstruous(CooX, VoisinGauche)
+			  ->  retract(riskMonstruous(CooX, VoisinGauche)),
+			      asserta(monstruous(CooX, VoisinGauche))
+			  ;   !))))
+	;   !).
+
