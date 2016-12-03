@@ -24,28 +24,28 @@ update_internal_state(CooXCurrentCase, CooYCurrentCase, Putrid, Windy, BordureDr
         %Ajout de la case si la case est putride
 	(Putrid== true
 	->  asserta(putrid(CooXCurrentCase, CooYCurrentCase)),
-	    Haut is CooXCurrentCase+1,
-	    Droite is CooYCurrentCase+1,
-	    Bas is CooXCurrentCase+1,
-	    Gauche is CooYCurrentCase-1,
+	    VoisinHaut is CooXCurrentCase+1,
+	    VoisinDroite is CooYCurrentCase+1,
+	    VoisinBas is CooXCurrentCase+1,
+	    VoisinGauche is CooYCurrentCase-1,
 	    (\+BordureHaut
-	     ->	(\+caseCovered(Haut, CooYCurrentCase)
-		->  asserta(riskMonstruous(Haut, CooYCurrentCase))
+	     ->	(\+caseCovered(VoisinHaut, CooYCurrentCase)
+		->  update_risk_putrid_case(VoisinHaut, CooYCurrentCase)
 		;    !)
 	    ;    !),
 	    (\+BordureDroite
-	     ->	(\+caseCovered(CooXCurrentCase, Droite)
-		->  asserta(riskMonstruous(CooXCurrentCase, Droite))
+	     ->	(\+caseCovered(CooXCurrentCase, VoisinDroite)
+		->  update_risk_putrid_case(CooXCurrentCase, VoisinDroite)
 		;    !)
 	    ;    !),
 	    (\+BordureBas
-	     ->	(\+caseCovered(Bas, CooYCurrentCase)
-		->  asserta(riskMonstruous(Bas, CooYCurrentCase))
+	     ->	(\+caseCovered(VoisinBas, CooYCurrentCase)
+		->  update_risk_putrid_case(VoisinBas, CooYCurrentCase)
 		;    !)
 	    ;    !),
 	    (\+BordureGauche
-	     ->	(\+caseCovered(CooXCurrentCase, Gauche)
-		->  asserta(riskMonstruous(CooXCurrentCase, Gauche))
+	     ->	(\+caseCovered(CooXCurrentCase, VoisinGauche)
+		->  update_risk_putrid_case(CooXCurrentCase, VoisinGauche)
 		;    !)
 	    ;    !)
 	;    !),
@@ -54,23 +54,23 @@ update_internal_state(CooXCurrentCase, CooYCurrentCase, Putrid, Windy, BordureDr
 	(Windy == true
 	 -> asserta(windy(CooXCurrentCase, CooYCurrentCase)),
 	    (\+BordureHaut
-	     ->	(\+caseCovered(CooXCurrentCase-1, CooYCurrentCase)
-		->  asserta(riskWindy(CooXCurrentCase-1, CooYCurrentCase))
+	     ->	(\+caseCovered(VoisinHaut, CooYCurrentCase)
+		->  update_risk_windy_case(VoisinHaut, CooYCurrentCase)
 		;    !)
 	    ;   !),
 	    (\+BordureDroite
-	     ->	(\+caseCovered(CooXCurrentCase, CooYCurrentCase+1)
-		->  asserta(riskWindy(CooXCurrentCase, CooYCurrentCase+1))
+	     ->	(\+caseCovered(CooXCurrentCase, VoisinDroite)
+		->  update_risk_windy_case(CooXCurrentCase, VoisinDroite)
 		;    !)
 	    ;    !),
 	    (\+BordureBas
-	     ->	(\+caseCovered(CooXCurrentCase+1, CooYCurrentCase)
-		->  asserta(riskWindy(CooXCurrentCase+1, CooYCurrentCase))
+	     ->	(\+caseCovered(VoisinBas, CooYCurrentCase)
+		->  update_risk_windy_case(VoisinBas, CooYCurrentCase)
 		;    !)
 	    ;    !),
 	    (\+BordureGauche
-	     ->	(\+caseCovered(CooXCurrentCase, CooYCurrentCase-1)
-		->  asserta(riskWindy(CooXCurrentCase, CooYCurrentCase-1))
+	     ->	(\+caseCovered(CooXCurrentCase, VoisinGauche)
+		->  update_risk_windy_case(CooXCurrentCase, VoisinGauche)
 		;    !)
 	    ;    !)
 	;    !),
@@ -97,3 +97,63 @@ raz_internal_state():-
 	retractall(riskMonstruous(_,_)),
 	retractall(riskFall(_,_)),
 	retractall(currentCase(_,_)).
+
+update_risk_putrid_case(CooX, CooY):-
+	VoisinHaut is CooX-1,
+	VoisinDroite is CooY+1,
+	VoisinBas is CooX+1,
+	VoisinGauche is CooY-1,
+	Continuer=true,
+	(   caseCovered(VoisinHaut, CooY)
+	-> (\+putrid(VoisinHaut, CooY)
+	    -> Continuer=false
+	   ;   !)
+	;   !),
+	(   (Continuer, caseCovered(CooX, VoisinDroite))
+	-> (\+putrid(CooX, VoisinDroite)
+	    -> Continuer=false
+	   ;   !)
+	;  ! ),
+	(   (Continuer, caseCovered(VoisinBas, CooY))
+	-> (\+putrid(VoisinBas, CooY)
+	    -> Continuer=false
+	   ;  ! )
+	;  ! ),
+	(   (Continuer, caseCovered(CooX, VoisinGauche))
+	-> (\+putrid(CooX, VoisinGauche)
+	    -> Continuer=false
+	   ;  ! )
+	;   !),
+        (   Continuer
+	-> asserta(riskMonstruous(CooX, CooY))
+	; !).
+
+update_risk_windy_case(CooX, CooY):-
+	VoisinHaut is CooX-1,
+	VoisinDroite is CooY+1,
+	VoisinBas is CooX+1,
+	VoisinGauche is CooY-1,
+	Continuer=true,
+	(   caseCovered(VoisinHaut, CooY)
+	-> (\+windy(VoisinHaut, CooY)
+	    -> Continuer=false
+	   ;   !)
+	;   !),
+	(   (Continuer, caseCovered(CooX, VoisinDroite))
+	-> (\+windy(CooX, VoisinDroite)
+	    -> Continuer=false
+	   ;   !)
+	;  ! ),
+	(   (Continuer, caseCovered(VoisinBas, CooY))
+	-> (\+windy(VoisinBas, CooY)
+	    -> Continuer=false
+	   ;  ! )
+	;  ! ),
+	(   (Continuer, caseCovered(CooX, VoisinGauche))
+	-> (\+windy(CooX, VoisinGauche)
+	    -> Continuer=false
+	   ;  ! )
+	;   !),
+        (   Continuer
+	-> asserta(riskFall(CooX, CooY))
+	; !).
