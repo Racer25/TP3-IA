@@ -110,8 +110,6 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 	private void configureCharacter()
 	{
 		this.character.setLevelComplete(false);
-		AdventureMapCharacter mapCharacter=new AdventureMapCharacterImpl();
-		this.character.setMapDiscovered(mapCharacter);
 		this.character.setOrientation(OrientationEnum.RIGHT);
 		this.character.setAlive(true);
 		
@@ -119,7 +117,6 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 		int[] tab={0,0};
 		CaseCharacter spawnPointCharacter=new CaseCharacterImpl(tab, true, false, false, false, false, false);
 		this.character.setCurrentCase(spawnPointCharacter);//Current Case
-		this.character.getMapDiscovered().addCase(spawnPointCharacter);//Memory
 		
 		//Initailize sensors and effectors
 		CaseMap spawnPointMap=this.generator.getSpawnPoint();

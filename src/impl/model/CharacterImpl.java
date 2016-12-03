@@ -36,9 +36,6 @@ public class CharacterImpl extends Observable implements Character, Runnable
 	private Sensor sensorLight;
 	private Sensor sensorDirections;
 	
-	//Memory
-	private AdventureMapCharacter mapDiscovered;
-	
 	public CharacterImpl()
 	{
 		this.alive=true;
@@ -51,7 +48,13 @@ public class CharacterImpl extends Observable implements Character, Runnable
 	@Override
 	public void run()
 	{
-		
+		while(true)
+		{
+			while(this.alive)
+			{
+				
+			}
+		}
 	}
 	
 	@Override
@@ -110,16 +113,6 @@ public class CharacterImpl extends Observable implements Character, Runnable
 		this.currentCase = currentCase;
 		notifyObservers(currentCase.getCoords());
 		setChanged();
-	}
-
-	public AdventureMapCharacter getMapDiscovered()
-	{
-		return mapDiscovered;
-	}
-
-	public void setMapDiscovered(AdventureMapCharacter mapDiscovered)
-	{
-		this.mapDiscovered = mapDiscovered;
 	}
 
 	public boolean isLevelComplete()

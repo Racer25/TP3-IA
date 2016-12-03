@@ -22,8 +22,6 @@ public class EffectorUpImpl implements Effector
 				this.character.getCurrentCase().getCoords()[1]};
 		CaseCharacter newCase=new CaseCharacterImpl(newCoord, false, false, false, false, false, false);
 		this.character.setCurrentCase(newCase);
-		this.character.getMapDiscovered().addCase(newCase);
-		character.setCurrentCase(newCase);
 	}
 
 }
