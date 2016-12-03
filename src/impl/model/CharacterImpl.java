@@ -61,57 +61,94 @@ public class CharacterImpl extends Observable implements Character, Runnable
 			{
 				//MAJ case actuelle
 				updateCurrentCase();
-				//Envoie des informations à prolog
-				Query internalStateQuery = new Query(new Compound("update_internal_state", new Term[] 
-						{
-								new Atom(Integer.toString(this.currentCase.getCoords()[0])), 
-								new Atom(Integer.toString(this.currentCase.getCoords()[1])),
-								new Atom(Boolean.toString(this.currentCase.isPutrid())),
-								new Atom(Boolean.toString(this.currentCase.isWindy())),
-								new Atom(Boolean.toString(!this.currentCase.getPossibleDirections().get(DirectionEnum.RIGHT))),
-								new Atom(Boolean.toString(!this.currentCase.getPossibleDirections().get(DirectionEnum.LEFT))),
-								new Atom(Boolean.toString(!this.currentCase.getPossibleDirections().get(DirectionEnum.UP))),
-								new Atom(Boolean.toString(!this.currentCase.getPossibleDirections().get(DirectionEnum.DOWN)))
-						}));
-				internalStateQuery.hasSolution();
-				
-				List<Integer> actions=new ArrayList<Integer>();
-				Query q = new Query(new Compound("takeDecisions", new Term[] { new Variable("X")}));
-				while (q.hasMoreSolutions())
+				if(this.currentCase.isPortalPoint())
 				{
-					Map<String, Term> action = q.nextSolution();
-				    actions.add(Integer.valueOf(action.get("X").toString()));
+					this.setLevelComplete(true);
 				}
-				
-				for(Integer action: actions)
+				else
 				{
-					switch (action) 
+					//Envoie des informations à prolog
+					Query internalStateQuery = new Query(new Compound("update_internal_state", new Term[] 
+							{
+									new Atom(Integer.toString(this.currentCase.getCoords()[0])), 
+									new Atom(Integer.toString(this.currentCase.getCoords()[1])),
+									new Atom(Boolean.toString(this.currentCase.isPutrid())),
+									new Atom(Boolean.toString(this.currentCase.isWindy())),
+									new Atom(Boolean.toString(!this.currentCase.getPossibleDirections().get(DirectionEnum.RIGHT))),
+									new Atom(Boolean.toString(!this.currentCase.getPossibleDirections().get(DirectionEnum.LEFT))),
+									new Atom(Boolean.toString(!this.currentCase.getPossibleDirections().get(DirectionEnum.UP))),
+									new Atom(Boolean.toString(!this.currentCase.getPossibleDirections().get(DirectionEnum.DOWN)))
+							}));
+					internalStateQuery.hasSolution();
+					
+					//Récupération des actions à réaliser
+					List<Integer> actions=new ArrayList<Integer>();
+					Query q = new Query(new Compound("takeDecisions", new Term[] { new Variable("Reponse")}));
+					System.out.println("Envoi de requête takeDecisions");
+					while (q.hasMoreSolutions())
 					{
-						case 0:
-							System.out.println("Caillou");
-							this.effectorStone.doIt();
-							break;
-			            case 1:
-			            	System.out.println("Haut");
-			            	this.effectorUp.doIt();     
-			            	break;
-			            case 2:
-			            	System.out.println("Droite");
-			            	this.effectorRight.doIt();
-			                break;
-			            case 3:
-			            	System.out.println("Down");
-			            	this.effectorDown.doIt();
-			            	break;
-			            case 4:
-			            	System.out.println("Gauche");
-			            	this.effectorLeft.doIt();
-			                break;
-			            default: 
-			            	System.out.println("Erreur dans l'entier retourner par prolog");
-			                break;
-		            }
+						Map<String, Term> action = q.nextSolution();
+					    actions.add(Integer.valueOf(action.get("Reponse").toString()));
+					    System.out.println("ajout de l'action: "+action);
+					}
+					
+					//Réalisation des actions
+					for(Integer action: actions)
+					{
+						System.out.println("action: "+action);
+						switch (action) 
+						{
+				            case 1:
+				            	System.out.println("Haut");
+				            	this.setOrientation(OrientationEnum.UP);
+				            	this.effectorUp.doIt();     
+				            	break;
+				            case 2:
+				            	System.out.println("Droite");
+				            	this.setOrientation(OrientationEnum.RIGHT);
+				            	this.effectorRight.doIt();
+				                break;
+				            case 3:
+				            	System.out.println("Down");
+				            	this.setOrientation(OrientationEnum.DOWN);
+				            	this.effectorDown.doIt();
+				            	break;
+				            case 4:
+				            	System.out.println("Gauche");
+				            	this.setOrientation(OrientationEnum.LEFT);
+				            	this.effectorLeft.doIt();
+				                break;
+				            case 5:
+								System.out.println("CaillouHaut");
+								this.setOrientation(OrientationEnum.UP);
+								this.effectorStone.doIt();
+								break;
+				            case 6:
+								System.out.println("CaillouDroite");
+								this.setOrientation(OrientationEnum.RIGHT);
+								this.effectorStone.doIt();
+								break;
+				            case 7:
+								System.out.println("CaillouBas");
+								this.setOrientation(OrientationEnum.DOWN);
+								this.effectorStone.doIt();
+								break;
+				            case 8:
+								System.out.println("CaillouGauche");
+								this.setOrientation(OrientationEnum.LEFT);
+								this.effectorStone.doIt();
+								break;
+				            default: 
+				            	System.out.println("Erreur dans l'entier retourner par prolog");
+				                break;
+			            }
+					}
 				}
+			}
+			if(!this.alive)
+			{
+				Query resetQuery=new Query("raz_internal_state", new Term[]{});
+				resetQuery.hasSolution();
 			}
 		}
 	}
