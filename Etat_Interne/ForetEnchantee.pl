@@ -92,7 +92,26 @@ update_internal_state(CooXCurrentCase, CooYCurrentCase, Putrid, Windy, BordureDr
 		->  update_risk_windy_case(CooXCurrentCase, VoisinGauche)
 		;    !)
 	    ;    !)
-	;    !),
+	;    VoisinHaut is CooXCurrentCase+1,
+	    VoisinDroite is CooYCurrentCase+1,
+	    VoisinBas is CooXCurrentCase+1,
+	    VoisinGauche is CooYCurrentCase-1,
+	    (	riskFall(VoisinHaut,CooYCurrentCase)
+	    ->	retract(riskFall(VoisinHaut,CooYCurrentCase)),
+	        update_risk_not_windy_case(VoisinHaut, CooYCurrentCase)
+	    ;	!),
+	    (	 riskFall(CooXCurrentCase, VoisinDroite)
+	    ->	retract( riskFall(CooXCurrentCase, VoisinDroite)),
+	        update_risk_not_windy_case(CooXCurrentCase, VoisinDroite)
+	    ;	!),
+	    (	riskFall(VoisinBas, CooYCurrentCase)
+	    ->	retract( riskFall(VoisinBas, CooYCurrentCase)),
+	        update_risk_not_windy_case(VoisinBas, CooYCurrentCase)
+	    ;	!),
+	    (	riskFall(CooXCurrentCase, VoisinGauche)
+	    ->	retract(riskFall(CooXCurrentCase, VoisinGauche)),
+	        update_risk_not_windy_case(CooXCurrentCase, VoisinGauche)
+	    ;	!)),
 
 	%Mise a jours des bordures pour la case actuelle
 	((BordureDroite == true, BordureGauche == true, BordureHaut == true, BordureBas ==true)
@@ -187,19 +206,23 @@ update_risk_not_putrid_case(CooX, CooY):-
 	(   caseCovered(VoisinHaut, CooY)
 	->  (putrid(VoisinHaut, CooY)
 	    -> detection_monster(VoisinHaut, CooY)
-	    ;	!)),
+	    ;	!)
+	;   !),
 	(   caseCovered(CooX, VoisinDroite)
 	->  (putrid(CooX, VoisinDroite)
 	    ->	detection_monster(CooX, VoisinDroite)
-	    ;	!)),
+	    ;	!)
+	;   !),
 	(   caseCovered(VoisinBas, CooY)
 	->  (putrid(VoisinBas, CooY)
 	    ->	detection_monster(VoisinBas, CooY)
-	    ;	!)),
+	    ;	!)
+	;   !),
 	(   caseCovered(CooX, VoisinGauche)
 	->  (putrid(VoisinBas, CooY)
 	    ->	detection_monster(CooX, VoisinGauche)
-	    ;	!)).
+	    ;	!)
+	;   !).
 
 detection_monster(CooX, CooY):-
 	VoisinHaut is CooX-1,
@@ -235,3 +258,65 @@ detection_monster(CooX, CooY):-
 			  ;   !))))
 	;   !).
 
+
+% Attention vérifier auparavant qu'il existe un risque sur la case
+% voisine et le supprimer avant de lancer cette méthode
+update_risk_not_windy_case(CooX, CooY):-
+	VoisinHaut is CooX-1,
+	VoisinDroite is CooY+1,
+	VoisinBas is CooX+1,
+	VoisinGauche is CooY-1,
+	(   caseCovered(VoisinHaut, CooY)
+	->  (windy(VoisinHaut, CooY)
+	    -> detection_fall(VoisinHaut, CooY)
+	    ;	!)
+	;   !),
+	(   caseCovered(CooX, VoisinDroite)
+	->  (windy(CooX, VoisinDroite)
+	    ->	detection_fall(CooX, VoisinDroite)
+	    ;	!)
+	;   !),
+	(   caseCovered(VoisinBas, CooY)
+	->  (windy(VoisinBas, CooY)
+	    ->	detection_fall(VoisinBas, CooY)
+	    ;	!)
+	;   !),
+	(   caseCovered(CooX, VoisinGauche)
+	->  (windy(VoisinBas, CooY)
+	    ->	detection_fall(CooX, VoisinGauche)
+	    ;	!)
+	;   !).
+
+detection_fall(CooX, CooY):-
+	VoisinHaut is CooX-1,
+	VoisinDroite is CooY+1,
+	VoisinBas is CooX+1,
+	VoisinGauche is CooY-1,
+        Compteur=0,
+	(   riskFall(VoisinHaut,CooY)
+	->  Compteur=Compteur+1
+	;   !),
+	(   riskFall(CooX, VoisinDroite)
+	->  Compteur=Compteur+1
+	;   !),
+	(   riskFall(VoisinBas, CooY)
+	->  Compteur=Compteur+1
+	;   !),
+	(   riskFall(CooX, VoisinGauche)
+	->  Compteur=Compteur+1
+	;   !),
+	(   Compteur==1
+	->  (riskFall(VoisinHaut,CooY)
+	    ->	retract(riskFall(VoisinHaut,CooY)),
+		asserta(fall(VoisinHaut, CooY))
+	    ;	(riskFall(CooX, VoisinDroite)
+		->  retract(riskFall(CooX, VoisinDroite)),
+		    asserta(fall(CooX, VoisinDroite))
+		;   (riskFall(VoisinBas, CooY)
+		      ->  retract(riskFall(VoisinBas,CooY)),
+			  asserta(fall(VoisinBas,CooY))
+		      ;	  (riskFall(CooX, VoisinGauche)
+			  ->  retract(riskFall(CooX, VoisinGauche)),
+			      asserta(fall(CooX, VoisinGauche))
+			  ;   !))))
+	;   !).
