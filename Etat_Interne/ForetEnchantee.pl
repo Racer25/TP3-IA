@@ -388,7 +388,7 @@ searchSureWay([_|RestFSet],Solution):-
 expand2(Parent,PathsoFar,ChildStates):-
  findall([Child|PathsoFar],operator2(Parent,Child),ChildStates).
 
-riskMonstruous2((X,Y)):-riskMonstruous(X,Y).
+riskMonstruous2((X,Y)):-riskMonstruous(X,Y),\+riskFall(X,Y).
 
 operator2(Parent,Child):-
  voisin(Parent,Child),
