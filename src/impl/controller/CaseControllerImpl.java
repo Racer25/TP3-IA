@@ -59,7 +59,15 @@ public class CaseControllerImpl implements CaseController, Observer
 					if(maCase.getCoords()[0]==coord[0] && maCase.getCoords()[1]==coord[1])
 					{
 						((CaseViewImpl) maCaseView).setCharacterVisible(true);
-						if(maCase.isPutrid() && maCase.isWindy())
+						/*if(maCase.isMonstruous() || maCase.isFall())
+						{
+							character.setAlive(false);
+						}*/
+						if(maCase.isPortalPoint())
+						{
+							sonPortal();
+						}
+						else if(maCase.isPutrid() && maCase.isWindy())
 						{
 							sonWindZombi();
 						}
@@ -72,11 +80,6 @@ public class CaseControllerImpl implements CaseController, Observer
 							sonWind();
 						}
 					}
-				}
-					//maCaseView.setPlayerVisible(true)
-				else
-				{
-					//maCaseView.setPlayerVisible(false)
 				}
 			}
 			
@@ -160,6 +163,35 @@ public class CaseControllerImpl implements CaseController, Observer
 			{
 				try{
 		            AudioInputStream ais = AudioSystem.getAudioInputStream(new File("son/zombiwind.wav"));
+		            Clip test = AudioSystem.getClip();  
+	
+		            test.open(ais);
+		            test.start();
+	
+		            while (!test.isRunning())
+		                Thread.sleep(10);
+		            while (test.isRunning())
+		                Thread.sleep(10);
+	
+		            test.close();
+		        }catch(Exception ex){
+		            ex.printStackTrace();
+		        }
+			}
+		};
+		new Thread (son).start();
+	
+	}
+	
+	public void sonPortal()
+	{
+		Runnable son = new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				try{
+		            AudioInputStream ais = AudioSystem.getAudioInputStream(new File("son/portal.wav"));
 		            Clip test = AudioSystem.getClip();  
 	
 		            test.open(ais);
