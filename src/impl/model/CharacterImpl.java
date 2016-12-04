@@ -12,7 +12,6 @@ import org.jpl7.Query;
 import org.jpl7.Term;
 import org.jpl7.Variable;
 
-import contract.model.AdventureMapCharacter;
 import contract.model.CaseCharacter;
 import contract.model.Character;
 import contract.model.Effector;
