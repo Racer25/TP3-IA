@@ -102,22 +102,26 @@ public class CharacterImpl extends Observable implements Character, Runnable
 				            case 1:
 				            	System.out.println("Haut");
 				            	this.setOrientation(OrientationEnum.UP);
-				            	this.effectorUp.doIt();     
+				            	this.effectorUp.doIt();
+				            	notifyObservers(new Object[]{"case", currentCase});
 				            	break;
 				            case 2:
 				            	System.out.println("Droite");
 				            	this.setOrientation(OrientationEnum.RIGHT);
 				            	this.effectorRight.doIt();
+				            	notifyObservers(new Object[]{"case", currentCase});
 				                break;
 				            case 3:
 				            	System.out.println("Down");
 				            	this.setOrientation(OrientationEnum.DOWN);
 				            	this.effectorDown.doIt();
+				            	notifyObservers(new Object[]{"case", currentCase});
 				            	break;
 				            case 4:
 				            	System.out.println("Gauche");
 				            	this.setOrientation(OrientationEnum.LEFT);
 				            	this.effectorLeft.doIt();
+				            	notifyObservers(new Object[]{"case", currentCase});
 				                break;
 				            case 5:
 								System.out.println("CaillouHaut");

@@ -60,7 +60,7 @@ public class CaseMapImpl extends Observable implements CaseMap
 	public void setPutrid(boolean putrid)
 	{
 		this.putrid = putrid;
-		notifyObservers(putrid);
+		notifyObservers(new Object[]{"putrid", putrid});
 		setChanged();
 	}
 	public boolean isMonstruous()
@@ -70,7 +70,7 @@ public class CaseMapImpl extends Observable implements CaseMap
 	public void setMonstruous(boolean monstruous)
 	{
 		this.monstruous = monstruous;
-		notifyObservers(monstruous);
+		notifyObservers(new Object[]{"monstruous", monstruous});
 		setChanged();
 	}
 	public boolean isWindy()

@@ -2,6 +2,7 @@ package contract.model;
 
 import java.util.HashMap;
 
+import contract.view.CaseView;
 import utils.DirectionEnum;
 
 public interface CaseMap

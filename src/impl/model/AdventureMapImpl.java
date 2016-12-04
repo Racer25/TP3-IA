@@ -1,9 +1,12 @@
 package impl.model;
 
+import java.util.Observable;
+import java.util.Observer;
+
 import contract.model.AdventureMap;
 import contract.model.CaseMap;
 
-public class AdventureMapImpl implements AdventureMap
+public class AdventureMapImpl implements AdventureMap, Observer
 {
 	private int[] changeReference;//pass from CoordCharacter to CoordMap
 	private CaseMapImpl[][] cases;
@@ -41,6 +44,12 @@ public class AdventureMapImpl implements AdventureMap
 	public void setTaille(int taille)
 	{
 		this.taille=taille;
+	}
+
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

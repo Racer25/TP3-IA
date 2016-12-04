@@ -15,12 +15,6 @@
 % border(cooX, cooY, bordureHaut,
 % bordureDroite, bordureBas, bordureGauche).
 
-takeDecisions(Reponse):-
-	currentCase(CooX,_),
-	currentCase(_,CooY),
-	(   (putrid(CooX, CooY))),
-	Reponse=2.
-
 update_internal_state(CooXCurrentCase, CooYCurrentCase, Putrid, Windy, BordureDroite, BordureGauche, BordureHaut, BordureBas):-
         %Ajout de la case si la case est putride
 	(Putrid== true
@@ -150,6 +144,46 @@ raz_internal_state():-
 	retractall(riskMonstruous(_,_)),
 	retractall(riskFall(_,_)),
 	retractall(currentCase(_,_)).
+
+takeDecisions(Reponse):-
+	currentCase(CooX,_),
+	currentCase(_,CooY),
+	VoisinHaut is CooX-1,
+	VoisinDroite is CooY+1,
+	VoisinBas is CooX+1,
+	VoisinGauche is CooY-1,
+	Compteur=4,
+        (   (border(CooX, CooY, true, _,_,_); caseCovered(VoisinHaut, CooY); riskMonstruous(VoisinHaut, CooY); riskFall(VoisinHaut, CooY); monstruous(VoisinHaut, CooY); fall(VoisinHaut, CooY))
+	->  Compteur=Compteur-1
+	;   !),
+	(   (border(CooX, CooY, _, true,_,_); caseCovered(CooX, VoisinDroite); riskMonstruous(CooX, VoisinDroite); riskFall(CooX, VoisinDroite); monstruous(CooX, VoisinDroite); fall(CooX, VoisinDroite))
+	->  Compteur=Compteur-1
+	;   !),
+	(   (border(CooX, CooY, _, _,true,_); caseCovered(VoisinBas, CooY); riskMonstruous(VoisinBas, CooY); riskFall(VoisinBas, CooY); monstruous(VoisinBas, CooY); fall(VoisinBas, CooY))
+	->  Compteur=Compteur-1
+	;   !),
+        (   (border(CooX, CooY, _, _,_,true); caseCovered(CooX, VoisinGauche); riskMonstruous(CooX, VoisinGauche); riskFall(CooX, VoisinGauche); monstruous(CooX, VoisinGauche); fall(CooX, VoisinGauche))
+	->  Compteur=Compteur-1
+	;   !),
+        (   Compteur>0
+	-> ValMax is Compteur+1,
+	   random(1,ValMax,ValRandom),
+	   CompteurPossibilite=0
+	;  ( search_closest_secure_case(ReponseSecure)
+	   ->  length(ReponseSecure, LongueurSecure),
+	       (   LongueurSecure>10
+	       ->  ( search_closest_monstruous_case(ReponseMonstruous)
+		   ->  length(ReponseMonstruous, LongueurMonstruous),
+		       Calcul is LongueurSecure-10-LongueurMonstruous,
+		       (   Calcul>0
+		       ->  Reponse=ReponseMonstruous
+		       ;   Reponse=ReponseSecure)
+		   ;   !)
+	       ;   Reponse=ReponseSecure)
+	   ;   ( search_closest_monstruous_case(ReponseMonstruous)
+	       ->  Reponse=ReponseMonstruous
+	       ;   !))).
+
 
 update_risk_putrid_case(CooX, CooY):-
 	VoisinHaut is CooX-1,
@@ -318,7 +352,7 @@ detection_fall(CooX, CooY):-
 	->  Compteur=Compteur+1
 	;   !),
 	(   riskFall(CooX, VoisinGauche)
-	->  Compteur=Compteur+1
+LongueurSecure	->  Compteur=Compteur+1
 	;   !),
 	(   Compteur==1
 	->  (riskFall(VoisinHaut,CooY)
