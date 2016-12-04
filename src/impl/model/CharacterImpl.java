@@ -12,7 +12,6 @@ import org.jpl7.Query;
 import org.jpl7.Term;
 import org.jpl7.Variable;
 
-import contract.model.AdventureMapCharacter;
 import contract.model.CaseCharacter;
 import contract.model.Character;
 import contract.model.Effector;
@@ -81,6 +80,7 @@ public class CharacterImpl extends Observable implements Character, Runnable
 									new Atom(Boolean.toString(!this.currentCase.getPossibleDirections().get(DirectionEnum.DOWN)))
 							}));
 					internalStateQuery.hasSolution();
+					
 					
 					//Récupération des actions à réaliser
 					List<Integer> actions=new ArrayList<Integer>();
