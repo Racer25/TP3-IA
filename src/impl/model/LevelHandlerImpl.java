@@ -84,6 +84,7 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 		//Generate Map
 		this.generator.createMap(dim, nbFall, nbMonstruous);
 		//Character configuration
+		character.addObserver((Observer) this.generator.getAdventureMap());
 		configureCharacter();
 		
 	}
