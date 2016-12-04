@@ -46,6 +46,7 @@ public class CaseViewImpl extends JPanel implements CaseView
 		fall = caseMap.isFall();
 		monstruous = caseMap.isMonstruous();
 		portal = caseMap.isPortalPoint();
+		windy = caseMap.isWindy();
 		this.setBackground(Color.WHITE);
 		this.setSize(50, 50);
 		this.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));	
@@ -60,6 +61,10 @@ public class CaseViewImpl extends JPanel implements CaseView
 		super.paintComponent(g);
 		Image background = null;
 		try {
+			if(windy == true)
+			{
+				background = ImageIO.read(new File("img/bedrockwind.jpg"));
+			}
 			if(monstruous == true)
 			{
 				background = ImageIO.read(new File("img/zombi.jpg"));

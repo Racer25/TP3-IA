@@ -1,9 +1,14 @@
 package impl.controller;
 
 import java.awt.Container;
+import java.io.File;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
@@ -46,13 +51,11 @@ public class CaseControllerImpl implements CaseController, Observer
 		{
 			if(arg1 instanceof Object[])
 			{
-				System.out.println("j'ai le tableau!");
 				//appear/diseappear character
 				Object[] object=(Object[])arg1;
 				if(object[0].equals("case"))
 				{
 					((CaseViewImpl) maCaseView).setCharacterVisible(false);
-					System.out.println("c'est une case!");
 					int x = ((CaseCharacterImpl) object[1]).getCoords()[0] + adventureMap.getChangeReference()[0];
 					int y = ((CaseCharacterImpl) object[1]).getCoords()[1] + adventureMap.getChangeReference()[1];
 					int[] coord = new int[2];
@@ -60,8 +63,19 @@ public class CaseControllerImpl implements CaseController, Observer
 					coord[1] = y;
 					if(maCase.getCoords()[0]==coord[0] && maCase.getCoords()[1]==coord[1])
 					{
-						System.out.println("je suis au bon endroit");
 						((CaseViewImpl) maCaseView).setCharacterVisible(true);
+						if(maCase.isPutrid() && maCase.isWindy())
+						{
+							sonWindZombi();
+						}
+						else if(maCase.isPutrid())
+						{
+							sonZombi();
+						}
+						else if(maCase.isWindy())
+						{
+							sonWind();
+						}
 					}
 				}
 					//maCaseView.setPlayerVisible(true)
@@ -81,7 +95,93 @@ public class CaseControllerImpl implements CaseController, Observer
 				
 			}
 		}
-		
+	}
+	
+	public void sonZombi()
+	{
+		Runnable son = new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				try{
+		            AudioInputStream ais = AudioSystem.getAudioInputStream(new File("son/zombi.wav"));
+		            Clip test = AudioSystem.getClip();  
+
+		            test.open(ais);
+		            test.start();
+
+		            while (!test.isRunning())
+		                Thread.sleep(10);
+		            while (test.isRunning())
+		                Thread.sleep(10);
+
+		            test.close();
+		        }catch(Exception ex){
+		            ex.printStackTrace();
+		        }
+			}
+		};
+		new Thread (son).start();
+	
 	}
 
+
+	public void sonWind()
+	{
+		Runnable son = new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				try{
+		            AudioInputStream ais = AudioSystem.getAudioInputStream(new File("son/wind.wav"));
+		            Clip test = AudioSystem.getClip();  
+	
+		            test.open(ais);
+		            test.start();
+	
+		            while (!test.isRunning())
+		                Thread.sleep(10);
+		            while (test.isRunning())
+		                Thread.sleep(10);
+	
+		            test.close();
+		        }catch(Exception ex){
+		            ex.printStackTrace();
+		        }
+			}
+		};
+		new Thread (son).start();
+	
+	}
+	
+	public void sonWindZombi()
+	{
+		Runnable son = new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				try{
+		            AudioInputStream ais = AudioSystem.getAudioInputStream(new File("son/zombiwind.wav"));
+		            Clip test = AudioSystem.getClip();  
+	
+		            test.open(ais);
+		            test.start();
+	
+		            while (!test.isRunning())
+		                Thread.sleep(10);
+		            while (test.isRunning())
+		                Thread.sleep(10);
+	
+		            test.close();
+		        }catch(Exception ex){
+		            ex.printStackTrace();
+		        }
+			}
+		};
+		new Thread (son).start();
+	
+	}
 }
