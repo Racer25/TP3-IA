@@ -336,6 +336,54 @@ update_risk_not_windy_case(CooX, CooY):-
 	    ;	!)
 	;   !).
 
+caseUnknownNotRisky((X,Y)):-
+	\+caseCovered(X,Y),
+	\+riskMonstruous(X,Y),
+	\+riskFall(X,Y).
+
+expand(Parent,PathsoFar,ChildStates):-
+ findall([Child|PathsoFar],operator(Parent,Child),ChildStates).
+
+caseCovered2((X,Y)):-caseCovered(X,Y).
+
+operator(Parent,Child):-
+ voisin(Parent,Child),
+ (\+caseUnknownNotRisky(Child)->
+    caseCovered2(Child);true).
+
+%BFS2
+%STOP criteria: si j'arrive sur une case inconnue non risquée
+searchSureWay([[State|Path]|_],[State|Path]):-
+	writeln(1),
+ caseUnknownNotRisky(State),
+ writeln(State+caseInconnueNonRisqueeTrouvee).
+
+% Continue criteria si je ne viens pas d'ajouter une case inconnue non
+% risquée et ajoute à Solution
+searchSureWay([[State|Path]|RestFSet],Solution):-
+	writeln(2),
+ \+ caseUnknownNotRisky(State),
+ writeln(State+caseInconnueNonRisqueeNonTrouvee),
+ expand(State,[State|Path],ChildStates),
+ prune_l(ChildStates,P_ChildStates),
+ append(RestFSet,P_ChildStates,NewFSet),
+ searchSureWay(NewFSet,Solution).
+
+%Je passe au traitement de la queue dans le cas ou ça coince
+searchSureWay([_|RestFSet],Solution):-
+	writeln(3),
+ searchSureWay(RestFSet,Solution).
+
+
+prune_l([],[]):-!.
+prune_l([[State|Path]|RestChilds],[[State|Path]|RestPChilds]):-
+ \+ member(State,Path),
+ !,
+ prune_l(RestChilds,RestPChilds).
+
+prune_l([_|RestChilds],RestPChilds):-
+ prune_l(RestChilds,RestPChilds).
+
 detection_fall(CooX, CooY):-
 	VoisinHaut is CooX-1,
 	VoisinDroite is CooY+1,
