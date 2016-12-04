@@ -61,19 +61,19 @@ public class CaseViewImpl extends JPanel implements CaseView
 		super.paintComponent(g);
 		Image background = null;
 		try {
-			if(windy == true)
+			if(windy && !monstruous && !fall && !portal)
 			{
 				background = ImageIO.read(new File("img/bedrockwind.jpg"));
 			}
-			if(monstruous == true)
+			else if(monstruous)
 			{
-				background = ImageIO.read(new File("img/zombi.jpg"));
+				background = ImageIO.read(new File("img/zombie.jpg"));
 			}
-			else if(fall == true)
+			else if(fall)
 			{
 				background = ImageIO.read(new File("img/fall.jpg"));
 			}
-			else if(portal == true)
+			else if(portal)
 			{
 				background = ImageIO.read(new File("img/portal.jpg"));
 			}
