@@ -19,20 +19,20 @@ public class CharacterViewImpl extends ImageIcon implements Observer{
 	CharacterViewImpl(CharacterImpl character)
 	{
 		this.character = character;
-		character.addObserver(this);
-		if(character.getOrientation()==OrientationEnum.DOWN)
+		this.character.addObserver(this);
+		if(this.character.getOrientation()==OrientationEnum.DOWN)
 		{
 			path = "img/stevedown.png";
 		}
-		else if(character.getOrientation()==OrientationEnum.UP)
+		else if(this.character.getOrientation()==OrientationEnum.UP)
 		{
 			path = "img/steveup.png";
 		}
-		else if(character.getOrientation()==OrientationEnum.RIGHT)
+		else if(this.character.getOrientation()==OrientationEnum.RIGHT)
 		{
 			path = "img/steveright.png";
 		}
-		else if(character.getOrientation()==OrientationEnum.LEFT)
+		else if(this.character.getOrientation()==OrientationEnum.LEFT)
 		{
 			path = "img/steveleft.png";
 		}
@@ -42,7 +42,7 @@ public class CharacterViewImpl extends ImageIcon implements Observer{
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		// TODO Auto-generated method stub
+		//The Character warned me
 		if(arg0 instanceof CharacterImpl)
 		{
 			if(arg1 instanceof Object[])
@@ -50,6 +50,7 @@ public class CharacterViewImpl extends ImageIcon implements Observer{
 				Object[] object=(Object[])arg1;
 				if(object[0].equals("orientation"))
 				{
+					//The Character warned me that orientation is changing
 					if(object[1]==OrientationEnum.DOWN)
 					{
 						path = "img/stevedown.png";

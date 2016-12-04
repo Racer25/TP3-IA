@@ -13,6 +13,7 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -40,8 +41,6 @@ public class WindowImpl extends JFrame implements Window
 		this.setResizable(true);
 		this.setSize(1000, 800);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//Image icon=Toolkit.getDefaultToolkit().getImage("img/aspi.jpg");
-		//this.setIconImage(icon);
 		
 		//BIG CENTERED PANEL
 		JPanel center1=new JPanel()
@@ -72,7 +71,8 @@ public class WindowImpl extends JFrame implements Window
 		mapConstraints.gridx = 0;
 		mapConstraints.gridy = 0;
 		//mapConstraints.insets = new Insets(10,10,20,20);
-		AdventureMapViewImpl map=new AdventureMapViewImpl(myMap, character);
+		CharacterViewImpl characterView = new CharacterViewImpl(character);
+		AdventureMapViewImpl map=new AdventureMapViewImpl(characterView,myMap, character);
 		map.setBackground(Color.BLACK);
 		map.setPreferredSize(new Dimension(500,500));
 		map.setMinimumSize(new Dimension(250,250));
@@ -150,7 +150,7 @@ public class WindowImpl extends JFrame implements Window
 		panelButton.setLayout(new GridBagLayout());
 		panelButton.setBackground(Color.WHITE);
 		JButton buttonMove=new JButton("MOVE");
-		buttonMove.addActionListener(new MoveButtonListenerImpl(character));
+		buttonMove.addActionListener(new MoveButtonListenerImpl(character,myMap));
 		panelButton.add(buttonMove);
 		
 		instructions.add(instructions1,instructions1Constraints);
@@ -174,6 +174,6 @@ public class WindowImpl extends JFrame implements Window
 		
 		
 		this.setVisible(true);
-		
+	
 	}
 }

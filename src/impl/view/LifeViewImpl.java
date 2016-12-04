@@ -69,8 +69,10 @@ public class LifeViewImpl extends JPanel implements LifeView, Observer
 			Object[] object=(Object[])arg;
 			if(object[0].equals("alive"))
 			{
+				//The Character warned me that he's alive or not
 				if ((Boolean) object[1])
 				{
+					//The Character warned me that he's alive
 					part1.setBackground(Color.GREEN);
 					part2.setBackground(Color.GREEN);
 					part3.setBackground(Color.GREEN);
@@ -78,6 +80,7 @@ public class LifeViewImpl extends JPanel implements LifeView, Observer
 				} 
 				else
 				{
+					//The Character warned me that he's dead
 					Runnable die = new Runnable()
 					{
 						@Override

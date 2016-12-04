@@ -7,6 +7,8 @@ import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -16,6 +18,9 @@ import javax.swing.JPanel;
 
 import contract.model.CaseMap;
 import contract.view.CaseView;
+import impl.model.CaseMapImpl;
+import impl.model.CharacterImpl;
+import utils.OrientationEnum;
 
 public class CaseViewImpl extends JPanel implements CaseView
 {
@@ -32,16 +37,22 @@ public class CaseViewImpl extends JPanel implements CaseView
 	//Combinable attributes
 	private boolean putrid;
 	private boolean windy;
+	
+	private JLabel label;
 
-	public CaseViewImpl(CaseMap caseMap)
+	public CaseViewImpl(CaseMap caseMap, CharacterViewImpl characterView)
 	{
 		//Creation with caseMap attributes
 		fall = caseMap.isFall();
 		monstruous = caseMap.isMonstruous();
 		portal = caseMap.isPortalPoint();
+		windy = caseMap.isWindy();
 		this.setBackground(Color.WHITE);
 		this.setSize(50, 50);
-		this.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));		
+		this.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));	
+		label = new JLabel(characterView);
+		this.add(label);
+		label.setVisible(false);
 	}
 
 	@Override
@@ -50,15 +61,34 @@ public class CaseViewImpl extends JPanel implements CaseView
 		super.paintComponent(g);
 		Image background = null;
 		try {
-			if(monstruous == true)
+			if(windy)
 			{
-				background = ImageIO.read(new File("img/zombi.jpg"));
+				if(monstruous)
+				{
+					background = ImageIO.read(new File("img/zombiewind.jpg"));
+				}
+				else if(fall)
+				{
+					background = ImageIO.read(new File("img/fall.jpg"));
+				}
+				else if(portal)
+				{
+					background = ImageIO.read(new File("img/portalwind.jpg"));
+				}
+				else
+				{
+					background = ImageIO.read(new File("img/bedrockwind.jpg"));
+				}
 			}
-			else if(fall == true)
+			else if(monstruous)
+			{
+				background = ImageIO.read(new File("img/zombie.jpg"));
+			}
+			else if(fall)
 			{
 				background = ImageIO.read(new File("img/fall.jpg"));
 			}
-			else if(portal == true)
+			else if(portal)
 			{
 				background = ImageIO.read(new File("img/portal.jpg"));
 			}
@@ -72,4 +102,10 @@ public class CaseViewImpl extends JPanel implements CaseView
 		}
 	    g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
 	}
+	
+	public void setCharacterVisible(boolean visible)
+	{
+		label.setVisible(visible);
+	}
+
 }
