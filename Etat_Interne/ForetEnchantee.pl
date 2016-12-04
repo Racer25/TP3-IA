@@ -336,6 +336,10 @@ update_risk_not_windy_case(CooX, CooY):-
 	    ;	!)
 	;   !).
 
+%%%%%%%%%%%%%%%
+%searchSureWay%
+%%%%%%%%%%%%%%%
+
 caseUnknownNotRisky((X,Y)):-
 	\+caseCovered(X,Y),
 	\+riskMonstruous(X,Y),
@@ -373,6 +377,52 @@ searchSureWay([[State|Path]|RestFSet],Solution):-
 searchSureWay([_|RestFSet],Solution):-
 	writeln(3),
  searchSureWay(RestFSet,Solution).
+
+%%%%%%%%%%%%%%%%%%%
+%fin searchSureWay%
+%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%searchNearestRiskMonstruous%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+expand2(Parent,PathsoFar,ChildStates):-
+ findall([Child|PathsoFar],operator2(Parent,Child),ChildStates).
+
+riskMonstruous2((X,Y)):-riskMonstruous(X,Y).
+
+operator2(Parent,Child):-
+ voisin(Parent,Child),
+ (   \+riskMonstruous2(Child)->
+ caseCovered2(Child);true).
+
+%Search the riskMonstruous the nearest
+%STOP criteria: si j'arrive sur une case riskMonstruous
+searchNearestRiskMonstruous([[State|Path]|_],[State|Path]):-
+	writeln(1+State),
+ riskMonstruous2(State),
+ writeln(State+"caseRisqueMonstruous Trouvee").
+
+
+% Continue criteria si je ne viens pas d'ajouter une case riskMonstruous
+% et ajoute à Solution
+searchNearestRiskMonstruous([[State|Path]|RestFSet],Solution):-
+	writeln(2+State),
+ \+ riskMonstruous2(State),
+ writeln(State+"caseRisqueMonstruous non Trouvee"),
+ expand2(State,[State|Path],ChildStates),
+ prune_l(ChildStates,P_ChildStates),
+ append(RestFSet,P_ChildStates,NewFSet),
+  writeln("Recherche dans: "+NewFSet),
+ searchNearestRiskMonstruous(NewFSet,Solution).
+
+%Je passe au traitement de la queue dans le cas ou ça coince
+searchNearestRiskMonstruous([_|RestFSet],Solution):-
+	writeln(3),
+ searchNearestRiskMonstruous(RestFSet,Solution).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%fin searchNearestRiskMonstruous%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 prune_l([],[]):-!.
