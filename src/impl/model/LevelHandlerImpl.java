@@ -41,26 +41,33 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 	{
 		if(arg0 instanceof CharacterImpl)
 		{
+			//The Character warned me
 			if(arg1 instanceof Object[])
 			{
 				Object[] object=(Object[])arg1;
 				if(object[0].equals("levelComplete"))
 				{
+					//The Character warned me that the level is complete or not
 					if((Boolean)object[1])
 					{
+						//The Character warned me that the level is complete
 						this.level++;
 						generateLevel();
 					}
 				}
 				else if(object[0].equals("alive"))
 				{
+					//The Character warned me that he's alive or not
 					if(!(Boolean)object[1])
 					{
+						//The Character warned me that he's not alive
 						generateLevel();
 					}
 				}
 				else if(object[0].equals("coordonnees"))
 				{
+					//The Character warned me that his coordinates are changing
+					
 					//We take the new CaseMap for sensors
 					int lineCaseMap=this.character.getCurrentCase().getCoords()[0]+this.generator.getAdventureMap().getChangeReference()[0];
 					int columnCaseMap=this.character.getCurrentCase().getCoords()[1]+this.generator.getAdventureMap().getChangeReference()[1];

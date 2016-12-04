@@ -203,8 +203,6 @@ public class CharacterImpl extends Observable implements Character, Runnable
 	public void setCurrentCase(CaseCharacter currentCase)
 	{
 		this.currentCase = currentCase;
-		notifyObservers(currentCase.getCoords());
-		setChanged();
 		if(this.currentCase.isPortalPoint())
 		{
 			setLevelComplete(true);

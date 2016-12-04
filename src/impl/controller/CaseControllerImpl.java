@@ -8,7 +8,6 @@ import contract.model.CaseMap;
 import contract.view.CaseView;
 import impl.model.CaseMapImpl;
 import impl.model.CharacterImpl;
-import impl.view.CaseViewImpl;
 
 public class CaseControllerImpl implements CaseController, Observer
 {

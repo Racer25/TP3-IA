@@ -129,7 +129,7 @@ update_internal_state(CooXCurrentCase, CooYCurrentCase, Putrid, Windy, BordureDr
 	    asserta(voisin((CooXCurrentCase,CooYCurrentCase),(NewCoord,CooYCurrentCase)));!),
 	  (BordureGauche=\=true->
 	    NewCoord is CooYCurrentCase-1,
-	    asserta(voisin((CooXCurrentCase,CooYCurrentCase),(CooXCurrentCase,NewCoord)));!)
+	    asserta(voisin([CooXCurrentCase,CooYCurrentCase],[CooXCurrentCase,NewCoord]));!)
 	;    !),
 
 	%Ajout de la case actuelle dans les cases parcourues
