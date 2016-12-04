@@ -1,6 +1,5 @@
 package impl.controller;
 
-import java.awt.Container;
 import java.io.File;
 import java.util.Observable;
 import java.util.Observer;
@@ -9,9 +8,6 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-
 import contract.controller.CaseController;
 import contract.model.CaseMap;
 import contract.view.CaseView;
@@ -21,7 +17,6 @@ import impl.model.CaseMapImpl;
 import impl.model.CharacterImpl;
 import impl.view.CaseViewImpl;
 import impl.view.CharacterViewImpl;
-import utils.OrientationEnum;
 
 public class CaseControllerImpl implements CaseController, Observer
 {

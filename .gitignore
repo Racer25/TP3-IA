@@ -1,1 +1,4 @@
 /bin/*
+/bin/
+
+/bin/impl/model/CharacterImpl.class

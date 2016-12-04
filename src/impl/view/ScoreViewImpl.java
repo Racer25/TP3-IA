@@ -57,6 +57,7 @@ public class ScoreViewImpl extends JPanel implements ScoreView, Observer
 	@Override
 	public void update(Observable o, Object arg)
 	{
+		//The Character warned me that the score is changing
 		if(arg instanceof Integer)
 		{
 			this.setScore((Integer) arg);
