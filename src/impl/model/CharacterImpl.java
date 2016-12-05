@@ -59,6 +59,14 @@ public class CharacterImpl extends Observable implements Character, Runnable
 		{
 			while(this.alive)
 			{
+				try
+				{
+					Thread.sleep(1000);
+				} catch (InterruptedException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				//MAJ case actuelle
 				updateCurrentCase();
 				if(this.currentCase.isPortalPoint())
@@ -88,9 +96,16 @@ public class CharacterImpl extends Observable implements Character, Runnable
 					System.out.println("Envoi de requête takeDecisions");
 					while (q.hasMoreSolutions())
 					{
-						Map<String, Term> action = q.nextSolution();
-					    actions.add(Integer.valueOf(action.get("Reponse").toString()));
-					    System.out.println("ajout de l'action: "+action);
+						Map<String, Term> actionList = q.nextSolution();
+						for (Term action : actionList.get("Reponse").args()) 
+						{
+							if(!action.toString().equals("'[]'"))
+							{
+								actions.add(Integer.valueOf(action.toString()));
+							    System.out.println("ajout de l'action: "+action);
+							}
+						}
+					    
 					}
 					
 					//Réalisation des actions

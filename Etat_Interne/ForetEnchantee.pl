@@ -18,7 +18,6 @@ update_internal_state(CooXCurrentCase, CooYCurrentCase, Putrid, Windy, BordureDr
 	%alors elle lance la methode interne update_risk_putrid_case.
 	%Si la case n'est pas putride alors elle regarde si ses voisins avaient un risque qu'il y ait un monstre. Si oui alors on supprime ce risque et on lance
 	%la methode interne update_risk_not_putrid_case.
-
 	(Putrid
 	 ->  asserta(putrid(CooXCurrentCase, CooYCurrentCase)),
 	    VoisinHaut is CooXCurrentCase+1,
@@ -153,8 +152,8 @@ update_internal_state(CooXCurrentCase, CooYCurrentCase, Putrid, Windy, BordureDr
 
 %Methode de remise a zero des fais.
 raz_internal_state():-
-	retractall(putrid(_)),
-	retractall(windy(_)),
+	retractall(putrid(_,_)),
+	retractall(windy(_,_)),
 	retractall(caseCovered(_,_)),
 	retractall(border(_,_,_,_,_,_)),
 	retractall(fall(_,_)),
@@ -172,7 +171,8 @@ takeDecisions(Reponse):-
 	currentCase(CooX,_),
 	currentCase(_,CooY),
 	(   searchSureWay([[(CooX, CooY)]], SolutionSecure)
-	->  length(SolutionSecure, LengthSolutionSecure),
+	->  writeln(SolutionSecure),
+	    length(SolutionSecure, LengthSolutionSecure),
 	    (	LengthSolutionSecure=<10
 	    -> inverseur(SolutionSecure, ListeSecure),
 	       converter_coo_direction("Secure", ListeSecure,[],_,ListeFinale),
@@ -187,10 +187,13 @@ takeDecisions(Reponse):-
 	      ;	 inverseur(SolutionSecure, ListeSecure),
 		 converter_coo_direction("Secure", ListeSecure,[],_,ListeFinale),
 	         Reponse=ListeFinale ))
-	; searchNearestRiskMonstruous([[(CooX, CooY)]],SolutionMonstruous),
+	; (searchNearestRiskMonstruous([[(CooX, CooY)]],SolutionMonstruous)->
 	  inverseur(SolutionMonstruous, ListeMonstruous),
 	  converter_coo_direction("Monster", ListeMonstruous, [], _, ListeFinale),
-	  Reponse=ListeFinale ).
+	  Reponse=ListeFinale
+	; randomDirection(CooX, CooY,PreReponse),
+	  converter_coo_direction("Secure", PreReponse, [], _, ListeFinale),
+	  Reponse=ListeFinale)).
 
 
 
@@ -485,6 +488,23 @@ searchNearestRiskMonstruous([_|RestFSet],Solution):-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %fin searchNearestRiskMonstruous%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%
+%randomDirection%
+%%%%%%%%%%%%%%%%%
+
+randomDirection(CooXCurrent, CooYCurrent,Liste2):-
+	writeln("RANDOOOOOOOOOOM"),
+	Liste=[(CooXCurrent,CooYCurrent)],
+	voisin((CooXCurrent,CooYCurrent),(NewCooX,NewCooY)),
+	append(Liste,[(NewCooX,NewCooY)],Liste2).
+
+%%%%%%%%%%%%%%%%%%%%%
+%fin randomDirection%
+%%%%%%%%%%%%%%%%%%%%%
+
+
 
 prune_l([],[]):-!.
 

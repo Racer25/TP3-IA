@@ -231,37 +231,37 @@ public class AdventureMapGeneratorImpl implements AdventureMapGenerator
 				CaseMap maCase=this.adventureMap.getCasesMap()[i][j];
 				if(i==0)
 				{
-					maCase.addPossibleDirection(DirectionEnum.UP, true);
+					maCase.addPossibleDirection(DirectionEnum.UP, false);
 				}
 				else
 				{
-					maCase.addPossibleDirection(DirectionEnum.UP, false);
+					maCase.addPossibleDirection(DirectionEnum.UP, true);
 				}
 				
 				if(i==adventureMap.getTaille()-1)
 				{
-					maCase.addPossibleDirection(DirectionEnum.DOWN, true);
+					maCase.addPossibleDirection(DirectionEnum.DOWN, false);
 				}
 				else
 				{
-					maCase.addPossibleDirection(DirectionEnum.DOWN, false);
+					maCase.addPossibleDirection(DirectionEnum.DOWN, true);
 				}
 				if(j==0)
 				{
-					maCase.addPossibleDirection(DirectionEnum.LEFT, true);
+					maCase.addPossibleDirection(DirectionEnum.LEFT, false);
 				}
 				else
 				{
-					maCase.addPossibleDirection(DirectionEnum.LEFT, false);
+					maCase.addPossibleDirection(DirectionEnum.LEFT, true);
 				}
 				
 				if(j==adventureMap.getTaille()-1)
 				{
-					maCase.addPossibleDirection(DirectionEnum.RIGHT, true);
+					maCase.addPossibleDirection(DirectionEnum.RIGHT, false);
 				}
 				else
 				{
-					maCase.addPossibleDirection(DirectionEnum.RIGHT, false);
+					maCase.addPossibleDirection(DirectionEnum.RIGHT, true);
 				}
 			}
 		}
