@@ -76,6 +76,12 @@ public class CharacterImpl extends Observable implements Character, Runnable
 				else
 				{
 					//Envoie des informations à prolog
+					System.out.println("Depuis java:");
+					System.out.println("BordureDroite: "+!this.currentCase.getPossibleDirections().get(DirectionEnum.RIGHT));
+					System.out.println("BordureGauche: "+!this.currentCase.getPossibleDirections().get(DirectionEnum.LEFT));
+					System.out.println("BordureHaut: "+!this.currentCase.getPossibleDirections().get(DirectionEnum.UP));
+					System.out.println("BordureBas: "+!this.currentCase.getPossibleDirections().get(DirectionEnum.DOWN)+"\n");
+			
 					Query internalStateQuery = new Query(new Compound("update_internal_state", new Term[] 
 							{
 									new org.jpl7.Integer(this.currentCase.getCoords()[0]), 
@@ -118,25 +124,21 @@ public class CharacterImpl extends Observable implements Character, Runnable
 				            	System.out.println("Haut");
 				            	this.setOrientation(OrientationEnum.UP);
 				            	this.effectorUp.doIt();
-				            	notifyObservers(new Object[]{"case", currentCase});
 				            	break;
 				            case 2:
 				            	System.out.println("Droite");
 				            	this.setOrientation(OrientationEnum.RIGHT);
 				            	this.effectorRight.doIt();
-				            	notifyObservers(new Object[]{"case", currentCase});
 				                break;
 				            case 3:
 				            	System.out.println("Down");
 				            	this.setOrientation(OrientationEnum.DOWN);
 				            	this.effectorDown.doIt();
-				            	notifyObservers(new Object[]{"case", currentCase});
 				            	break;
 				            case 4:
 				            	System.out.println("Gauche");
 				            	this.setOrientation(OrientationEnum.LEFT);
 				            	this.effectorLeft.doIt();
-				            	notifyObservers(new Object[]{"case", currentCase});
 				                break;
 				            case 5:
 								System.out.println("CaillouHaut");
@@ -159,7 +161,7 @@ public class CharacterImpl extends Observable implements Character, Runnable
 								this.effectorStone.doIt();
 								break;
 				            default: 
-				            	System.out.println("Erreur dans l'entier retourner par prolog");
+				            	System.out.println("Erreur dans l'entier retourné par prolog");
 				                break;
 			            }
 					}
@@ -222,10 +224,10 @@ public class CharacterImpl extends Observable implements Character, Runnable
 	public void setCurrentCase(CaseCharacter currentCase)
 	{
 		this.currentCase = currentCase;
-		if(this.currentCase.isPortalPoint())
+		/*if(this.currentCase.isPortalPoint())
 		{
 			setLevelComplete(true);
-		}
+		}*/
 		notifyObservers(new Object[]{"case", currentCase});
 		setChanged();
 	}

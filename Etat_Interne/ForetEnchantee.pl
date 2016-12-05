@@ -18,6 +18,14 @@ update_internal_state(CooXCurrentCase, CooYCurrentCase, Putrid, Windy, BordureDr
 	%alors elle lance la methode interne update_risk_putrid_case.
 	%Si la case n'est pas putride alors elle regarde si ses voisins avaient un risque qu'il y ait un monstre. Si oui alors on supprime ce risque et on lance
 	%la methode interne update_risk_not_putrid_case.
+
+	%Ajout de la case actuelle dans les cases parcourues
+	asserta(caseCovered(CooXCurrentCase, CooYCurrentCase)),
+	(currentCase(_,_)
+	->  retract(currentCase(_,_))
+	;   !),
+	asserta(currentCase(CooXCurrentCase, CooYCurrentCase)),
+
 	(Putrid
 	 ->  asserta(putrid(CooXCurrentCase, CooYCurrentCase)),
 	    VoisinHaut is CooXCurrentCase+1,
@@ -139,14 +147,7 @@ update_internal_state(CooXCurrentCase, CooYCurrentCase, Putrid, Windy, BordureDr
 	  (\+BordureGauche->
 	    NewCoord is CooYCurrentCase-1,
 	    asserta(voisin((CooXCurrentCase,CooYCurrentCase),(CooXCurrentCase,NewCoord)));!)
-	;    !),
-
-	%Ajout de la case actuelle dans les cases parcourues
-	asserta(caseCovered(CooXCurrentCase, CooYCurrentCase)),
-	(currentCase(_,_)
-	->  retract(currentCase(_,_))
-	;   !),
-	asserta(currentCase(CooXCurrentCase, CooYCurrentCase)).
+	;    !).
 
 
 
@@ -168,10 +169,12 @@ raz_internal_state():-
 % faire. Elle retourne une liste d'action ï¿½ effectuer et l'envoie a
 % java.
 takeDecisions(Reponse):-
+	writeln("Allo!!"),
 	currentCase(CooX,_),
 	currentCase(_,CooY),
+	writeln("Cherchons un chemin sûr"),
 	(   searchSureWay([[(CooX, CooY)]], SolutionSecure)
-	->  writeln(SolutionSecure),
+	->  writeln("Chemin sûr trouvé"),
 	    length(SolutionSecure, LengthSolutionSecure),
 	    (	LengthSolutionSecure=<10
 	    -> inverseur(SolutionSecure, ListeSecure),
@@ -187,11 +190,16 @@ takeDecisions(Reponse):-
 	      ;	 inverseur(SolutionSecure, ListeSecure),
 		 converter_coo_direction("Secure", ListeSecure,[],_,ListeFinale),
 	         Reponse=ListeFinale ))
-	; (searchNearestRiskMonstruous([[(CooX, CooY)]],SolutionMonstruous)->
+	;
+	writeln("Chemin sûr pas trouvé"),
+	(searchNearestRiskMonstruous([[(CooX, CooY)]],SolutionMonstruous)->
 	  inverseur(SolutionMonstruous, ListeMonstruous),
 	  converter_coo_direction("Monster", ListeMonstruous, [], _, ListeFinale),
 	  Reponse=ListeFinale
-	; randomDirection(CooX, CooY,PreReponse),
+	;
+	writeln("Cherchons un chemin aléatoire"),
+	randomDirection(CooX, CooY,PreReponse),
+	 writeln("Chemin aléatoire trouvé"),
 	  converter_coo_direction("Secure", PreReponse, [], _, ListeFinale),
 	  Reponse=ListeFinale)).
 
@@ -425,7 +433,7 @@ operator(Parent,Child):-
 searchSureWay([[State|Path]|_],[State|Path]):-
 	writeln(1),
  caseUnknownNotRisky(State),
- writeln(State+caseInconnueNonRisqueeTrouvee).
+ writeln(State+"case Inconnue Non Risquee Trouvee").
 
 % Continue criteria si je ne viens pas d'ajouter une case inconnue non
 % risquï¿½e et ajoute ï¿½ Solution
@@ -498,6 +506,7 @@ randomDirection(CooXCurrent, CooYCurrent,Liste2):-
 	writeln("RANDOOOOOOOOOOM"),
 	Liste=[(CooXCurrent,CooYCurrent)],
 	voisin((CooXCurrent,CooYCurrent),(NewCooX,NewCooY)),
+	writeln((NewCooX,NewCooY)),
 	append(Liste,[(NewCooX,NewCooY)],Liste2).
 
 %%%%%%%%%%%%%%%%%%%%%

@@ -64,13 +64,13 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 						generateLevel();
 					}
 				}
-				else if(object[0].equals("coordonnees"))
+				else if(object[0].equals("case"))
 				{
 					//The Character warned me that his coordinates are changing
-					
+					CaseCharacter newCaseCharacter=(CaseCharacter) object[1];
 					//We take the new CaseMap for sensors
-					int lineCaseMap=this.character.getCurrentCase().getCoords()[0]+this.generator.getAdventureMap().getChangeReference()[0];
-					int columnCaseMap=this.character.getCurrentCase().getCoords()[1]+this.generator.getAdventureMap().getChangeReference()[1];
+					int lineCaseMap=newCaseCharacter.getCoords()[0]+this.generator.getAdventureMap().getChangeReference()[0];
+					int columnCaseMap=newCaseCharacter.getCoords()[1]+this.generator.getAdventureMap().getChangeReference()[1];
 					CaseMap newCase=this.generator.getAdventureMap().getCasesMap()[lineCaseMap][columnCaseMap];
 					
 					//Update
