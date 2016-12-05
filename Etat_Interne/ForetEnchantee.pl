@@ -9,41 +9,6 @@
 :-dynamic(currentCase/2).
 :-dynamic(voisin/2).
 
-
-currentCase(0,0).
-
-caseCovered(-1,0).
-caseCovered(0,0).
-caseCovered(0,1).
-
-voisin((-1,0),(0,0)).
-voisin((0,0),(-1,0)).
-voisin((0,0),(0,1)).
-
-voisin((0,1),(0,0)).
-voisin((0,1),(-1,1)).
-voisin((0,1),(0,2)).
-
-voisin((0,2),(0,1)).
-
-voisin((-1,0),(-2,0)).
-voisin((-1,0),(-1,1)).
-voisin((-1,0),(0,0)).
-
-voisin((-1,1),(0,1)).
-voisin((-1,1),(-1,0)).
-
-voisin((-2,0),(-1,0)).
-
-border(-1,0,false,false,false,true).
-border(0,0,false,false,true,true).
-border(0,1, false,false, true, false).
-
-putrid(-1,0).
-
-riskFall(-2,0).
-riskFall(0,2).
-riskMonstruous(-1,1).
 % -----------------------------------------------------------------------
 % Methodes externes
 % -----------------------------------------------------------------------
