@@ -22,6 +22,7 @@ import utils.OrientationEnum;
 public class CharacterImpl extends Observable implements Character, Runnable
 {	
 	private Boolean alive;
+	private Boolean active;
 	private Integer score;
 	private OrientationEnum orientation;
 	private CaseCharacter currentCase;
@@ -44,7 +45,8 @@ public class CharacterImpl extends Observable implements Character, Runnable
 	
 	public CharacterImpl()
 	{
-		this.alive=false;
+		this.alive=true;
+		this.active=false;
 		this.score=0;
 		this.orientation=OrientationEnum.RIGHT;
 		this.currentCase=null;
@@ -57,19 +59,27 @@ public class CharacterImpl extends Observable implements Character, Runnable
 		boolean consultation = consultPrologFile();
 		while(true)
 		{
-			while(this.alive)
+			//Actualisation evenry 0.1 second
+			try
+			{
+				Thread.sleep(100);
+			} 
+			catch (InterruptedException e)
+			{
+				e.printStackTrace();
+			}
+			while(this.alive && this.active)
 			{
 				try
 				{
 					Thread.sleep(1000);
-				} catch (InterruptedException e)
+				} 
+				catch (InterruptedException e)
 				{
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				//MAJ case actuelle
 				updateCurrentCase();
-				
 				
 				if(this.currentCase.isPortalPoint())
 				{
@@ -96,24 +106,33 @@ public class CharacterImpl extends Observable implements Character, Runnable
 									new Atom(Boolean.toString(!this.currentCase.getPossibleDirections().get(DirectionEnum.DOWN)))
 							}));
 					boolean updateInternalState=internalStateQuery.hasSolution();
+					internalStateQuery.close();
 					
 					
 					//Récupération des actions à réaliser
 					List<Integer> actions=new ArrayList<Integer>();
 					Query q = new Query(new Compound("takeDecisions", new Term[] { new Variable("Reponse")}));
 					System.out.println("Envoi de requête takeDecisions");
-					while (q.hasMoreSolutions())
+					q.open();
+					q.hasMoreSolutions();
+					Map<String, Term> actionList = q.nextSolution();
+					for (Term action : actionList.get("Reponse").args()) 
 					{
-						Map<String, Term> actionList = q.nextSolution();
-						for (Term action : actionList.get("Reponse").args()) 
+						System.out.println(action.toString());
+						if(action.isInteger())
 						{
-							if(!action.toString().equals("'[]'"))
-							{
-								actions.add(Integer.valueOf(action.toString()));
-							    System.out.println("ajout de l'action: "+action);
-							}
+							actions.add(Integer.valueOf(action.toString()));
+						    System.out.println("ajout de l'action: "+action);
+						}
+						//format du dernier terme de la liste: '[|]'(4, '[]')
+						else if(!action.toString().equals("'[]'"))
+						{
+							String maString=action.toString().substring(6, action.toString().length());
+							maString=maString.substring(0, maString.length()-7);
+							actions.add(Integer.valueOf(maString));
 						}
 					}
+					q.close();
 					
 					//Réalisation des actions
 					for(Integer action: actions)
@@ -166,9 +185,10 @@ public class CharacterImpl extends Observable implements Character, Runnable
 				                break;
 			            }
 					}
+					
 				}
 			}
-			if(!this.alive)
+			if(!this.alive || !this.active)
 			{
 				Query resetQuery=new Query("raz_internal_state", new Term[]{});
 				resetQuery.hasSolution();
@@ -351,5 +371,15 @@ public class CharacterImpl extends Observable implements Character, Runnable
 		this.currentCase.setPutrid((Boolean) this.sensorPutrid.answer());
 		this.currentCase.setWindy((Boolean) this.sensorWindy.answer());
 		this.currentCase.setPossibleDirections((HashMap<DirectionEnum, Boolean>) this.sensorDirections.answer());
+	}
+
+	public Boolean isActive()
+	{
+		return active;
+	}
+
+	public void setActive(Boolean active)
+	{
+		this.active = active;
 	}
 }

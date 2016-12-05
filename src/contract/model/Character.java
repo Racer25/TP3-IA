@@ -7,6 +7,8 @@ public interface Character
 	//Change currentCase and update memory of the agent	
 	public Boolean isAlive();
 	public void setAlive(Boolean alive);
+	public Boolean isActive();
+	public void setActive(Boolean active);
 	public int getScore();
 	public void setScore(int score);
 	public OrientationEnum getOrientation();
