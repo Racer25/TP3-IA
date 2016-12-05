@@ -9,6 +9,41 @@
 :-dynamic(currentCase/2).
 :-dynamic(voisin/2).
 
+
+currentCase(0,0).
+
+caseCovered(-1,0).
+caseCovered(0,0).
+caseCovered(0,1).
+
+voisin((-1,0),(0,0)).
+voisin((0,0),(-1,0)).
+voisin((0,0),(0,1)).
+
+voisin((0,1),(0,0)).
+voisin((0,1),(-1,1)).
+voisin((0,1),(0,2)).
+
+voisin((0,2),(0,1)).
+
+voisin((-1,0),(-2,0)).
+voisin((-1,0),(-1,1)).
+voisin((-1,0),(0,0)).
+
+voisin((-1,1),(0,1)).
+voisin((-1,1),(-1,0)).
+
+voisin((-2,0),(-1,0)).
+
+border(-1,0,false,false,false,true).
+border(0,0,false,false,true,true).
+border(0,1, false,false, true, false).
+
+putrid(-1,0).
+
+riskFall(-2,0).
+riskFall(0,2).
+riskMonstruous(-1,1).
 % -----------------------------------------------------------------------
 % Methodes externes
 % -----------------------------------------------------------------------
@@ -168,17 +203,29 @@ raz_internal_state():-
 % Methode dont le but est de prendre une decision sur les actions a
 % faire. Elle retourne une liste d'action � effectuer et l'envoie a
 % java.
-%takeDecisions(Reponse):-
-%	currentCase(CooX,_),
-%	currentCase(_,CooY),
-%	(   searchSureWay([[CooX, CooY]], SolutionSecure)
-%	->  length(SolutionSecure, lengthSolutionSecure),
-%	    (	lengthSolutionSecure=<10
-%	    ->	writeln("algo de changement coo en direction")
-%	    ; writeln("algo du chemin vers case risque monstrueux la
-%	    plus proche + calcul"))
-%	; writeln("algo du chemin vers case risque monstrueux la plus
-%	proche")). %A completer avec monstre
+takeDecisions(Reponse):-
+	currentCase(CooX,_),
+	currentCase(_,CooY),
+	(   searchSureWay([[(CooX, CooY)]], SolutionSecure)
+	->  length(SolutionSecure, LengthSolutionSecure),
+	    (	LengthSolutionSecure=<10
+	    -> inverseur(SolutionSecure, ListeSecure),
+	       converter_coo_direction("Secure", ListeSecure,[],_,ListeFinale),
+	       Reponse=ListeFinale
+	    ; searchNearestRiskMonstruous([[(CooX, CooY)]],SolutionMonstruous),
+	      length(SolutionMonstruous, LengthSolutionMonstruous),
+	      Calcul is LengthSolutionSecure-10-LengthSolutionMonstruous,
+	      (	  Calcul>0
+	      ->   inverseur(SolutionMonstruous, ListeMonstruous),
+		   converter_coo_direction("Monster", ListeMonstruous, [], _, ListeFinale),
+		   Reponse=ListeFinale
+	      ;	 inverseur(SolutionSecure, ListeSecure),
+		 converter_coo_direction("Secure", ListeSecure,[],_,ListeFinale),
+	         Reponse=ListeFinale ))
+	; searchNearestRiskMonstruous([[CooX, CooY]],SolutionMonstruous),
+	  inverseur(SolutionMonstruous, ListeMonstruous),
+	  converter_coo_direction("Monster", ListeMonstruous, [], _, ListeFinale),
+	  Reponse=ListeFinale ).
 
 
 
@@ -415,7 +462,7 @@ searchSureWay([[State|Path]|_],[State|Path]):-
 % Continue criteria si je ne viens pas d'ajouter une case inconnue non
 % risqu�e et ajoute � Solution
 searchSureWay([[State|Path]|RestFSet],Solution):-
-	writeln(2),
+ writeln(2),
  \+ caseUnknownNotRisky(State),
  writeln(State+caseInconnueNonRisqueeNonTrouvee),
  expand(State,[State|Path],ChildStates),
@@ -474,33 +521,58 @@ searchNearestRiskMonstruous([_|RestFSet],Solution):-
 %fin searchNearestRiskMonstruous%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+prune_l([],[]):-!.
 
+prune_l([[State|Path]|RestChilds],[[State|Path]|RestPChilds]):-
+  \+ member(State,Path),
+  !,
+  prune_l(RestChilds,RestPChilds).
+
+prune_l([_|RestChilds],RestPChilds):-
+  prune_l(RestChilds,RestPChilds).
 
 %On convertit les coordonn�es en directions
-converter_coo_direction([Element], Liste2, Element, Solution2):-
-	Solution2=Liste2.
+%On convertit les coordonn�es en directions
+converter_coo_direction(_,[Element], Liste3, Element, Solution2):-
+	Solution2=Liste3.
 
-converter_coo_direction([Tete|Queue], Liste, Solution1, Solution2):-
+converter_coo_direction(Intitule, [Tete|Queue], Liste, Solution1, Solution2):-
 	nth0(0,[Tete|Queue],Element1),
 	nth0(1,[Tete|Queue],Element2),
 	process_Couple_CooX(Element1, CooX1),
 	process_Couple_CooX(Element2, CooX2),
 	process_Couple_CooY(Element1, CooY1),
 	process_Couple_CooY(Element2, CooY2),
+	length([Tete|Queue],Length),
+	writeln("Length"+Length),
+	(  (Intitule=="Monster", Length==2)
+	->	(   CooX1<CooX2
+		 -> append(Liste, [7], Liste2)
+		;   !),
+		(   CooX2<CooX1
+		->  append(Liste, [5], Liste2)
+		;   !),
+		(CooY1<CooY2
+		->  append(Liste, [6], Liste2)
+		;   !),
+		(CooY2<CooY1
+		->  append(Liste,[8], Liste2)
+		;   !),
+	       ListeTest = Liste2
+	;   ListeTest=Liste),
 	(   CooX1<CooX2
-	->  append(Liste, 3, Liste2)
+	->  append(ListeTest, [3], Liste3)
 	;   !),
 	(   CooX2<CooX1
-	->  append(Liste, 1, Liste2)
+	->  append(ListeTest, [1], Liste3)
 	;   !),
 	(CooY1<CooY2
-	->  append(Liste, 2, Liste2)
+	->  append(ListeTest, [2], Liste3)
 	;   !),
 	(CooY2<CooY1
-	->  append(Liste,4, Liste2)
+	->  append(ListeTest,[4], Liste3)
 	;   !),
-	converter_coo_direction(Queue, Liste2, Solution1, Solution2).
-
+	converter_coo_direction(Intitule, Queue, Liste3, Solution1, Solution2).
 
 %Methode pour inverser une liste
 % l'inverse d'une liste vide est une liste vide
@@ -518,3 +590,4 @@ process_Couple_CooX((X,_), CooX):-
 
 process_Couple_CooY((_,Y), CooY):-
 	CooY=Y.
+
