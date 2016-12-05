@@ -98,10 +98,17 @@ public class CharacterImpl extends Observable implements Character, Runnable
 					boolean updateInternalState=internalStateQuery.hasSolution();
 					
 					
-					//Récupération des actions à réaliser
+					//Recuperation des actions a realiser
 					List<Integer> actions=new ArrayList<Integer>();
 					Query q = new Query(new Compound("takeDecisions", new Term[] { new Variable("Reponse")}));
-					System.out.println("Envoi de requête takeDecisions");
+					System.out.println("Envoi de requete takeDecisions");
+					Term listTerm = q.oneSolution().get("Reponse");
+					
+					for(int term=0; term<listTerm.listLength(); term++){
+						Term termeObtenu= listTerm.arg(term);
+						actions.add(termeObtenu.intValue());
+					}
+					/*
 					while (q.hasMoreSolutions())
 					{
 						Map<String, Term> actionList = q.nextSolution();
@@ -113,9 +120,9 @@ public class CharacterImpl extends Observable implements Character, Runnable
 							    System.out.println("ajout de l'action: "+action);
 							}
 						}
-					}
+					}*/
 					
-					//Réalisation des actions
+					//Realisation des actions
 					for(Integer action: actions)
 					{
 						System.out.println("action: "+action);
