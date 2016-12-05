@@ -54,13 +54,15 @@ public class CharacterImpl extends Observable implements Character, Runnable
 	@Override
 	public void run()
 	{
-		consultPrologFile();
+		boolean consultation = consultPrologFile();
 		while(true)
 		{
 			while(this.alive)
 			{
 				//MAJ case actuelle
 				updateCurrentCase();
+				
+				
 				if(this.currentCase.isPortalPoint())
 				{
 					this.setLevelComplete(true);
@@ -79,16 +81,20 @@ public class CharacterImpl extends Observable implements Character, Runnable
 									new Atom(Boolean.toString(!this.currentCase.getPossibleDirections().get(DirectionEnum.UP))),
 									new Atom(Boolean.toString(!this.currentCase.getPossibleDirections().get(DirectionEnum.DOWN)))
 							}));
-					internalStateQuery.hasSolution();
+					boolean updateInternalState=internalStateQuery.hasSolution();
 					
 					
 					//Récupération des actions à réaliser
 					List<Integer> actions=new ArrayList<Integer>();
 					Query q = new Query(new Compound("takeDecisions", new Term[] { new Variable("Reponse")}));
-					System.out.println("Envoi de requête takeDecisions");
-					while (q.hasMoreSolutions())
-					{
+					System.out.println("Envoi de requete takeDecisions");
+					System.out.println("test : "+q.hasSolution());
+					Term listTerm = q.oneSolution().get("Reponse");
+					Term firstListItem = listTerm.arg(1);
+					int value=firstListItem.intValue();
+					while (q.hasMoreSolutions()){
 						Map<String, Term> action = q.nextSolution();
+						
 					    actions.add(Integer.valueOf(action.get("Reponse").toString()));
 					    System.out.println("ajout de l'action: "+action);
 					}

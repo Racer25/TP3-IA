@@ -21,7 +21,7 @@ update_internal_state(CooXCurrentCase, CooYCurrentCase, Putrid, Windy, BordureDr
 
 	(Putrid
 	 ->  asserta(putrid(CooXCurrentCase, CooYCurrentCase)),
-	    VoisinHaut is CooXCurrentCase+1,
+	    VoisinHaut is CooXCurrentCase-1,
 	    VoisinDroite is CooYCurrentCase+1,
 	    VoisinBas is CooXCurrentCase+1,
 	    VoisinGauche is CooYCurrentCase-1,
@@ -45,7 +45,7 @@ update_internal_state(CooXCurrentCase, CooYCurrentCase, Putrid, Windy, BordureDr
 		->  update_risk_putrid_case(CooXCurrentCase, VoisinGauche)
 		;    !)
 	    ;    !)
-	;   VoisinHaut is CooXCurrentCase+1,
+	;   VoisinHaut is CooXCurrentCase-1,
 	    VoisinDroite is CooYCurrentCase+1,
 	    VoisinBas is CooXCurrentCase+1,
 	    VoisinGauche is CooYCurrentCase-1,
@@ -102,7 +102,7 @@ update_internal_state(CooXCurrentCase, CooYCurrentCase, Putrid, Windy, BordureDr
 		->  update_risk_windy_case(CooXCurrentCase, VoisinGauche)
 		;    !)
 	    ;    !)
-	;   VoisinHaut is CooXCurrentCase+1,
+	;   VoisinHaut is CooXCurrentCase-1,
 	    VoisinDroite is CooYCurrentCase+1,
 	    VoisinBas is CooXCurrentCase+1,
 	    VoisinGauche is CooYCurrentCase-1,
@@ -125,22 +125,29 @@ update_internal_state(CooXCurrentCase, CooYCurrentCase, Putrid, Windy, BordureDr
 
 	%Mise a jours des bordures pour la case actuelle
 	((BordureDroite; BordureGauche; BordureHaut; BordureBas)
-	->  asserta(border(CooXCurrentCase, CooYCurrentCase, BordureHaut, BordureDroite, BordureBas, BordureGauche)),
+	->  asserta(border(CooXCurrentCase, CooYCurrentCase, BordureHaut, BordureDroite, BordureBas, BordureGauche))
+	;   !),
 
 	 %Ajout des voisins
-	 (\+BordureHaut->
-	    NewCoord is CooXCurrentCase-1,
-	    asserta(voisin((CooXCurrentCase,CooYCurrentCase),(NewCoord,CooYCurrentCase)));!),
-	 (\+BordureDroite->
-	    NewCoord is CooYCurrentCase+1,
-	    asserta(voisin((CooXCurrentCase,CooYCurrentCase),(CooXCurrentCase,NewCoord)));!),
-	 (\+BordureBas->
-	    NewCoord is CooXCurrentCase+1,
-	    asserta(voisin((CooXCurrentCase,CooYCurrentCase),(NewCoord,CooYCurrentCase)));!),
-	  (\+BordureGauche->
-	    NewCoord is CooYCurrentCase-1,
-	    asserta(voisin((CooXCurrentCase,CooYCurrentCase),(CooXCurrentCase,NewCoord)));!)
-	;    !),
+	 (\+BordureHaut
+	 ->NewCoord1 is CooXCurrentCase-1,
+	   asserta(voisin((CooXCurrentCase,CooYCurrentCase),(NewCoord1,CooYCurrentCase)))
+	 ;   !),
+
+	 (\+BordureDroite
+	 ->NewCoord2 is CooYCurrentCase+1,
+	   asserta(voisin((CooXCurrentCase,CooYCurrentCase),(CooXCurrentCase,NewCoord2)))
+	 ;   !),
+
+	 (\+BordureBas
+	 ->NewCoord3 is CooXCurrentCase+1,
+	   asserta(voisin((CooXCurrentCase,CooYCurrentCase),(NewCoord3,CooYCurrentCase)))
+	 ;  !),
+
+	(\+BordureGauche
+	->NewCoord4 is CooYCurrentCase-1,
+	  asserta(voisin((CooXCurrentCase,CooYCurrentCase),(CooXCurrentCase,NewCoord4)))
+	;  !),
 
 	%Ajout de la case actuelle dans les cases parcourues
 	asserta(caseCovered(CooXCurrentCase, CooYCurrentCase)),
