@@ -70,8 +70,8 @@ public class CharacterImpl extends Observable implements Character, Runnable
 					//Envoie des informations à prolog
 					Query internalStateQuery = new Query(new Compound("update_internal_state", new Term[] 
 							{
-									new Atom(Integer.toString(this.currentCase.getCoords()[0])), 
-									new Atom(Integer.toString(this.currentCase.getCoords()[1])),
+									new org.jpl7.Integer(this.currentCase.getCoords()[0]), 
+									new org.jpl7.Integer(this.currentCase.getCoords()[1]),
 									new Atom(Boolean.toString(this.currentCase.isPutrid())),
 									new Atom(Boolean.toString(this.currentCase.isWindy())),
 									new Atom(Boolean.toString(!this.currentCase.getPossibleDirections().get(DirectionEnum.RIGHT))),
