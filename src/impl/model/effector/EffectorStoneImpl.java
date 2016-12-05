@@ -1,7 +1,7 @@
 package impl.model.effector;
 
 import contract.model.AdventureMap;
-import contract.model.CaseCharacter;
+import contract.model.CaseMap;
 import contract.model.Effector;
 import impl.model.CharacterImpl;
 
@@ -19,32 +19,32 @@ public class EffectorStoneImpl implements Effector
 	@Override
 	public void doIt()
 	{
-		CaseCharacter caseAttacked = null;
+		CaseMap caseAttacked = null;
 		int lineCurrentCase=character.getCurrentCase().getCoords()[0]+map.getChangeReference()[0];
 		int columnCurrentCase=character.getCurrentCase().getCoords()[1]+map.getChangeReference()[1];
 		//case attacked depends on the character orientation!!!
 		 switch (character.getOrientation()) 
 		 {
          case UP: 
-        	 caseAttacked=(CaseCharacter) 
+        	 caseAttacked=
         			 map.getCasesMap()
      				[lineCurrentCase-1]
      				[columnCurrentCase];
         	 break;
          case RIGHT:  
-        	 caseAttacked=(CaseCharacter) 
+        	 caseAttacked=
         			 map.getCasesMap()
         			 [lineCurrentCase]
         				[columnCurrentCase+1];
         	 break;
          case DOWN:  
-        	 caseAttacked=(CaseCharacter) 
+        	 caseAttacked= 
         			 map.getCasesMap()
         			 [lineCurrentCase+1]
         	     	[columnCurrentCase];
              break;
          case LEFT:  
-        	 caseAttacked=(CaseCharacter) 
+        	 caseAttacked=
         			 map.getCasesMap()
         			 [lineCurrentCase]
         	     	[columnCurrentCase-1];

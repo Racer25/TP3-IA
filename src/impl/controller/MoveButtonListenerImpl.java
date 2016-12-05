@@ -22,9 +22,11 @@ public class MoveButtonListenerImpl implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-		if(!this.character.isAlive())
+		System.out.println("Bonjour");
+		if(!this.character.isActive())
 		{
-			this.character.setAlive(true);
+			this.character.setActive(true);
+			System.out.println("Mis à jour de active vers: "+this.character.isActive());
 		}
 		//character.getEffectorDown().doIt();
 	}

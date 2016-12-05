@@ -119,8 +119,9 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 	private void configureCharacter()
 	{
 		this.character.setLevelComplete(false);
-		this.character.setOrientation(OrientationEnum.UP);
-		this.character.setAlive(false);
+		this.character.setOrientation(OrientationEnum.RIGHT);
+		this.character.setAlive(true);
+		this.character.setActive(false);
 		
 		//Spawnpoint impact
 		int[] tab={0,0};
