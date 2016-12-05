@@ -1,5 +1,5 @@
-:-dynamic(putrid/1).
-:-dynamic(windy/1).
+:-dynamic(putrid/2).
+:-dynamic(windy/2).
 :-dynamic(caseCovered/2).
 :-dynamic(border/6).
 :-dynamic(fall/2).
@@ -9,16 +9,18 @@
 :-dynamic(currentCase/2).
 :-dynamic(voisin/2).
 
-% putrid(cooX, cooY).
-% windy(cooX, cooY).
-% caseCovered(cooX, cooY).
-% border(cooX, cooY, bordureHaut,
-% bordureDroite, bordureBas, bordureGauche).
+% -----------------------------------------------------------------------
+% Methodes externes
+% -----------------------------------------------------------------------
 
 update_internal_state(CooXCurrentCase, CooYCurrentCase, Putrid, Windy, BordureDroite, BordureGauche, BordureHaut, BordureBas):-
-        %Ajout de la case si la case est putride
-	(Putrid== true
-	->  asserta(putrid(CooXCurrentCase, CooYCurrentCase)),
+        %Ajout de la case si la case est putride, puis si la case actuelle a des voisins et qu'ils n'ont pas encore ete decouvert
+	%alors elle lance la methode interne update_risk_putrid_case.
+	%Si la case n'est pas putride alors elle regarde si ses voisins avaient un risque qu'il y ait un monstre. Si oui alors on supprime ce risque et on lance
+	%la methode interne update_risk_not_putrid_case.
+
+	(Putrid
+	 ->  asserta(putrid(CooXCurrentCase, CooYCurrentCase)),
 	    VoisinHaut is CooXCurrentCase+1,
 	    VoisinDroite is CooYCurrentCase+1,
 	    VoisinBas is CooXCurrentCase+1,
@@ -64,8 +66,21 @@ update_internal_state(CooXCurrentCase, CooYCurrentCase, Putrid, Windy, BordureDr
 	        update_risk_not_putrid_case(CooXCurrentCase, VoisinGauche)
 	    ;	!)),
 
-	%Ajout de la case si la case est venteuse
-	(Windy == true
+	%Si la case actuelle avait des risques ou etait monstrueuse alors on supprime ces risques (car etant sur cette case et n'etant pas mort cette case n'etait pas a risque.
+	(   riskMonstruous(CooXCurrentCase, CooYCurrentCase)
+	->  retract(riskMonstruous(CooXCurrentCase, CooYCurrentCase))
+	;   !),
+	(   riskFall(CooXCurrentCase, CooYCurrentCase)
+	->  retract(riskFall(CooXCurrentCase, CooYCurrentCase))
+	;   !),
+	(   monstruous(CooXCurrentCase,CooYCurrentCase)
+	->  retract(monstruous(CooXCurrentCase,CooYCurrentCase))
+	;   !),
+
+	%Ajout de la case si la case est venteuse, si celle-ci a des voisins et qu'ils n'ont pas encore ete découverts alors elle lance update_risk_windy_case.
+	%Si la case actuelle n'est pas windy alors si ces voisins avaient un risque qu'il y ait un gouffre, alors on supprime ce risque car il n'a pas lieu d'etre et
+	%nous lançons la methode update_risk_not_windy_case
+	(Windy
 	 -> asserta(windy(CooXCurrentCase, CooYCurrentCase)),
 	    (\+BordureHaut
 	     ->	(\+caseCovered(VoisinHaut, CooYCurrentCase)
@@ -87,7 +102,7 @@ update_internal_state(CooXCurrentCase, CooYCurrentCase, Putrid, Windy, BordureDr
 		->  update_risk_windy_case(CooXCurrentCase, VoisinGauche)
 		;    !)
 	    ;    !)
-	;    VoisinHaut is CooXCurrentCase+1,
+	;   VoisinHaut is CooXCurrentCase+1,
 	    VoisinDroite is CooYCurrentCase+1,
 	    VoisinBas is CooXCurrentCase+1,
 	    VoisinGauche is CooYCurrentCase-1,
@@ -109,19 +124,20 @@ update_internal_state(CooXCurrentCase, CooYCurrentCase, Putrid, Windy, BordureDr
 	    ;	!)),
 
 	%Mise a jours des bordures pour la case actuelle
-	((BordureDroite == true; BordureGauche == true; BordureHaut == true; BordureBas ==true)
+	((BordureDroite; BordureGauche; BordureHaut; BordureBas)
 	->  asserta(border(CooXCurrentCase, CooYCurrentCase, BordureHaut, BordureDroite, BordureBas, BordureGauche)),
-	    %Ajout des voisins
-	    (BordureHaut=\=true->
+
+	 %Ajout des voisins
+	 (\+BordureHaut->
 	    NewCoord is CooXCurrentCase-1,
 	    asserta(voisin((CooXCurrentCase,CooYCurrentCase),(NewCoord,CooYCurrentCase)));!),
-	 (BordureDroite=\=true->
+	 (\+BordureDroite->
 	    NewCoord is CooYCurrentCase+1,
 	    asserta(voisin((CooXCurrentCase,CooYCurrentCase),(CooXCurrentCase,NewCoord)));!),
-	 (BordureBas=\=true->
+	 (\+BordureBas->
 	    NewCoord is CooXCurrentCase+1,
 	    asserta(voisin((CooXCurrentCase,CooYCurrentCase),(NewCoord,CooYCurrentCase)));!),
-	  (BordureGauche=\=true->
+	  (\+BordureGauche->
 	    NewCoord is CooYCurrentCase-1,
 	    asserta(voisin((CooXCurrentCase,CooYCurrentCase),(CooXCurrentCase,NewCoord)));!)
 	;    !),
@@ -134,6 +150,8 @@ update_internal_state(CooXCurrentCase, CooYCurrentCase, Putrid, Windy, BordureDr
 	asserta(currentCase(CooXCurrentCase, CooYCurrentCase)).
 
 
+
+%Methode de remise a zero des fais.
 raz_internal_state():-
 	retractall(putrid(_)),
 	retractall(windy(_)),
@@ -145,46 +163,31 @@ raz_internal_state():-
 	retractall(riskFall(_,_)),
 	retractall(currentCase(_,_)).
 
-takeDecisions(Reponse):-
-	currentCase(CooX,_),
-	currentCase(_,CooY),
-	VoisinHaut is CooX-1,
-	VoisinDroite is CooY+1,
-	VoisinBas is CooX+1,
-	VoisinGauche is CooY-1,
-	Compteur=4,
-        (   (border(CooX, CooY, true, _,_,_); caseCovered(VoisinHaut, CooY); riskMonstruous(VoisinHaut, CooY); riskFall(VoisinHaut, CooY); monstruous(VoisinHaut, CooY); fall(VoisinHaut, CooY))
-	->  Compteur=Compteur-1
-	;   !),
-	(   (border(CooX, CooY, _, true,_,_); caseCovered(CooX, VoisinDroite); riskMonstruous(CooX, VoisinDroite); riskFall(CooX, VoisinDroite); monstruous(CooX, VoisinDroite); fall(CooX, VoisinDroite))
-	->  Compteur=Compteur-1
-	;   !),
-	(   (border(CooX, CooY, _, _,true,_); caseCovered(VoisinBas, CooY); riskMonstruous(VoisinBas, CooY); riskFall(VoisinBas, CooY); monstruous(VoisinBas, CooY); fall(VoisinBas, CooY))
-	->  Compteur=Compteur-1
-	;   !),
-        (   (border(CooX, CooY, _, _,_,true); caseCovered(CooX, VoisinGauche); riskMonstruous(CooX, VoisinGauche); riskFall(CooX, VoisinGauche); monstruous(CooX, VoisinGauche); fall(CooX, VoisinGauche))
-	->  Compteur=Compteur-1
-	;   !),
-        (   Compteur>0
-	-> ValMax is Compteur+1,
-	   random(1,ValMax,ValRandom),
-	   CompteurPossibilite=0
-	;  ( search_closest_secure_case(ReponseSecure)
-	   ->  length(ReponseSecure, LongueurSecure),
-	       (   LongueurSecure>10
-	       ->  ( search_closest_monstruous_case(ReponseMonstruous)
-		   ->  length(ReponseMonstruous, LongueurMonstruous),
-		       Calcul is LongueurSecure-10-LongueurMonstruous,
-		       (   Calcul>0
-		       ->  Reponse=ReponseMonstruous
-		       ;   Reponse=ReponseSecure)
-		   ;   !)
-	       ;   Reponse=ReponseSecure)
-	   ;   ( search_closest_monstruous_case(ReponseMonstruous)
-	       ->  Reponse=ReponseMonstruous
-	       ;   !))).
 
 
+% Methode dont le but est de prendre une decision sur les actions a
+% faire. Elle retourne une liste d'action à effectuer et l'envoie a
+% java.
+%takeDecisions(Reponse):-
+%	currentCase(CooX,_),
+%	currentCase(_,CooY),
+%	(   searchSureWay([[CooX, CooY]], SolutionSecure)
+%	->  length(SolutionSecure, lengthSolutionSecure),
+%	    (	lengthSolutionSecure=<10
+%	    ->	writeln("algo de changement coo en direction")
+%	    ; writeln("algo du chemin vers case risque monstrueux la
+%	    plus proche + calcul"))
+%	; writeln("algo du chemin vers case risque monstrueux la plus
+%	proche")). %A completer avec monstre
+
+
+
+% ------------------------------------------------------------------------
+% Methodes internes
+% -----------------------------------------------------------------------
+
+% on met le voisin de la case windy en riskMonstruous seulement si les
+% cases autour du voisin sont soit putrid soit inconnu
 update_risk_putrid_case(CooX, CooY):-
 	VoisinHaut is CooX-1,
 	VoisinDroite is CooY+1,
@@ -215,6 +218,10 @@ update_risk_putrid_case(CooX, CooY):-
 	-> asserta(riskMonstruous(CooX, CooY))
 	; !).
 
+
+
+% on met le voisin de la case windy en riskFall seulement si les cases
+% autour du voisin sont soit windy soit inconnu
 update_risk_windy_case(CooX, CooY):-
 	VoisinHaut is CooX-1,
 	VoisinDroite is CooY+1,
@@ -245,8 +252,12 @@ update_risk_windy_case(CooX, CooY):-
 	-> asserta(riskFall(CooX, CooY))
 	; !).
 
+
+
 % Attention vérifier auparavant qu'il existe un risque sur la case
 % voisine et le supprimer avant de lancer cette méthode
+% Cette methode permet de mettre à jours les cases autour de la case
+% où on est et qui n'est pas putrid
 update_risk_not_putrid_case(CooX, CooY):-
 	VoisinHaut is CooX-1,
 	VoisinDroite is CooY+1,
@@ -308,8 +319,11 @@ detection_monster(CooX, CooY):-
 	;   !).
 
 
-% Attention vérifier auparavant qu'il existe un risque sur la case
-% voisine et le supprimer avant de lancer cette méthode
+
+% Attention verifier auparavant qu'il existe un risque sur la case
+% voisine et le supprimer avant de lancer cette methode
+% Cette methode permet de mettre à jours les cases autour de la case
+% où on est et qui n'est pas windy
 update_risk_not_windy_case(CooX, CooY):-
 	VoisinHaut is CooX-1,
 	VoisinDroite is CooY+1,
@@ -336,6 +350,41 @@ update_risk_not_windy_case(CooX, CooY):-
 	    ;	!)
 	;   !).
 
+detection_fall(CooX, CooY):-
+	VoisinHaut is CooX-1,
+	VoisinDroite is CooY+1,
+	VoisinBas is CooX+1,
+	VoisinGauche is CooY-1,
+        Compteur=0,
+	(   riskFall(VoisinHaut,CooY)
+	->  Compteur=Compteur+1
+	;   !),
+	(   riskFall(CooX, VoisinDroite)
+	->  Compteur=Compteur+1
+	;   !),
+	(   riskFall(VoisinBas, CooY)
+	->  Compteur=Compteur+1
+	;   !),
+	(   riskFall(CooX, VoisinGauche)
+	->  Compteur=Compteur+1
+	;   !),
+	(   Compteur==1
+	->  (riskFall(VoisinHaut,CooY)
+	    ->	retract(riskFall(VoisinHaut,CooY)),
+		asserta(fall(VoisinHaut, CooY))
+	    ;	(riskFall(CooX, VoisinDroite)
+		->  retract(riskFall(CooX, VoisinDroite)),
+		    asserta(fall(CooX, VoisinDroite))
+		;   (riskFall(VoisinBas, CooY)
+		      ->  retract(riskFall(VoisinBas,CooY)),
+			  asserta(fall(VoisinBas,CooY))
+		      ;	  (riskFall(CooX, VoisinGauche)
+			  ->  retract(riskFall(CooX, VoisinGauche)),
+			      asserta(fall(CooX, VoisinGauche))
+			  ;   !))))
+	;   !).
+
+
 %%%%%%%%%%%%%%%
 %searchSureWay%
 %%%%%%%%%%%%%%%
@@ -353,7 +402,8 @@ caseCovered2((X,Y)):-caseCovered(X,Y).
 operator(Parent,Child):-
  voisin(Parent,Child),
  (\+caseUnknownNotRisky(Child)->
-    caseCovered2(Child);true).
+    caseCovered2(Child)
+ ;   ! ).
 
 %BFS2
 %STOP criteria: si j'arrive sur une case inconnue non risquée
@@ -425,45 +475,46 @@ searchNearestRiskMonstruous([_|RestFSet],Solution):-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-prune_l([],[]):-!.
-prune_l([[State|Path]|RestChilds],[[State|Path]|RestPChilds]):-
- \+ member(State,Path),
- !,
- prune_l(RestChilds,RestPChilds).
 
-prune_l([_|RestChilds],RestPChilds):-
- prune_l(RestChilds,RestPChilds).
+%On convertit les coordonnées en directions
+converter_coo_direction([Element], Liste2, Element, Solution2):-
+	Solution2=Liste2.
 
-detection_fall(CooX, CooY):-
-	VoisinHaut is CooX-1,
-	VoisinDroite is CooY+1,
-	VoisinBas is CooX+1,
-	VoisinGauche is CooY-1,
-        Compteur=0,
-	(   riskFall(VoisinHaut,CooY)
-	->  Compteur=Compteur+1
+converter_coo_direction([Tete|Queue], Liste, Solution1, Solution2):-
+	nth0(0,[Tete|Queue],Element1),
+	nth0(1,[Tete|Queue],Element2),
+	process_Couple_CooX(Element1, CooX1),
+	process_Couple_CooX(Element2, CooX2),
+	process_Couple_CooY(Element1, CooY1),
+	process_Couple_CooY(Element2, CooY2),
+	(   CooX1<CooX2
+	->  append(Liste, 3, Liste2)
 	;   !),
-	(   riskFall(CooX, VoisinDroite)
-	->  Compteur=Compteur+1
+	(   CooX2<CooX1
+	->  append(Liste, 1, Liste2)
 	;   !),
-	(   riskFall(VoisinBas, CooY)
-	->  Compteur=Compteur+1
+	(CooY1<CooY2
+	->  append(Liste, 2, Liste2)
 	;   !),
-	(   riskFall(CooX, VoisinGauche)
-LongueurSecure	->  Compteur=Compteur+1
+	(CooY2<CooY1
+	->  append(Liste,4, Liste2)
 	;   !),
-	(   Compteur==1
-	->  (riskFall(VoisinHaut,CooY)
-	    ->	retract(riskFall(VoisinHaut,CooY)),
-		asserta(fall(VoisinHaut, CooY))
-	    ;	(riskFall(CooX, VoisinDroite)
-		->  retract(riskFall(CooX, VoisinDroite)),
-		    asserta(fall(CooX, VoisinDroite))
-		;   (riskFall(VoisinBas, CooY)
-		      ->  retract(riskFall(VoisinBas,CooY)),
-			  asserta(fall(VoisinBas,CooY))
-		      ;	  (riskFall(CooX, VoisinGauche)
-			  ->  retract(riskFall(CooX, VoisinGauche)),
-			      asserta(fall(CooX, VoisinGauche))
-			  ;   !))))
-	;   !).
+	converter_coo_direction(Queue, Liste2, Solution1, Solution2).
+
+
+%Methode pour inverser une liste
+% l'inverse d'une liste vide est une liste vide
+inverseur([],[]).
+
+% pour inverser une liste, je mets le premier élémement de la liste
+% à la fin du reste de la liste inversé
+inverseur([X|Xs],Resultat) :-
+    my_rev(Xs,ResultatInter),
+    append(ResultatInter, [X], Resultat).
+
+
+process_Couple_CooX((X,_), CooX):-
+	CooX=X.
+
+process_Couple_CooY((_,Y), CooY):-
+	CooY=Y.
