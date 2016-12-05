@@ -222,7 +222,7 @@ takeDecisions(Reponse):-
 	      ;	 inverseur(SolutionSecure, ListeSecure),
 		 converter_coo_direction("Secure", ListeSecure,[],_,ListeFinale),
 	         Reponse=ListeFinale ))
-	; searchNearestRiskMonstruous([[CooX, CooY]],SolutionMonstruous),
+	; searchNearestRiskMonstruous([[(CooX, CooY)]],SolutionMonstruous),
 	  inverseur(SolutionMonstruous, ListeMonstruous),
 	  converter_coo_direction("Monster", ListeMonstruous, [], _, ListeFinale),
 	  Reponse=ListeFinale ).
@@ -581,7 +581,7 @@ inverseur([],[]).
 % pour inverser une liste, je mets le premier élémement de la liste
 % à la fin du reste de la liste inversé
 inverseur([X|Xs],Resultat) :-
-    my_rev(Xs,ResultatInter),
+    inverseur(Xs,ResultatInter),
     append(ResultatInter, [X], Resultat).
 
 
