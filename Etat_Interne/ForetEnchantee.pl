@@ -77,9 +77,9 @@ update_internal_state(CooXCurrentCase, CooYCurrentCase, Putrid, Windy, BordureDr
 	->  retract(monstruous(CooXCurrentCase,CooYCurrentCase))
 	;   !),
 
-	%Ajout de la case si la case est venteuse, si celle-ci a des voisins et qu'ils n'ont pas encore ete découverts alors elle lance update_risk_windy_case.
+	%Ajout de la case si la case est venteuse, si celle-ci a des voisins et qu'ils n'ont pas encore ete dï¿½couverts alors elle lance update_risk_windy_case.
 	%Si la case actuelle n'est pas windy alors si ces voisins avaient un risque qu'il y ait un gouffre, alors on supprime ce risque car il n'a pas lieu d'etre et
-	%nous lançons la methode update_risk_not_windy_case
+	%nous lanï¿½ons la methode update_risk_not_windy_case
 	(Windy
 	 -> asserta(windy(CooXCurrentCase, CooYCurrentCase)),
 	    (\+BordureHaut
@@ -166,7 +166,7 @@ raz_internal_state():-
 
 
 % Methode dont le but est de prendre une decision sur les actions a
-% faire. Elle retourne une liste d'action à effectuer et l'envoie a
+% faire. Elle retourne une liste d'action ï¿½ effectuer et l'envoie a
 % java.
 %takeDecisions(Reponse):-
 %	currentCase(CooX,_),
@@ -254,10 +254,10 @@ update_risk_windy_case(CooX, CooY):-
 
 
 
-% Attention vérifier auparavant qu'il existe un risque sur la case
-% voisine et le supprimer avant de lancer cette méthode
-% Cette methode permet de mettre à jours les cases autour de la case
-% où on est et qui n'est pas putrid
+% Attention vï¿½rifier auparavant qu'il existe un risque sur la case
+% voisine et le supprimer avant de lancer cette mï¿½thode
+% Cette methode permet de mettre ï¿½ jours les cases autour de la case
+% oï¿½ on est et qui n'est pas putrid
 update_risk_not_putrid_case(CooX, CooY):-
 	VoisinHaut is CooX-1,
 	VoisinDroite is CooY+1,
@@ -322,8 +322,8 @@ detection_monster(CooX, CooY):-
 
 % Attention verifier auparavant qu'il existe un risque sur la case
 % voisine et le supprimer avant de lancer cette methode
-% Cette methode permet de mettre à jours les cases autour de la case
-% où on est et qui n'est pas windy
+% Cette methode permet de mettre ï¿½ jours les cases autour de la case
+% oï¿½ on est et qui n'est pas windy
 update_risk_not_windy_case(CooX, CooY):-
 	VoisinHaut is CooX-1,
 	VoisinDroite is CooY+1,
@@ -406,14 +406,14 @@ operator(Parent,Child):-
  ;   ! ).
 
 %BFS2
-%STOP criteria: si j'arrive sur une case inconnue non risquée
+%STOP criteria: si j'arrive sur une case inconnue non risquï¿½e
 searchSureWay([[State|Path]|_],[State|Path]):-
 	writeln(1),
  caseUnknownNotRisky(State),
  writeln(State+caseInconnueNonRisqueeTrouvee).
 
 % Continue criteria si je ne viens pas d'ajouter une case inconnue non
-% risquée et ajoute à Solution
+% risquï¿½e et ajoute ï¿½ Solution
 searchSureWay([[State|Path]|RestFSet],Solution):-
 	writeln(2),
  \+ caseUnknownNotRisky(State),
@@ -423,7 +423,7 @@ searchSureWay([[State|Path]|RestFSet],Solution):-
  append(RestFSet,P_ChildStates,NewFSet),
  searchSureWay(NewFSet,Solution).
 
-%Je passe au traitement de la queue dans le cas ou ça coince
+%Je passe au traitement de la queue dans le cas ou ï¿½a coince
 searchSureWay([_|RestFSet],Solution):-
 	writeln(3),
  searchSureWay(RestFSet,Solution).
@@ -454,7 +454,7 @@ searchNearestRiskMonstruous([[State|Path]|_],[State|Path]):-
 
 
 % Continue criteria si je ne viens pas d'ajouter une case riskMonstruous
-% et ajoute à Solution
+% et ajoute ï¿½ Solution
 searchNearestRiskMonstruous([[State|Path]|RestFSet],Solution):-
 	writeln(2+State),
  \+ riskMonstruous2(State),
@@ -465,7 +465,7 @@ searchNearestRiskMonstruous([[State|Path]|RestFSet],Solution):-
   writeln("Recherche dans: "+NewFSet),
  searchNearestRiskMonstruous(NewFSet,Solution).
 
-%Je passe au traitement de la queue dans le cas ou ça coince
+%Je passe au traitement de la queue dans le cas ou ï¿½a coince
 searchNearestRiskMonstruous([_|RestFSet],Solution):-
 	writeln(3),
  searchNearestRiskMonstruous(RestFSet,Solution).
@@ -476,7 +476,7 @@ searchNearestRiskMonstruous([_|RestFSet],Solution):-
 
 
 
-%On convertit les coordonnées en directions
+%On convertit les coordonnï¿½es en directions
 converter_coo_direction([Element], Liste2, Element, Solution2):-
 	Solution2=Liste2.
 
@@ -506,8 +506,8 @@ converter_coo_direction([Tete|Queue], Liste, Solution1, Solution2):-
 % l'inverse d'une liste vide est une liste vide
 inverseur([],[]).
 
-% pour inverser une liste, je mets le premier élémement de la liste
-% à la fin du reste de la liste inversé
+% pour inverser une liste, je mets le premier ï¿½lï¿½mement de la liste
+% ï¿½ la fin du reste de la liste inversï¿½
 inverseur([X|Xs],Resultat) :-
     my_rev(Xs,ResultatInter),
     append(ResultatInter, [X], Resultat).
