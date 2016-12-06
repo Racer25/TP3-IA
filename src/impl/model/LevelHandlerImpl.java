@@ -54,6 +54,7 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 						this.level++;
 						generateLevel();
 						configureCharacter();
+						character.setScore((int) (character.getScore()+10*Math.pow(generator.getAdventureMap().getTaille(),2)));
 					}
 				}
 				else if(object[0].equals("alive"))
@@ -67,6 +68,7 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 				}
 				else if(object[0].equals("case"))
 				{
+					character.setScore((int) (character.getScore()-1));
 					//The Character warned me that his coordinates are changing
 					CaseCharacter newCaseCharacter=(CaseCharacter) object[1];
 					//We take the new CaseMap for sensors
@@ -76,6 +78,7 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 					
 					if(newCase.isFall() || newCase.isMonstruous())
 					{
+						character.setAlive(false);
 						generateLevel();
 						configureCharacter();
 					}
