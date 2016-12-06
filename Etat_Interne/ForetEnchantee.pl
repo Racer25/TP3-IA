@@ -175,9 +175,8 @@ raz_internal_state():-
 	retractall(monstruous(_,_)),
 	retractall(riskMonstruous(_,_)),
 	retractall(riskFall(_,_)),
-	retractall(currentCase(_,_)).
-
-
+	retractall(currentCase(_,_)),
+	retractall(voisin(_,_)).
 
 % Methode dont le but est de prendre une decision sur les actions a
 % faire. Elle retourne une liste d'action � effectuer et l'envoie a
@@ -469,6 +468,9 @@ searchSureWay([_|RestFSet],Solution):-
 %fin searchSureWay%
 %%%%%%%%%%%%%%%%%%%
 
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %searchNearestRiskMonstruous%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -512,6 +514,8 @@ searchNearestRiskMonstruous([_|RestFSet],Solution):-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
+
+
 %%%%%%%%%%%%%%%%%
 %randomDirection%
 %%%%%%%%%%%%%%%%%
@@ -519,9 +523,21 @@ searchNearestRiskMonstruous([_|RestFSet],Solution):-
 randomDirection(CooXCurrent, CooYCurrent,Liste2):-
 	writeln("RANDOOOOOOOOOOM"),
 	Liste=[(CooXCurrent,CooYCurrent)],
-	voisin((CooXCurrent,CooYCurrent),(NewCooX,NewCooY)),
-	writeln((NewCooX,NewCooY)),
-	append(Liste,[(NewCooX,NewCooY)],Liste2).
+	VoisinHaut is CooXCurrent-1,
+	VoisinDroite is CooYCurrent+1,
+	VoisinBas is CooXCurrent+1,
+	VoisinGauche is CooYCurrent-1,
+	(   (border(CooXCurrent, CooYCurrent, false, _, _, _), \+caseCovered(VoisinHaut, CooYCurrent))
+	    ->	append(Liste,[(VoisinHaut, CooYCurrent)],ListeInter)
+	    ;	(   (border(CooXCurrent, CooYCurrent, _, false, _, _), \+caseCovered(CooXCurrent, VoisinDroite))
+		->  append(Liste, [(CooXCurrent, VoisinDroite)], ListeInter)
+		;   (   (border(CooXCurrent, CooYCurrent, _, _, false, _), \+caseCovered(VoisinBas, CooYCurrent))
+		    ->  append(Liste, [(VoisinBas, CooYCurrent)], ListeInter)
+		    ;	(   (border(CooXCurrent, CooYCurrent, _, _, false, _), \+caseCovered(CooXCurrent, VoisinGauche))
+		        ->  append(Liste, [(CooXCurrent, VoisinGauche)], ListeInter)
+			;   !)))),
+	Liste2=ListeInter.
+
 
 %%%%%%%%%%%%%%%%%%%%%
 %fin randomDirection%

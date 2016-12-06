@@ -70,6 +70,8 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 					//The Character warned me that his coordinates are changing
 					CaseCharacter newCaseCharacter=(CaseCharacter) object[1];
 					//We take the new CaseMap for sensors
+					System.out.println("Coo Perso : "+newCaseCharacter.getCoords()[0]+" - "+newCaseCharacter.getCoords()[1]);
+					System.out.println("Changement coo : "+this.generator.getAdventureMap().getChangeReference()[0]+" - "+this.generator.getAdventureMap().getChangeReference()[1]);
 					int lineCaseMap=newCaseCharacter.getCoords()[0]+this.generator.getAdventureMap().getChangeReference()[0];
 					int columnCaseMap=newCaseCharacter.getCoords()[1]+this.generator.getAdventureMap().getChangeReference()[1];
 					CaseMap newCase=this.generator.getAdventureMap().getCasesMap()[lineCaseMap][columnCaseMap];
