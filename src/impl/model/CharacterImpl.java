@@ -193,11 +193,7 @@ public class CharacterImpl extends Observable implements Character, Runnable
 					//this.effectorStone.doIt();
 				}
 			}
-			if(!this.alive || !this.active)
-			{
-				Query resetQuery=new Query("raz_internal_state", new Term[]{});
-				resetQuery.hasSolution();
-			}
+
 		}
 	}
 	

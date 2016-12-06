@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 
+import org.jpl7.Query;
+import org.jpl7.Term;
+
 import contract.model.AdventureMapGenerator;
 import contract.model.CaseCharacter;
 import contract.model.CaseMap;
@@ -52,6 +55,8 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 					{
 						//The Character warned me that the level is complete
 						this.level++;
+						Query resetQuery=new Query("raz_internal_state", new Term[]{});
+						resetQuery.hasSolution();
 						generateLevel();
 						configureCharacter();
 						character.setScore((int) (character.getScore()+10*Math.pow(generator.getAdventureMap().getTaille(),2)));
@@ -78,13 +83,6 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 					int lineCaseMap=newCaseCharacter.getCoords()[0]+this.generator.getAdventureMap().getChangeReference()[0];
 					int columnCaseMap=newCaseCharacter.getCoords()[1]+this.generator.getAdventureMap().getChangeReference()[1];
 					CaseMap newCase=this.generator.getAdventureMap().getCasesMap()[lineCaseMap][columnCaseMap];
-
-					if(newCase.isFall() || newCase.isMonstruous())
-					{
-						character.setAlive(false);
-						generateLevel();
-						configureCharacter();
-					}
 					
 					//Update
 					this.character.getSensorPutrid().setCaseMap(newCase);
@@ -96,6 +94,7 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 					if(newCase.isFall() || newCase.isMonstruous())
 					{
 						System.out.println("Je meurs");
+						character.setScore((int) (character.getScore()-10*Math.pow(generator.getAdventureMap().getTaille(),2)));
 						this.character.setAlive(false);
 						generateLevel();
 						configureCharacter();
@@ -143,6 +142,9 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 		this.character.setOrientation(OrientationEnum.RIGHT);
 		this.character.setAlive(true);
 		this.character.setActive(false);
+		
+		Query resetQuery=new Query("raz_internal_state", new Term[]{});
+		resetQuery.hasSolution();
 		
 		//Spawnpoint impact
 		int[] tab={0,0};

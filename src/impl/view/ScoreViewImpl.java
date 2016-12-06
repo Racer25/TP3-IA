@@ -61,6 +61,7 @@ public class ScoreViewImpl extends JPanel implements ScoreView, Observer
 		if(arg instanceof Integer)
 		{
 			this.setScore((Integer) arg);
+			this.revalidate();
 		}
 	}
 
