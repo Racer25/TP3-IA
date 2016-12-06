@@ -207,7 +207,7 @@ takeDecisions(Reponse):-
 	      ;	 writeln("Cherchons un chemin aléatoire"),
 	         randomDirection(CooX, CooY,PreReponse),
 	         writeln("Chemin aléatoire trouvé"),
-	         converter_coo_direction("Secure", ListeRandom, [], _, ListeFinale),
+	         converter_coo_direction("Secure", PreReponse, [], _, ListeFinale),
 	         Reponse=ListeFinale ))
 
 	;  writeln("Chemin sûr pas trouvé"),
@@ -219,7 +219,7 @@ takeDecisions(Reponse):-
 	  ;   writeln("Cherchons un chemin aléatoire"),
 	      randomDirection(CooX, CooY,PreReponse),
 	      writeln("Chemin aléatoire trouvé"),
-	      converter_coo_direction("Secure", ListeRandom, [], _, ListeFinale),
+	      converter_coo_direction("Secure", PreReponse, [], _, ListeFinale),
 	      Reponse=ListeFinale)).
 
 
