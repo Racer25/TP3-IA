@@ -57,6 +57,7 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 				}
 				else if(object[0].equals("alive"))
 				{
+					System.out.println("Je change d'état de alive");
 					//The Character warned me that he's alive or not
 					if(!(Boolean)object[1])
 					{
@@ -66,6 +67,8 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 				}
 				else if(object[0].equals("case"))
 				{
+					System.out.println("je change de case!");
+					
 					//The Character warned me that his coordinates are changing
 					CaseCharacter newCaseCharacter=(CaseCharacter) object[1];
 					//We take the new CaseMap for sensors
@@ -78,6 +81,13 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 					this.character.getSensorWindy().setCaseMap(newCase);
 					this.character.getSensorLight().setCaseMap(newCase);
 					this.character.getSensorDirections().setCaseMap(newCase);
+					
+					//Is there a monster or a fall?
+					if(newCase.isFall() || newCase.isMonstruous())
+					{
+						System.out.println("Je meurs");
+						this.character.setAlive(false);
+					}
 				}
 			}
 		}
@@ -91,7 +101,6 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 		//Generate Map
 		this.generator.createMap(dim, nbFall, nbMonstruous);
 		//Character configuration
-		character.addObserver((Observer) this.generator.getAdventureMap());
 		configureCharacter();
 		
 	}
