@@ -207,7 +207,6 @@ takeDecisions(Reponse):-
 	      ;	 writeln("Cherchons un chemin aléatoire"),
 	         randomDirection(CooX, CooY,PreReponse),
 	         writeln("Chemin aléatoire trouvé"),
-	         inverseur(PreReponse, ListeRandom),
 	         converter_coo_direction("Secure", ListeRandom, [], _, ListeFinale),
 	         Reponse=ListeFinale ))
 
@@ -220,7 +219,6 @@ takeDecisions(Reponse):-
 	  ;   writeln("Cherchons un chemin aléatoire"),
 	      randomDirection(CooX, CooY,PreReponse),
 	      writeln("Chemin aléatoire trouvé"),
-	      inverseur(PreReponse, ListeRandom),
 	      converter_coo_direction("Secure", ListeRandom, [], _, ListeFinale),
 	      Reponse=ListeFinale)).
 
