@@ -1,5 +1,8 @@
 package impl.controller;
 
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
 import java.io.File;
 import java.util.Observable;
 import java.util.Observer;
@@ -8,6 +11,11 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.border.Border;
+
 import contract.controller.CaseController;
 import contract.model.CaseMap;
 import contract.view.CaseView;
@@ -17,6 +25,7 @@ import impl.model.CaseMapImpl;
 import impl.model.CharacterImpl;
 import impl.view.CaseViewImpl;
 import impl.view.CharacterViewImpl;
+import utils.OrientationEnum;
 
 public class CaseControllerImpl implements CaseController, Observer
 {
@@ -42,6 +51,7 @@ public class CaseControllerImpl implements CaseController, Observer
 	@Override
 	public void update(Observable arg0, Object arg1)
 	{
+		System.out.println("hey2");
 		if(arg0 instanceof CharacterImpl)
 		{
 			if(arg1 instanceof Object[])
@@ -86,13 +96,47 @@ public class CaseControllerImpl implements CaseController, Observer
 		}
 		else if(arg0 instanceof CaseMapImpl)
 		{
-			//Change caseView Visual
-			Object[] object=(Object[])arg1;
-			if(object[0].equals("character"))
+			System.out.println("monstruous1");
+			if(arg1 instanceof Object[])
 			{
-				
+				Object[] object=(Object[])arg1;
+				if(object[0].equals("monstruous"))
+				{
+					if(!((boolean) object[1]))
+					{
+						imageCaillou();					
+					}
+				}
 			}
 		}
+	}
+	
+	public void imageCaillou()
+	{
+		Runnable son = new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				try{
+					JLabel rock = new JLabel(new ImageIcon("img/rock.png"));
+					((CaseViewImpl) maCaseView).add(rock);
+					((CaseViewImpl) maCaseView).revalidate();
+					try {
+						Thread.sleep(500);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					rock.setVisible(false);
+					((CaseViewImpl) maCaseView).revalidate();
+					
+		        }catch(Exception ex){
+		            ex.printStackTrace();
+		        }
+			}
+		};
+		new Thread (son).start();
 	}
 	
 	public void sonZombi()

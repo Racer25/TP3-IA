@@ -28,7 +28,6 @@ public class MoveButtonListenerImpl implements ActionListener
 			this.character.setActive(true);
 			System.out.println("Mis à jour de active vers: "+this.character.isActive());
 		}
-		//character.getEffectorDown().doIt();
 	}
 
 }

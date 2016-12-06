@@ -190,6 +190,7 @@ public class CharacterImpl extends Observable implements Character, Runnable
 			            }
 					}
 					//this.effectorUp.doIt();
+					//this.effectorStone.doIt();
 				}
 			}
 			if(!this.alive || !this.active)
