@@ -1,6 +1,7 @@
 package impl.model;
 
 import java.util.ArrayList;
+import java.util.Observable;
 import java.util.Random;
 
 import javax.swing.JOptionPane;
@@ -10,7 +11,7 @@ import contract.model.AdventureMapGenerator;
 import contract.model.CaseMap;
 import utils.DirectionEnum;
 
-public class AdventureMapGeneratorImpl implements AdventureMapGenerator
+public class AdventureMapGeneratorImpl extends Observable implements AdventureMapGenerator
 {
 	
 	private AdventureMap adventureMap;
@@ -35,6 +36,8 @@ public class AdventureMapGeneratorImpl implements AdventureMapGenerator
 		//Initiation des variables
 		this.taille = taille;
 		this.nbFall = nbFall;
+		fallPoints = new ArrayList<CaseMapImpl>();
+		monstruousPoints = new ArrayList<CaseMapImpl>();
 		this.nbMonstruous = nbMonstruous;
 		//On verifie que la Map peut �tre generee
 		if((taille*taille)-2 > nbFall+nbMonstruous)
@@ -77,6 +80,8 @@ public class AdventureMapGeneratorImpl implements AdventureMapGenerator
 			ReinitializeCasesList();
 			if(isFeasible(spawnPoint))
 			{
+				notifyObservers(adventureMap);
+				setChanged();
 				return (AdventureMapImpl) adventureMap;
 			}
 			else

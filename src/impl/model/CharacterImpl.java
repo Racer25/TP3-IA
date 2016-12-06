@@ -84,6 +84,7 @@ public class CharacterImpl extends Observable implements Character, Runnable
 				if(this.currentCase.isPortalPoint())
 				{
 					this.setLevelComplete(true);
+					System.out.println("C'est le portail !!!! *********************************");
 				}
 				else
 				{
@@ -109,20 +110,23 @@ public class CharacterImpl extends Observable implements Character, Runnable
 					internalStateQuery.close();
 					
 					
-					//Récupération des actions à réaliser
+					//Recuperation des actions a realiser
 					List<Integer> actions=new ArrayList<Integer>();
 					Query q = new Query(new Compound("takeDecisions", new Term[] { new Variable("Reponse")}));
+
 					System.out.println("Envoi de requête takeDecisions");
 					q.open();
 					q.hasMoreSolutions();
 					Map<String, Term> actionList = q.nextSolution();
-					for (Term action : actionList.get("Reponse").args()) 
-					{
+					for (Term action : actionList.get("Reponse").args()) {
 						System.out.println(action.toString());
 						if(action.isInteger())
 						{
-							actions.add(Integer.valueOf(action.toString()));
-						    System.out.println("ajout de l'action: "+action);
+							if(!action.toString().equals("'[]'"))
+							{
+								actions.add(Integer.valueOf(action.toString()));
+							    System.out.println("ajout de l'action: "+action);
+							}
 						}
 						//format du dernier terme de la liste: '[|]'(4, '[]')
 						else if(!action.toString().equals("'[]'"))
@@ -134,7 +138,7 @@ public class CharacterImpl extends Observable implements Character, Runnable
 					}
 					q.close();
 					
-					//Réalisation des actions
+					//Realisation des actions
 					for(Integer action: actions)
 					{
 						System.out.println("action: "+action);
@@ -185,7 +189,8 @@ public class CharacterImpl extends Observable implements Character, Runnable
 				                break;
 			            }
 					}
-					
+					//this.effectorUp.doIt();
+					//this.effectorStone.doIt();
 				}
 			}
 			if(!this.alive || !this.active)

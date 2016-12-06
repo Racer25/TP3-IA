@@ -13,6 +13,7 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import java.util.Observable;
 import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
@@ -23,18 +24,23 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import contract.model.AdventureMap;
+import contract.model.AdventureMapGenerator;
+import impl.model.AdventureMapGeneratorImpl;
 import contract.view.LifeView;
 import contract.view.ScoreView;
 import contract.view.Window;
 import impl.controller.MoveButtonListenerImpl;
+import impl.model.AdventureMapImpl;
 import impl.model.CharacterImpl;
 
 public class WindowImpl extends JFrame implements Window
 {
 	private static final long serialVersionUID = -7191389537408309634L;
 	
-	public WindowImpl(AdventureMap myMap, CharacterImpl character)
+	public WindowImpl(AdventureMapGenerator myMapGenerator, CharacterImpl character)
 	{
+		AdventureMapImpl myMap = (AdventureMapImpl) myMapGenerator.getAdventureMap();
+		
 		//Our Window
 		this.setTitle("Adventure Guy");
 		this.setLayout(new BorderLayout());
@@ -73,6 +79,7 @@ public class WindowImpl extends JFrame implements Window
 		//mapConstraints.insets = new Insets(10,10,20,20);
 		CharacterViewImpl characterView = new CharacterViewImpl(character);
 		AdventureMapViewImpl map=new AdventureMapViewImpl(characterView,myMap, character);
+		((AdventureMapGeneratorImpl) myMapGenerator).addObserver(map);
 		map.setBackground(Color.BLACK);
 		map.setPreferredSize(new Dimension(500,500));
 		map.setMinimumSize(new Dimension(250,250));
