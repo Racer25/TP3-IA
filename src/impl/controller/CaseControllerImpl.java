@@ -25,7 +25,6 @@ import impl.model.CaseMapImpl;
 import impl.model.CharacterImpl;
 import impl.view.CaseViewImpl;
 import impl.view.CharacterViewImpl;
-import utils.OrientationEnum;
 
 public class CaseControllerImpl implements CaseController, Observer
 {
@@ -51,7 +50,6 @@ public class CaseControllerImpl implements CaseController, Observer
 	@Override
 	public void update(Observable arg0, Object arg1)
 	{
-		System.out.println("hey2");
 		if(arg0 instanceof CharacterImpl)
 		{
 			if(arg1 instanceof Object[])
@@ -63,16 +61,9 @@ public class CaseControllerImpl implements CaseController, Observer
 					((CaseViewImpl) maCaseView).setCharacterVisible(false);
 					int x = ((CaseCharacterImpl) object[1]).getCoords()[0] + adventureMap.getChangeReference()[0];
 					int y = ((CaseCharacterImpl) object[1]).getCoords()[1] + adventureMap.getChangeReference()[1];
-					int[] coord = new int[2];
-					coord[0] = x;
-					coord[1] = y;
-					if(maCase.getCoords()[0]==coord[0] && maCase.getCoords()[1]==coord[1])
+					if(this.maCase==this.adventureMap.getCasesMap()[x][y])
 					{
 						((CaseViewImpl) maCaseView).setCharacterVisible(true);
-						/*if(maCase.isMonstruous() || maCase.isFall())
-						{
-							character.setAlive(false);
-						}*/
 						if(maCase.isPortalPoint())
 						{
 							sonPortal();
