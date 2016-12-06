@@ -72,7 +72,7 @@ public class CharacterImpl extends Observable implements Character, Runnable
 			{
 				try
 				{
-					Thread.sleep(1000);
+					Thread.sleep(2000);
 				} 
 				catch (InterruptedException e)
 				{
@@ -115,29 +115,29 @@ public class CharacterImpl extends Observable implements Character, Runnable
 					Query q = new Query(new Compound("takeDecisions", new Term[] { new Variable("Reponse")}));
 
 					System.out.println("Envoi de requête takeDecisions");
-					q.open();
-					q.hasMoreSolutions();
-					Map<String, Term> actionList = q.nextSolution();
-					for (Term action : actionList.get("Reponse").args()) {
-						System.out.println(action.toString());
-						if(action.isInteger())
-						{
-							if(!action.toString().equals("'[]'"))
+					while(q.hasMoreSolutions())
+					{
+						Map<String, Term> actionList = q.nextSolution();
+						for (Term action : actionList.get("Reponse").args()) {
+							System.out.println(action.toString());
+							if(action.isInteger())
 							{
-								actions.add(Integer.valueOf(action.toString()));
-							    System.out.println("ajout de l'action: "+action);
+								if(!action.toString().equals("'[]'"))
+								{
+									actions.add(Integer.valueOf(action.toString()));
+								    System.out.println("ajout de l'action: "+action);
+								}
+							}
+							//format du dernier terme de la liste: '[|]'(4, '[]')
+							else if(!action.toString().equals("'[]'"))
+							{
+								String maString=action.toString().substring(6, action.toString().length());
+								actions.add(transformToInteger(maString));
+								System.out.println("ajout de l'action: "+transformToInteger(maString));
 							}
 						}
-						//format du dernier terme de la liste: '[|]'(4, '[]')
-						else if(!action.toString().equals("'[]'"))
-						{
-							String maString=action.toString().substring(6, action.toString().length());
-							maString=maString.substring(0, maString.length()-7);
-							actions.add(Integer.valueOf(maString));
-						}
 					}
-					q.close();
-					
+		
 					//Realisation des actions
 					for(Integer action: actions)
 					{
@@ -386,5 +386,21 @@ public class CharacterImpl extends Observable implements Character, Runnable
 	public void setActive(Boolean active)
 	{
 		this.active = active;
+	}
+	
+	private Integer transformToInteger(String maString)
+	{
+		System.out.println(maString);
+		Integer res= null;
+		try
+		{
+			res=Integer.valueOf(maString);
+		}
+		catch(NumberFormatException e)
+		{
+			return transformToInteger(maString.substring(0, maString.length()-1));
+		}
+		System.out.println("Ne doit pas s'exécuter");
+		return res;
 	}
 }

@@ -77,12 +77,6 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 					int columnCaseMap=newCaseCharacter.getCoords()[1]+this.generator.getAdventureMap().getChangeReference()[1];
 					CaseMap newCase=this.generator.getAdventureMap().getCasesMap()[lineCaseMap][columnCaseMap];
 					
-					if(newCase.isFall() || newCase.isMonstruous())
-					{
-						generateLevel();
-						configureCharacter();
-					}
-					
 					//Update
 					this.character.getSensorPutrid().setCaseMap(newCase);
 					this.character.getSensorWindy().setCaseMap(newCase);
@@ -94,6 +88,8 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 					{
 						System.out.println("Je meurs");
 						this.character.setAlive(false);
+						generateLevel();
+						configureCharacter();
 					}
 				}
 			}
