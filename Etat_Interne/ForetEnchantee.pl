@@ -175,15 +175,13 @@ raz_internal_state():-
 	retractall(monstruous(_,_)),
 	retractall(riskMonstruous(_,_)),
 	retractall(riskFall(_,_)),
-	retractall(currentCase(_,_)).
-
-
+	retractall(currentCase(_,_)),
+	retractall(voisin(_,_)).
 
 % Methode dont le but est de prendre une decision sur les actions a
 % faire. Elle retourne une liste d'action ï¿½ effectuer et l'envoie a
 % java.
 takeDecisions(Reponse):-
-	writeln("Allo!!"),
 	currentCase(CooX,_),
 	currentCase(_,CooY),
 	writeln("Cherchons un chemin sûr"),
@@ -194,28 +192,35 @@ takeDecisions(Reponse):-
 	    -> inverseur(SolutionSecure, ListeSecure),
 	       converter_coo_direction("Secure", ListeSecure,[],_,ListeFinale),
 	       Reponse=ListeFinale
-	    ; searchNearestRiskMonstruous([[(CooX, CooY)]],SolutionMonstruous),
-	      length(SolutionMonstruous, LengthSolutionMonstruous),
-	      Calcul is LengthSolutionSecure-10-LengthSolutionMonstruous,
-	      (	  Calcul>0
-	      ->   inverseur(SolutionMonstruous, ListeMonstruous),
-		   converter_coo_direction("Monster", ListeMonstruous, [], _, ListeFinale),
-		   Reponse=ListeFinale
-	      ;	 inverseur(SolutionSecure, ListeSecure),
-		 converter_coo_direction("Secure", ListeSecure,[],_,ListeFinale),
+
+	    ; ( searchNearestRiskMonstruous([[(CooX, CooY)]],SolutionMonstruous)
+	      ->  length(SolutionMonstruous, LengthSolutionMonstruous),
+	          Calcul is LengthSolutionSecure-10-LengthSolutionMonstruous,
+	         (	  Calcul>0
+	          ->   inverseur(SolutionMonstruous, ListeMonstruous),
+		       converter_coo_direction("Monster", ListeMonstruous, [], _, ListeFinale),
+		       Reponse=ListeFinale
+
+	          ;	 inverseur(SolutionSecure, ListeSecure),
+		         converter_coo_direction("Secure", ListeSecure,[],_,ListeFinale),
+	                 Reponse=ListeFinale )
+	      ;	 writeln("Cherchons un chemin aléatoire"),
+	         randomDirection(CooX, CooY,PreReponse),
+	         writeln("Chemin aléatoire trouvé"),
+	         converter_coo_direction("Secure", ListeRandom, [], _, ListeFinale),
 	         Reponse=ListeFinale ))
-	;
-	writeln("Chemin sûr pas trouvé"),
-	(searchNearestRiskMonstruous([[(CooX, CooY)]],SolutionMonstruous)->
-	  inverseur(SolutionMonstruous, ListeMonstruous),
-	  converter_coo_direction("Monster", ListeMonstruous, [], _, ListeFinale),
-	  Reponse=ListeFinale
-	;
-	writeln("Cherchons un chemin aléatoire"),
-	randomDirection(CooX, CooY,PreReponse),
-	 writeln("Chemin aléatoire trouvé"),
-	  converter_coo_direction("Secure", PreReponse, [], _, ListeFinale),
-	  Reponse=ListeFinale)).
+
+	;  writeln("Chemin sûr pas trouvé"),
+	  ( searchNearestRiskMonstruous([[(CooX, CooY)]],SolutionMonstruous)
+	  ->  inverseur(SolutionMonstruous, ListeMonstruous),
+	      converter_coo_direction("Monster", ListeMonstruous, [], _, ListeFinale),
+	      Reponse=ListeFinale
+
+	  ;   writeln("Cherchons un chemin aléatoire"),
+	      randomDirection(CooX, CooY,PreReponse),
+	      writeln("Chemin aléatoire trouvé"),
+	      converter_coo_direction("Secure", ListeRandom, [], _, ListeFinale),
+	      Reponse=ListeFinale)).
 
 
 
@@ -230,28 +235,7 @@ update_risk_putrid_case(CooX, CooY):-
 	VoisinDroite is CooY+1,
 	VoisinBas is CooX+1,
 	VoisinGauche is CooY-1,
-	Continuer=true,
-	(   caseCovered(VoisinHaut, CooY)
-	-> (\+putrid(VoisinHaut, CooY)
-	    -> Continuer=false
-	   ;   !)
-	;   !),
-	(   (Continuer, caseCovered(CooX, VoisinDroite))
-	-> (\+putrid(CooX, VoisinDroite)
-	    -> Continuer=false
-	   ;   !)
-	;  ! ),
-	(   (Continuer, caseCovered(VoisinBas, CooY))
-	-> (\+putrid(VoisinBas, CooY)
-	    -> Continuer=false
-	   ;  ! )
-	;  ! ),
-	(   (Continuer, caseCovered(CooX, VoisinGauche))
-	-> (\+putrid(CooX, VoisinGauche)
-	    -> Continuer=false
-	   ;  ! )
-	;   !),
-        (   Continuer
+	(   (caseCovered(VoisinHaut, CooY),caseCovered(CooX, VoisinDroite),caseCovered(VoisinBas, CooY),caseCovered(CooX, VoisinGauche))
 	-> asserta(riskMonstruous(CooX, CooY))
 	; !).
 
@@ -264,28 +248,7 @@ update_risk_windy_case(CooX, CooY):-
 	VoisinDroite is CooY+1,
 	VoisinBas is CooX+1,
 	VoisinGauche is CooY-1,
-	Continuer=true,
-	(   caseCovered(VoisinHaut, CooY)
-	-> (\+windy(VoisinHaut, CooY)
-	    -> Continuer=false
-	   ;   !)
-	;   !),
-	(   (Continuer, caseCovered(CooX, VoisinDroite))
-	-> (\+windy(CooX, VoisinDroite)
-	    -> Continuer=false
-	   ;   !)
-	;  ! ),
-	(   (Continuer, caseCovered(VoisinBas, CooY))
-	-> (\+windy(VoisinBas, CooY)
-	    -> Continuer=false
-	   ;  ! )
-	;  ! ),
-	(   (Continuer, caseCovered(CooX, VoisinGauche))
-	-> (\+windy(CooX, VoisinGauche)
-	    -> Continuer=false
-	   ;  ! )
-	;   !),
-        (   Continuer
+	(   (caseCovered(VoisinHaut, CooY),caseCovered(CooX, VoisinDroite),caseCovered(VoisinBas, CooY),caseCovered(CooX, VoisinGauche))
 	-> asserta(riskFall(CooX, CooY))
 	; !).
 
@@ -469,6 +432,9 @@ searchSureWay([_|RestFSet],Solution):-
 %fin searchSureWay%
 %%%%%%%%%%%%%%%%%%%
 
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %searchNearestRiskMonstruous%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -512,6 +478,8 @@ searchNearestRiskMonstruous([_|RestFSet],Solution):-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
+
+
 %%%%%%%%%%%%%%%%%
 %randomDirection%
 %%%%%%%%%%%%%%%%%
@@ -519,9 +487,22 @@ searchNearestRiskMonstruous([_|RestFSet],Solution):-
 randomDirection(CooXCurrent, CooYCurrent,Liste2):-
 	writeln("RANDOOOOOOOOOOM"),
 	Liste=[(CooXCurrent,CooYCurrent)],
-	voisin((CooXCurrent,CooYCurrent),(NewCooX,NewCooY)),
-	writeln((NewCooX,NewCooY)),
-	append(Liste,[(NewCooX,NewCooY)],Liste2).
+	VoisinHaut is CooXCurrent-1,
+	VoisinDroite is CooYCurrent+1,
+	VoisinBas is CooXCurrent+1,
+	VoisinGauche is CooYCurrent-1,
+	(   (border(CooXCurrent, CooYCurrent, false, _, _, _), \+caseCovered(VoisinHaut, CooYCurrent))
+	    ->	append(Liste,[(VoisinHaut, CooYCurrent)],ListeInter)
+	    ;	(   (border(CooXCurrent, CooYCurrent, _, false, _, _), \+caseCovered(CooXCurrent, VoisinDroite))
+		->  append(Liste, [(CooXCurrent, VoisinDroite)], ListeInter)
+		;   (   (border(CooXCurrent, CooYCurrent, _, _, false, _), \+caseCovered(VoisinBas, CooYCurrent))
+		    ->  append(Liste, [(VoisinBas, CooYCurrent)], ListeInter)
+		    ;	(   (border(CooXCurrent, CooYCurrent, _, _, false, _), \+caseCovered(CooXCurrent, VoisinGauche))
+		        ->  append(Liste, [(CooXCurrent, VoisinGauche)], ListeInter)
+			;   voisin(CooXCurrent, CooYCurrent, NewCooX, NewCooY),
+			    append(Liste, [(NewCooX, NewCooY)],ListeInter))))),
+	Liste2=ListeInter.
+
 
 %%%%%%%%%%%%%%%%%%%%%
 %fin randomDirection%
