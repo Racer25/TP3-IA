@@ -89,7 +89,7 @@ public class CharacterImpl extends Observable implements Character, Runnable
 				else
 				{
 					//Envoie des informations à prolog
-					/*System.out.println("Depuis java:");
+					System.out.println("Depuis java:");
 					System.out.println("BordureDroite: "+!this.currentCase.getPossibleDirections().get(DirectionEnum.RIGHT));
 					System.out.println("BordureGauche: "+!this.currentCase.getPossibleDirections().get(DirectionEnum.LEFT));
 					System.out.println("BordureHaut: "+!this.currentCase.getPossibleDirections().get(DirectionEnum.UP));
@@ -188,8 +188,9 @@ public class CharacterImpl extends Observable implements Character, Runnable
 				            	System.out.println("Erreur dans l'entier retourné par prolog");
 				                break;
 			            }
-					}*/
-					this.effectorUp.doIt();
+					}
+					//this.effectorUp.doIt();
+					//this.effectorStone.doIt();
 				}
 			}
 			if(!this.alive || !this.active)
