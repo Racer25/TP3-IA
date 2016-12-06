@@ -53,6 +53,7 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 						//The Character warned me that the level is complete
 						this.level++;
 						generateLevel();
+						configureCharacter();
 					}
 				}
 				else if(object[0].equals("alive"))
@@ -61,7 +62,7 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 					if(!(Boolean)object[1])
 					{
 						//The Character warned me that he's not alive
-						generateLevel();
+						//generateLevel();
 					}
 				}
 				else if(object[0].equals("case"))
@@ -72,6 +73,12 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 					int lineCaseMap=newCaseCharacter.getCoords()[0]+this.generator.getAdventureMap().getChangeReference()[0];
 					int columnCaseMap=newCaseCharacter.getCoords()[1]+this.generator.getAdventureMap().getChangeReference()[1];
 					CaseMap newCase=this.generator.getAdventureMap().getCasesMap()[lineCaseMap][columnCaseMap];
+					
+					if(newCase.isFall() || newCase.isMonstruous())
+					{
+						generateLevel();
+						configureCharacter();
+					}
 					
 					//Update
 					this.character.getSensorPutrid().setCaseMap(newCase);
