@@ -182,7 +182,6 @@ raz_internal_state():-
 % faire. Elle retourne une liste d'action ï¿½ effectuer et l'envoie a
 % java.
 takeDecisions(Reponse):-
-	writeln("Allo!!"),
 	currentCase(CooX,_),
 	currentCase(_,CooY),
 	writeln("Cherchons un chemin sûr"),
@@ -193,28 +192,37 @@ takeDecisions(Reponse):-
 	    -> inverseur(SolutionSecure, ListeSecure),
 	       converter_coo_direction("Secure", ListeSecure,[],_,ListeFinale),
 	       Reponse=ListeFinale
-	    ; searchNearestRiskMonstruous([[(CooX, CooY)]],SolutionMonstruous),
-	      length(SolutionMonstruous, LengthSolutionMonstruous),
-	      Calcul is LengthSolutionSecure-10-LengthSolutionMonstruous,
-	      (	  Calcul>0
-	      ->   inverseur(SolutionMonstruous, ListeMonstruous),
-		   converter_coo_direction("Monster", ListeMonstruous, [], _, ListeFinale),
-		   Reponse=ListeFinale
-	      ;	 inverseur(SolutionSecure, ListeSecure),
-		 converter_coo_direction("Secure", ListeSecure,[],_,ListeFinale),
+
+	    ; ( searchNearestRiskMonstruous([[(CooX, CooY)]],SolutionMonstruous)
+	      ->  length(SolutionMonstruous, LengthSolutionMonstruous),
+	          Calcul is LengthSolutionSecure-10-LengthSolutionMonstruous,
+	         (	  Calcul>0
+	          ->   inverseur(SolutionMonstruous, ListeMonstruous),
+		       converter_coo_direction("Monster", ListeMonstruous, [], _, ListeFinale),
+		       Reponse=ListeFinale
+
+	          ;	 inverseur(SolutionSecure, ListeSecure),
+		         converter_coo_direction("Secure", ListeSecure,[],_,ListeFinale),
+	                 Reponse=ListeFinale )
+	      ;	 writeln("Cherchons un chemin aléatoire"),
+	         randomDirection(CooX, CooY,PreReponse),
+	         writeln("Chemin aléatoire trouvé"),
+	         inverseur(PreReponse, ListeRandom),
+	         converter_coo_direction("Secure", ListeRandom, [], _, ListeFinale),
 	         Reponse=ListeFinale ))
-	;
-	writeln("Chemin sûr pas trouvé"),
-	(searchNearestRiskMonstruous([[(CooX, CooY)]],SolutionMonstruous)->
-	  inverseur(SolutionMonstruous, ListeMonstruous),
-	  converter_coo_direction("Monster", ListeMonstruous, [], _, ListeFinale),
-	  Reponse=ListeFinale
-	;
-	writeln("Cherchons un chemin aléatoire"),
-	randomDirection(CooX, CooY,PreReponse),
-	 writeln("Chemin aléatoire trouvé"),
-	  converter_coo_direction("Secure", PreReponse, [], _, ListeFinale),
-	  Reponse=ListeFinale)).
+
+	;  writeln("Chemin sûr pas trouvé"),
+	  ( searchNearestRiskMonstruous([[(CooX, CooY)]],SolutionMonstruous)
+	  ->  inverseur(SolutionMonstruous, ListeMonstruous),
+	      converter_coo_direction("Monster", ListeMonstruous, [], _, ListeFinale),
+	      Reponse=ListeFinale
+
+	  ;   writeln("Cherchons un chemin aléatoire"),
+	      randomDirection(CooX, CooY,PreReponse),
+	      writeln("Chemin aléatoire trouvé"),
+	      inverseur(PreReponse, ListeRandom),
+	      converter_coo_direction("Secure", ListeRandom, [], _, ListeFinale),
+	      Reponse=ListeFinale)).
 
 
 
@@ -535,7 +543,8 @@ randomDirection(CooXCurrent, CooYCurrent,Liste2):-
 		    ->  append(Liste, [(VoisinBas, CooYCurrent)], ListeInter)
 		    ;	(   (border(CooXCurrent, CooYCurrent, _, _, false, _), \+caseCovered(CooXCurrent, VoisinGauche))
 		        ->  append(Liste, [(CooXCurrent, VoisinGauche)], ListeInter)
-			;   !)))),
+			;   voisin(CooXCurrent, CooYCurrent, NewCooX, NewCooY),
+			    append(Liste, [(NewCooX, NewCooY)],ListeInter))))),
 	Liste2=ListeInter.
 
 
