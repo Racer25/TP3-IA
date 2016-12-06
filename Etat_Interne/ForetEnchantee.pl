@@ -237,28 +237,7 @@ update_risk_putrid_case(CooX, CooY):-
 	VoisinDroite is CooY+1,
 	VoisinBas is CooX+1,
 	VoisinGauche is CooY-1,
-	Continuer=true,
-	(   caseCovered(VoisinHaut, CooY)
-	-> (\+putrid(VoisinHaut, CooY)
-	    -> Continuer=false
-	   ;   !)
-	;   !),
-	(   (Continuer, caseCovered(CooX, VoisinDroite))
-	-> (\+putrid(CooX, VoisinDroite)
-	    -> Continuer=false
-	   ;   !)
-	;  ! ),
-	(   (Continuer, caseCovered(VoisinBas, CooY))
-	-> (\+putrid(VoisinBas, CooY)
-	    -> Continuer=false
-	   ;  ! )
-	;  ! ),
-	(   (Continuer, caseCovered(CooX, VoisinGauche))
-	-> (\+putrid(CooX, VoisinGauche)
-	    -> Continuer=false
-	   ;  ! )
-	;   !),
-        (   Continuer
+	(   (caseCovered(VoisinHaut, CooY),caseCovered(CooX, VoisinDroite),caseCovered(VoisinBas, CooY),caseCovered(CooX, VoisinGauche))
 	-> asserta(riskMonstruous(CooX, CooY))
 	; !).
 
@@ -271,28 +250,7 @@ update_risk_windy_case(CooX, CooY):-
 	VoisinDroite is CooY+1,
 	VoisinBas is CooX+1,
 	VoisinGauche is CooY-1,
-	Continuer=true,
-	(   caseCovered(VoisinHaut, CooY)
-	-> (\+windy(VoisinHaut, CooY)
-	    -> Continuer=false
-	   ;   !)
-	;   !),
-	(   (Continuer, caseCovered(CooX, VoisinDroite))
-	-> (\+windy(CooX, VoisinDroite)
-	    -> Continuer=false
-	   ;   !)
-	;  ! ),
-	(   (Continuer, caseCovered(VoisinBas, CooY))
-	-> (\+windy(VoisinBas, CooY)
-	    -> Continuer=false
-	   ;  ! )
-	;  ! ),
-	(   (Continuer, caseCovered(CooX, VoisinGauche))
-	-> (\+windy(CooX, VoisinGauche)
-	    -> Continuer=false
-	   ;  ! )
-	;   !),
-        (   Continuer
+	(   (caseCovered(VoisinHaut, CooY),caseCovered(CooX, VoisinDroite),caseCovered(VoisinBas, CooY),caseCovered(CooX, VoisinGauche))
 	-> asserta(riskFall(CooX, CooY))
 	; !).
 
