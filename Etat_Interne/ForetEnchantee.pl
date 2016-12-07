@@ -204,7 +204,7 @@ takeDecisions(Reponse):-
 	          ;	 inverseur(SolutionSecure, ListeSecure),
 		         converter_coo_direction("Secure", ListeSecure,[],_,ListeFinale),
 	                 Reponse=ListeFinale )
-<<<<<<< HEAD
+
 	      ;	 writeln("Cherchons un chemin aléatoire"),
 	         randomDirection(CooX, CooY,PreReponse),
 	         writeln("Chemin aléatoire trouvé"),
