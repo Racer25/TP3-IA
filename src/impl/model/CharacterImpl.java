@@ -222,7 +222,7 @@ public class CharacterImpl extends Observable implements Character, Runnable
 	public void setScore(int score)
 	{
 		this.score = score;
-		notifyObservers(new Object[]{"score", score});
+		notifyObservers(score);
 		setChanged();
 	}
 

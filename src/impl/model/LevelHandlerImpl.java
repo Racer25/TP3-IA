@@ -55,8 +55,6 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 					{
 						//The Character warned me that the level is complete
 						this.level++;
-						Query resetQuery=new Query("raz_internal_state", new Term[]{});
-						resetQuery.hasSolution();
 						generateLevel();
 						configureCharacter();
 						character.setScore((int) (character.getScore()+10*Math.pow(generator.getAdventureMap().getTaille(),2)));
