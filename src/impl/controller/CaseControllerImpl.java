@@ -62,9 +62,9 @@ public class CaseControllerImpl implements CaseController, Observer
 					int x = ((CaseCharacterImpl) object[1]).getCoords()[0] + adventureMap.getChangeReference()[0];
 					int y = ((CaseCharacterImpl) object[1]).getCoords()[1] + adventureMap.getChangeReference()[1];
 					
-					System.out.println("/CurrentCase//////////////////////("+x+";"+y+")///////////////////");
+					System.out.println("/XY//////////////////////("+x+";"+y+")///////////////////");
 					System.out.println("/ChangeRef//////////////////////("+adventureMap.getChangeReference()[0]+";"+adventureMap.getChangeReference()[1]+")///////////////////");
-					System.out.println("///////////////////////("+((CaseCharacterImpl) object[1]).getCoords()[0]+";"+((CaseCharacterImpl) object[1]).getCoords()[1]+")///////////////////");
+					System.out.println("/CasePerso//////////////////////("+((CaseCharacterImpl) object[1]).getCoords()[0]+";"+((CaseCharacterImpl) object[1]).getCoords()[1]+")///////////////////");
 					if(this.maCase==this.adventureMap.getCasesMap()[x][y])
 					{
 						((CaseViewImpl) maCaseView).setCharacterVisible(true);
@@ -99,7 +99,8 @@ public class CaseControllerImpl implements CaseController, Observer
 				{
 					if(!((boolean) object[1]))
 					{
-						imageCaillou();					
+						imageCaillou();		
+						((CaseViewImpl) maCaseView).repaint();
 					}
 				}
 			}
