@@ -119,8 +119,8 @@ public class CharacterImpl extends Observable implements Character, Runnable
 					while(q.hasMoreSolutions())
 					{
 						Map<String, Term> actionList = q.nextSolution();
-						for (Term action : actionList.get("Reponse").args()) {
-							System.out.println(action.toString());
+						for (Term action : actionList.get("Reponse").args()) 
+						{
 							if(action.isInteger())
 							{
 								if(!action.toString().equals("'[]'"))
@@ -403,7 +403,6 @@ public class CharacterImpl extends Observable implements Character, Runnable
 	
 	private Integer transformToInteger(String maString)
 	{
-		System.out.println(maString);
 		Integer res= null;
 		try
 		{

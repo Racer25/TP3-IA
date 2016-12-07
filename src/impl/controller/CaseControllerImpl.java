@@ -1,20 +1,14 @@
 package impl.controller;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
 import java.io.File;
 import java.util.Observable;
 import java.util.Observer;
 
-import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.border.Border;
 
 import contract.controller.CaseController;
 import contract.model.CaseMap;
@@ -27,7 +21,7 @@ import impl.view.CaseViewImpl;
 import impl.view.CharacterViewImpl;
 
 public class CaseControllerImpl implements CaseController, Observer
-{
+{	
 	private CaseMap maCase;
 	private CaseView maCaseView;
 	private CharacterImpl character;
@@ -59,14 +53,17 @@ public class CaseControllerImpl implements CaseController, Observer
 				if(object[0].equals("case"))
 				{
 					((CaseViewImpl) maCaseView).setCharacterVisible(false);
-					int x = ((CaseCharacterImpl) object[1]).getCoords()[0] + adventureMap.getChangeReference()[0];
-					int y = ((CaseCharacterImpl) object[1]).getCoords()[1] + adventureMap.getChangeReference()[1];
+					int x = ((CaseCharacterImpl) object[1]).getCoords()[0] + this.adventureMap.getChangeReference()[0];
+					int y = ((CaseCharacterImpl) object[1]).getCoords()[1] + this.adventureMap.getChangeReference()[1];
 					
-					System.out.println("/XY//////////////////////("+x+";"+y+")///////////////////");
-					System.out.println("/ChangeRef//////////////////////("+adventureMap.getChangeReference()[0]+";"+adventureMap.getChangeReference()[1]+")///////////////////");
-					System.out.println("/CasePerso//////////////////////("+((CaseCharacterImpl) object[1]).getCoords()[0]+";"+((CaseCharacterImpl) object[1]).getCoords()[1]+")///////////////////");
 					if(this.maCase==this.adventureMap.getCasesMap()[x][y])
 					{
+						System.out.println("////////////////////////////////////////////");
+						System.out.println("Taille de la map: "+this.adventureMap.getTaille());
+						System.out.println("CurrentCase("+x+";"+y+")"+", CoordInterne("+((CaseCharacterImpl) object[1]).getCoords()[0]+";"+((CaseCharacterImpl) object[1]).getCoords()[1]+")");
+						System.out.println("ChangeRef("+this.adventureMap.getChangeReference()[0]+";"+adventureMap.getChangeReference()[1]+")");
+						System.out.println("////////////////////////////////////////////");
+						
 						((CaseViewImpl) maCaseView).setCharacterVisible(true);
 						if(maCase.isPortalPoint())
 						{
@@ -120,8 +117,8 @@ public class CaseControllerImpl implements CaseController, Observer
 					((CaseViewImpl) maCaseView).revalidate();
 					try {
 						Thread.sleep(500);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
+					} catch (InterruptedException e) 
+					{
 						e.printStackTrace();
 					}
 					rock.setVisible(false);
