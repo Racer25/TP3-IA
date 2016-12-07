@@ -148,11 +148,12 @@ public class CharacterImpl extends Observable implements Character, Runnable
 					actions.add(6);
 					actions.add(2);
 					*/
-					//Realisation des actions
-					for(Integer action: actions)
+					//Realisation des actions tant qu'il est vivant
+					int k=0;
+					while(k<actions.size() && this.alive)
 					{
-						System.out.println("action: "+action);
-						switch (action) 
+						System.out.println("action: "+actions.get(k));
+						switch (actions.get(k)) 
 						{
 				            case 1:
 				            	System.out.println("Haut");
@@ -206,6 +207,7 @@ public class CharacterImpl extends Observable implements Character, Runnable
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
+						k++;
 					}
 					//this.effectorUp.doIt();
 					//this.effectorStone.doIt();
@@ -264,10 +266,6 @@ public class CharacterImpl extends Observable implements Character, Runnable
 	public void setCurrentCase(CaseCharacter currentCase)
 	{
 		this.currentCase = currentCase;
-		/*if(this.currentCase.isPortalPoint())
-		{
-			setLevelComplete(true);
-		}*/
 		notifyObservers(new Object[]{"case", currentCase});
 		setChanged();
 	}
