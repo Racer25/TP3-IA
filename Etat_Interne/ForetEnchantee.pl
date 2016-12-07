@@ -392,7 +392,9 @@ detection_fall(CooX, CooY):-
 caseUnknownNotRisky((X,Y)):-
 	\+caseCovered(X,Y),
 	\+riskMonstruous(X,Y),
-	\+riskFall(X,Y).
+	\+riskFall(X,Y),
+	\+fall(X,Y),
+	\+monstruous(X,Y).
 
 expand(Parent,PathsoFar,ChildStates):-
  findall([Child|PathsoFar],operator(Parent,Child),ChildStates).
