@@ -184,9 +184,9 @@ raz_internal_state():-
 takeDecisions(Reponse):-
 	currentCase(CooX,_),
 	currentCase(_,CooY),
-	writeln("Cherchons un chemin sï¿½r"),
+	writeln("Cherchons un chemin sûr"),
 	(   searchSureWay([[(CooX, CooY)]], SolutionSecure)
-	->  writeln("Chemin sï¿½r trouvï¿½"),
+	->  writeln("Chemin sûr trouvé"),
 	    length(SolutionSecure, LengthSolutionSecure),
 	    (	LengthSolutionSecure=<10
 	    -> inverseur(SolutionSecure, ListeSecure),
@@ -204,21 +204,23 @@ takeDecisions(Reponse):-
 	          ;	 inverseur(SolutionSecure, ListeSecure),
 		         converter_coo_direction("Secure", ListeSecure,[],_,ListeFinale),
 	                 Reponse=ListeFinale )
-	      ;	 writeln("Cherchons un chemin alï¿½atoire"),
-	         randomDirection(CooX, CooY,ListeRandom),
-	         writeln("Chemin alï¿½atoire trouvï¿½"),
+	      ;	 writeln("Cherchons un chemin aléatoire"),
+	         randomDirection(CooX, CooY,PreReponse),
+	         writeln("Chemin aléatoire trouvé"),
+	         inverseur(PreReponse, ListeRandom),
 	         converter_coo_direction("Secure", ListeRandom, [], _, ListeFinale),
 	         Reponse=ListeFinale ))
 
-	;  writeln("Chemin sï¿½r pas trouvï¿½"),
+	;  writeln("Chemin sûr pas trouvé"),
 	  ( searchNearestRiskMonstruous([[(CooX, CooY)]],SolutionMonstruous)
 	  ->  inverseur(SolutionMonstruous, ListeMonstruous),
 	      converter_coo_direction("Monster", ListeMonstruous, [], _, ListeFinale),
 	      Reponse=ListeFinale
 
-	  ;   writeln("Cherchons un chemin alï¿½atoire"),
-	      randomDirection(CooX, CooY,ListeRandom),
-	      writeln("Chemin alï¿½atoire trouvï¿½"),
+	  ;   writeln("Cherchons un chemin aléatoire"),
+	      randomDirection(CooX, CooY,PreReponse),
+	      writeln("Chemin aléatoire trouvé"),
+	      inverseur(PreReponse, ListeRandom),
 	      converter_coo_direction("Secure", ListeRandom, [], _, ListeFinale),
 	      Reponse=ListeFinale)).
 
@@ -228,16 +230,16 @@ takeDecisions(Reponse):-
 % Methodes internes
 % -----------------------------------------------------------------------
 
-% on met le voisin de la case windy en riskMonstruous seulement si les
+% on met le voisin de la case windy en riskMonstruous seulement si lesfalse
 % cases autour du voisin sont soit putrid soit inconnu
 update_risk_putrid_case(CooX, CooY):-
 	VoisinHaut is CooX-1,
 	VoisinDroite is CooY+1,
 	VoisinBas is CooX+1,
 	VoisinGauche is CooY-1,
-	(   (caseCovered(VoisinHaut, CooY),caseCovered(CooX, VoisinDroite),caseCovered(VoisinBas, CooY),caseCovered(CooX, VoisinGauche))
+	(   \+((caseCovered(VoisinHaut, CooY),\+putrid(VoisinHaut, CooY));((caseCovered(CooX, VoisinDroite)),(\+putrid(CooX, VoisinDroite)));((caseCovered(VoisinBas, CooY)),(\+putrid(VoisinBas, CooY)));((caseCovered(CooX, VoisinGauche)),(\+putrid(CooX, VoisinGauche))))
 	-> asserta(riskMonstruous(CooX, CooY))
-	; !).
+	;  !).
 
 
 
@@ -248,9 +250,9 @@ update_risk_windy_case(CooX, CooY):-
 	VoisinDroite is CooY+1,
 	VoisinBas is CooX+1,
 	VoisinGauche is CooY-1,
-	(   (caseCovered(VoisinHaut, CooY),caseCovered(CooX, VoisinDroite),caseCovered(VoisinBas, CooY),caseCovered(CooX, VoisinGauche))
+	(   \+((caseCovered(VoisinHaut, CooY),(\+windy(VoisinHaut, CooY)));(caseCovered(CooX, VoisinDroite),(\+windy(CooX, VoisinDroite)));(caseCovered(VoisinBas, CooY),\+windy(VoisinBas, CooY));( caseCovered(CooX, VoisinGauche),(\+windy(CooX, VoisinGauche))))
 	-> asserta(riskFall(CooX, CooY))
-	; !).
+	;  ! ).
 
 
 
