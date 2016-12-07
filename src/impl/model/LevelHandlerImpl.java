@@ -56,7 +56,6 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 						//The Character warned me that the level is complete
 						this.level++;
 						generateLevel();
-						configureCharacter();
 						character.setScore((int) (character.getScore()+10*Math.pow(generator.getAdventureMap().getTaille(),2)));
 					}
 				}
@@ -95,7 +94,6 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 						character.setScore((int) (character.getScore()-10*Math.pow(generator.getAdventureMap().getTaille(),2)));
 						this.character.setAlive(false);
 						generateLevel();
-						configureCharacter();
 					}
 				}
 			}
