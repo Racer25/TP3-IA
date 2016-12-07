@@ -96,7 +96,8 @@ public class CaseControllerImpl implements CaseController, Observer
 				{
 					if(!((boolean) object[1]))
 					{
-						imageCaillou();					
+						imageCaillou();		
+						((CaseViewImpl) maCaseView).repaint();
 					}
 				}
 			}

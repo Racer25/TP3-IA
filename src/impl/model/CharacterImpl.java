@@ -138,6 +138,7 @@ public class CharacterImpl extends Observable implements Character, Runnable
 							}
 						}
 					}
+					q.close();
 		
 					/*TEST
 					List<Integer> actions=new ArrayList<Integer>();
