@@ -204,16 +204,11 @@ takeDecisions(Reponse):-
 	          ;	 inverseur(SolutionSecure, ListeSecure),
 		         converter_coo_direction("Secure", ListeSecure,[],_,ListeFinale),
 	                 Reponse=ListeFinale )
-
-	      ;	 writeln("Cherchons un chemin aléatoire"),
-	         randomDirection(CooX, CooY,PreReponse),
-	         writeln("Chemin aléatoire trouvé"),
-	         converter_coo_direction("Secure", PreReponse, [], _, ListeFinale),
-	         
 	      ;	 writeln("Cherchons un chemin alï¿½atoire"),
 	         randomDirection(CooX, CooY,ListeRandom),
 	         writeln("Chemin alï¿½atoire trouvï¿½"),
 	         converter_coo_direction("Secure", ListeRandom, [], _, ListeFinale),
+	         Reponse=ListeFinale ))
 
 	;  writeln("Chemin sï¿½r pas trouvï¿½"),
 	  ( searchNearestRiskMonstruous([[(CooX, CooY)]],SolutionMonstruous)
@@ -225,6 +220,7 @@ takeDecisions(Reponse):-
 	      randomDirection(CooX, CooY,ListeRandom),
 	      writeln("Chemin alï¿½atoire trouvï¿½"),
 	      converter_coo_direction("Secure", ListeRandom, [], _, ListeFinale),
+	      Reponse=ListeFinale)).
 
 
 
@@ -583,4 +579,3 @@ process_Couple_CooX((X,_), CooX):-
 
 process_Couple_CooY((_,Y), CooY):-
 	CooY=Y.
-

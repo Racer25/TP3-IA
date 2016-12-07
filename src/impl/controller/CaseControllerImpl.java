@@ -61,6 +61,7 @@ public class CaseControllerImpl implements CaseController, Observer
 					((CaseViewImpl) maCaseView).setCharacterVisible(false);
 					int x = ((CaseCharacterImpl) object[1]).getCoords()[0] + adventureMap.getChangeReference()[0];
 					int y = ((CaseCharacterImpl) object[1]).getCoords()[1] + adventureMap.getChangeReference()[1];
+					
 					if(this.maCase==this.adventureMap.getCasesMap()[x][y])
 					{
 						((CaseViewImpl) maCaseView).setCharacterVisible(true);

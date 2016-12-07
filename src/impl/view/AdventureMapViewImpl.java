@@ -73,7 +73,7 @@ public class AdventureMapViewImpl extends JPanel implements AdventureMapView, Ob
 		// TODO Auto-generated method stub
 		this.myMap = (AdventureMap) arg1;
 		System.out.println("Ah que coucou la vue ");
-
+		myMap.printMap();
 		removeAll();
 		
 		this.setLayout(new GridLayout(this.myMap.getTaille(), this.myMap.getTaille()));

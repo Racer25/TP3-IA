@@ -37,7 +37,6 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 		this.character=character;
 		this.generator=new AdventureMapGeneratorImpl();
 		generateLevel();
-		generator.getAdventureMap().setChangeReference(generator.getSpawnPoint().getCoords());
 	}
 
 	@Override

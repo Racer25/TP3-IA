@@ -10,4 +10,6 @@ public interface AdventureMap
 	
 	public int getTaille();
 	public void setTaille(int taille);
+	
+	public void printMap();
 }

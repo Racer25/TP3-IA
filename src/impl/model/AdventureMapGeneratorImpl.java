@@ -109,7 +109,7 @@ public class AdventureMapGeneratorImpl extends Observable implements AdventureMa
 		{
 			adventureMap.getCasesMap()[i][j].setSpawnPoint(true);
 			spawnPoint = (CaseMapImpl) adventureMap.getCasesMap()[i][j];
-			adventureMap.setChangeReference(spawnPoint.getCoords());;
+			adventureMap.setChangeReference(spawnPoint.getCoords());
 		}
 		else
 		{
