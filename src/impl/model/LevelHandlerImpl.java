@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 
+import org.jpl7.Atom;
 import org.jpl7.Query;
 import org.jpl7.Term;
 
@@ -141,6 +142,7 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 		this.character.setAlive(true);
 		this.character.setActive(false);
 		
+		consultPrologFile();
 		Query resetQuery=new Query("raz_internal_state", new Term[]{});
 		resetQuery.hasSolution();
 		
@@ -162,6 +164,11 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 		this.character.setEffectorLeft(new EffectorLeftImpl(character));
 		this.character.setEffectorStone(new EffectorStoneImpl(character, this.generator.getAdventureMap()));
 		this.character.setEffectorExit(new EffectorExitImpl(character));
+	}
+	
+	public boolean consultPrologFile() {
+		Query q1=new Query("consult", new Term[]{new Atom("Etat_Interne/ForetEnchantee.pl")});
+		return q1.hasSolution();
 	}
 
 }

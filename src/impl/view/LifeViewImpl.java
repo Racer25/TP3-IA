@@ -115,7 +115,12 @@ public class LifeViewImpl extends JPanel implements LifeView, Observer
 						}
 					};
 					new Thread (die).start();
-
+					try {
+						Thread.sleep(1500);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 		}
