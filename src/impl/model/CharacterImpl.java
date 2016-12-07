@@ -150,7 +150,7 @@ public class CharacterImpl extends Observable implements Character, Runnable
 					*/
 					//Realisation des actions tant qu'il est vivant
 					int k=0;
-					while(k<actions.size() && this.alive)
+					while(k<actions.size() && this.alive && !this.levelComplete && this.active)
 					{
 						System.out.println("action: "+actions.get(k));
 						switch (actions.get(k)) 
