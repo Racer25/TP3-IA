@@ -71,9 +71,11 @@ public class AdventureMapViewImpl extends JPanel implements AdventureMapView, Ob
 	public void update(Observable arg0, Object arg1) 
 	{
 		// TODO Auto-generated method stub
+		
+		
 		this.myMap = (AdventureMap) arg1;
 		this.removeAll();
-		revalidate();
+		this.validate();
 		
 		this.setLayout(new GridLayout(this.myMap.getTaille(), this.myMap.getTaille()));
 		this.casesView=new CaseView[this.myMap.getTaille()][this.myMap.getTaille()];
@@ -88,7 +90,7 @@ public class AdventureMapViewImpl extends JPanel implements AdventureMapView, Ob
 						(CaseMapImpl) this.myMap.getCasesMap()[i][j],
 						(CaseViewImpl)casesView[i][j], 
 						character));
-				//this.add((CaseViewImpl) casesView[i][j]);
+				this.add((CaseViewImpl) casesView[i][j]);
 				if(this.myMap.getCasesMap()[i][j].isSpawnPoint())
 				{
 					((CaseViewImpl) casesView[i][j]).setCharacterVisible(true);
@@ -96,7 +98,8 @@ public class AdventureMapViewImpl extends JPanel implements AdventureMapView, Ob
 			}
 		}
 		
-		//revalidate();
+		this.revalidate();
+		this.repaint();
 	}
 	
 	public List<CaseController> getCaseControllers()
