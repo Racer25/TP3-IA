@@ -88,6 +88,7 @@ public class CharacterImpl extends Observable implements Character, Runnable
 				}
 				else
 				{
+					
 					//Envoie des informations à prolog
 					System.out.println("Depuis java:");
 					System.out.println("BordureDroite: "+!this.currentCase.getPossibleDirections().get(DirectionEnum.RIGHT));
@@ -137,12 +138,23 @@ public class CharacterImpl extends Observable implements Character, Runnable
 							}
 						}
 					}
+					q.close();
 		
-					//Realisation des actions
-					for(Integer action: actions)
+					/*TEST
+					List<Integer> actions=new ArrayList<Integer>();
+					actions.add(4);
+					actions.add(3);
+					actions.add(2);
+					actions.add(2);
+					actions.add(6);
+					actions.add(2);
+					*/
+					//Realisation des actions tant qu'il est vivant
+					int k=0;
+					while(k<actions.size() && this.alive && !this.levelComplete && this.active)
 					{
-						System.out.println("action: "+action);
-						switch (action) 
+						System.out.println("action: "+actions.get(k));
+						switch (actions.get(k)) 
 						{
 				            case 1:
 				            	System.out.println("Haut");
@@ -188,6 +200,15 @@ public class CharacterImpl extends Observable implements Character, Runnable
 				            	System.out.println("Erreur dans l'entier retourné par prolog");
 				                break;
 			            }
+						try
+						{
+							Thread.sleep(2000);
+						} catch (InterruptedException e)
+						{
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						k++;
 					}
 					//this.effectorUp.doIt();
 					//this.effectorStone.doIt();
@@ -246,10 +267,6 @@ public class CharacterImpl extends Observable implements Character, Runnable
 	public void setCurrentCase(CaseCharacter currentCase)
 	{
 		this.currentCase = currentCase;
-		/*if(this.currentCase.isPortalPoint())
-		{
-			setLevelComplete(true);
-		}*/
 		notifyObservers(new Object[]{"case", currentCase});
 		setChanged();
 	}
@@ -396,7 +413,6 @@ public class CharacterImpl extends Observable implements Character, Runnable
 		{
 			return transformToInteger(maString.substring(0, maString.length()-1));
 		}
-		System.out.println("Ne doit pas s'exécuter");
 		return res;
 	}
 }
