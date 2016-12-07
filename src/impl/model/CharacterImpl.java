@@ -88,6 +88,7 @@ public class CharacterImpl extends Observable implements Character, Runnable
 				}
 				else
 				{
+					
 					//Envoie des informations à prolog
 					System.out.println("Depuis java:");
 					System.out.println("BordureDroite: "+!this.currentCase.getPossibleDirections().get(DirectionEnum.RIGHT));
@@ -138,6 +139,15 @@ public class CharacterImpl extends Observable implements Character, Runnable
 						}
 					}
 		
+					/*TEST
+					List<Integer> actions=new ArrayList<Integer>();
+					actions.add(4);
+					actions.add(3);
+					actions.add(2);
+					actions.add(2);
+					actions.add(6);
+					actions.add(2);
+					*/
 					//Realisation des actions
 					for(Integer action: actions)
 					{
@@ -188,6 +198,14 @@ public class CharacterImpl extends Observable implements Character, Runnable
 				            	System.out.println("Erreur dans l'entier retourné par prolog");
 				                break;
 			            }
+						try
+						{
+							Thread.sleep(2000);
+						} catch (InterruptedException e)
+						{
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 					//this.effectorUp.doIt();
 					//this.effectorStone.doIt();
@@ -396,7 +414,6 @@ public class CharacterImpl extends Observable implements Character, Runnable
 		{
 			return transformToInteger(maString.substring(0, maString.length()-1));
 		}
-		System.out.println("Ne doit pas s'exécuter");
 		return res;
 	}
 }

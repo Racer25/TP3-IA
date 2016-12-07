@@ -405,7 +405,7 @@ public class AdventureMapGeneratorImpl extends Observable implements AdventureMa
 		this.spawnPoint = spawnPoint;
 	}
 	
-	public AdventureMapImpl createTestMap()
+	public AdventureMap createTestMap()
 	{
 		//Initiation des variables
 		this.taille = 4;
@@ -417,16 +417,16 @@ public class AdventureMapGeneratorImpl extends Observable implements AdventureMa
 		if((taille*taille)-2 > nbFall+nbMonstruous)
 		{
 			//Creation de l'entite adventureMapImpl
-			adventureMap = new AdventureMapImpl();
-			adventureMap.setTaille(this.taille);
+			this.adventureMap = new AdventureMapImpl();
+			this.adventureMap.setTaille(this.taille);
 			//On creer son tableau de cases
-			adventureMap.setCasesMap(new CaseMapImpl[taille][taille]);
+			this.adventureMap.setCasesMap(new CaseMapImpl[taille][taille]);
 			//Et on l'implemente
 			for(int i = 0 ; i < taille ; i++)
 			{
 				for(int j = 0 ; j < taille ; j++)
 				{
-					adventureMap.getCasesMap()[i][j] = new CaseMapImpl();
+					this.adventureMap.getCasesMap()[i][j] = new CaseMapImpl();
 					int[] coordonnees = new int[2];
 					coordonnees[0]=i;
 					coordonnees[1]=j;
@@ -435,12 +435,19 @@ public class AdventureMapGeneratorImpl extends Observable implements AdventureMa
 			}
 			//On definit les attributs independants
 			adventureMap.getCasesMap()[2][1].setSpawnPoint(true);
+			spawnPoint=(CaseMapImpl)adventureMap.getCasesMap()[2][1];
+			adventureMap.setChangeReference(spawnPoint.getCoords());
 			adventureMap.getCasesMap()[0][1].setPortalPoint(true);
 			adventureMap.getCasesMap()[3][3].setMonstruous(true);
 			adventureMap.getCasesMap()[0][3].setMonstruous(true);
 			adventureMap.getCasesMap()[0][2].setFall(true);
 			adventureMap.getCasesMap()[0][0].setFall(true);
 			//On definit les attributs combinables 
+			fallPoints.add((CaseMapImpl) adventureMap.getCasesMap()[0][2]);
+			fallPoints.add((CaseMapImpl) adventureMap.getCasesMap()[0][0]);
+			monstruousPoints.add((CaseMapImpl) adventureMap.getCasesMap()[3][3]);
+			monstruousPoints.add((CaseMapImpl) adventureMap.getCasesMap()[0][3]);
+			
 			SetWindyCases();
 			SetPutridCases();
 			SetPossibleDirections();
@@ -448,18 +455,7 @@ public class AdventureMapGeneratorImpl extends Observable implements AdventureMa
 			//Test � supprimer
 			printMap();
 			
-			//On verifie si la map est faisable
-			ReinitializeCasesList();
-			if(isFeasible(spawnPoint))
-			{
-				notifyObservers(adventureMap);
-				setChanged();
-				return (AdventureMapImpl) adventureMap;
-			}
-			else
-			{
-				return createTestMap();
-			}
+			return adventureMap;
 		}
 		else
 		{

@@ -109,6 +109,8 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 		int nbMonstruous=dim*dim*15/100;
 		//Generate Map
 		this.generator.createMap(dim, nbFall, nbMonstruous);
+		/************************TEST************************/
+		//(AdventureMapGeneratorImpl)this.generator).createTestMap();
 		//Character configuration
 		configureCharacter();
 		
