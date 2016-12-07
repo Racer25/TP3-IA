@@ -21,89 +21,90 @@ import impl.view.CaseViewImpl;
 import impl.view.CharacterViewImpl;
 
 public class CaseControllerImpl implements CaseController, Observer
-{	
+{
 	private CaseMap maCase;
 	private CaseView maCaseView;
 	private CharacterImpl character;
 	private AdventureMapImpl adventureMap;
 	private CharacterViewImpl characterView;
 
-	public CaseControllerImpl(CharacterViewImpl characterView, AdventureMapImpl adventureMap, CaseMap maCase, CaseView maCaseview, CharacterImpl character)
+	public CaseControllerImpl(CharacterViewImpl characterView, AdventureMapImpl adventureMap, CaseMap maCase,
+			CaseView maCaseview, CharacterImpl character)
 	{
-		this.maCase=maCase;
-		this.maCaseView=maCaseview;
-		this.character=character;
-		this.adventureMap=adventureMap;
+		this.maCase = maCase;
+		this.maCaseView = maCaseview;
+		this.character = character;
+		this.adventureMap = adventureMap;
 		this.characterView = characterView;
 		
 		((CaseMapImpl) maCase).addObserver(this);
 		character.addObserver(this);
-		
+
 	}
-	
+
 	@Override
 	public void update(Observable arg0, Object arg1)
 	{
-		if(arg0 instanceof CharacterImpl)
+		if (arg0 instanceof CharacterImpl)
 		{
-			if(arg1 instanceof Object[])
+			if (arg1 instanceof Object[])
 			{
-				//appear/diseappear character
-				Object[] object=(Object[])arg1;
-				if(object[0].equals("case"))
+				// appear/diseappear character
+				Object[] object = (Object[]) arg1;
+				if (object[0].equals("case"))
 				{
 					((CaseViewImpl) maCaseView).setCharacterVisible(false);
 					int x = ((CaseCharacterImpl) object[1]).getCoords()[0] + this.adventureMap.getChangeReference()[0];
 					int y = ((CaseCharacterImpl) object[1]).getCoords()[1] + this.adventureMap.getChangeReference()[1];
-					
-					if(this.maCase==this.adventureMap.getCasesMap()[x][y])
+
+					if (this.maCase == this.adventureMap.getCasesMap()[x][y])
 					{
 						System.out.println("////////////////////////////////////////////");
-						System.out.println("Taille de la map: "+this.adventureMap.getTaille());
-						System.out.println("CurrentCase("+x+";"+y+")"+", CoordInterne("+((CaseCharacterImpl) object[1]).getCoords()[0]+";"+((CaseCharacterImpl) object[1]).getCoords()[1]+")");
-						System.out.println("ChangeRef("+this.adventureMap.getChangeReference()[0]+";"+adventureMap.getChangeReference()[1]+")");
+						System.out.println("Taille de la map: " + this.adventureMap.getTaille());
+						System.out.println("CurrentCase(" + x + ";" + y + ")" + ", CoordInterne("
+								+ ((CaseCharacterImpl) object[1]).getCoords()[0] + ";"
+								+ ((CaseCharacterImpl) object[1]).getCoords()[1] + ")");
+						System.out.println("ChangeRef(" + this.adventureMap.getChangeReference()[0] + ";"
+								+ adventureMap.getChangeReference()[1] + ")");
 						System.out.println("////////////////////////////////////////////");
-						
+
 						((CaseViewImpl) maCaseView).setCharacterVisible(true);
-						if(maCase.isPortalPoint())
+						if (maCase.isPortalPoint())
 						{
 							sonPortal();
-						}
-						else if(maCase.isPutrid() && maCase.isWindy())
+						} else if (maCase.isPutrid() && maCase.isWindy())
 						{
 							sonWindZombi();
-						}
-						else if(maCase.isPutrid())
+						} else if (maCase.isPutrid())
 						{
 							sonZombi();
-						}
-						else if(maCase.isWindy())
+						} else if (maCase.isWindy())
 						{
 							sonWind();
 						}
 					}
 				}
 			}
-			
-		}
-		else if(arg0 instanceof CaseMapImpl)
+
+		} else if (arg0 instanceof CaseMapImpl)
 		{
 			System.out.println("monstruous1");
-			if(arg1 instanceof Object[])
+			if (arg1 instanceof Object[])
 			{
-				Object[] object=(Object[])arg1;
-				if(object[0].equals("monstruous"))
+				Object[] object = (Object[]) arg1;
+				if (object[0].equals("monstruous"))
 				{
-					if(!((boolean) object[1]))
+					if (!((boolean) object[1]))
 					{
-						imageCaillou();		
+						imageCaillou();
 						((CaseViewImpl) maCaseView).repaint();
 					}
 				}
 			}
 		}
+
 	}
-	
+
 	public void imageCaillou()
 	{
 		Runnable son = new Runnable()
@@ -111,27 +112,30 @@ public class CaseControllerImpl implements CaseController, Observer
 			@Override
 			public void run()
 			{
-				try{
+				try
+				{
 					JLabel rock = new JLabel(new ImageIcon("img/rock.png"));
 					((CaseViewImpl) maCaseView).add(rock);
 					((CaseViewImpl) maCaseView).revalidate();
-					try {
+					try
+					{
 						Thread.sleep(500);
-					} catch (InterruptedException e) 
+					} catch (InterruptedException e)
 					{
 						e.printStackTrace();
 					}
 					rock.setVisible(false);
 					((CaseViewImpl) maCaseView).revalidate();
-					
-		        }catch(Exception ex){
-		            ex.printStackTrace();
-		        }
+
+				} catch (Exception ex)
+				{
+					ex.printStackTrace();
+				}
 			}
 		};
-		new Thread (son).start();
+		new Thread(son).start();
 	}
-	
+
 	public void sonZombi()
 	{
 		Runnable son = new Runnable()
@@ -139,28 +143,29 @@ public class CaseControllerImpl implements CaseController, Observer
 			@Override
 			public void run()
 			{
-				try{
-		            AudioInputStream ais = AudioSystem.getAudioInputStream(new File("son/zombi.wav"));
-		            Clip test = AudioSystem.getClip();  
+				try
+				{
+					AudioInputStream ais = AudioSystem.getAudioInputStream(new File("son/zombi.wav"));
+					Clip test = AudioSystem.getClip();
 
-		            test.open(ais);
-		            test.start();
+					test.open(ais);
+					test.start();
 
-		            while (!test.isRunning())
-		                Thread.sleep(10);
-		            while (test.isRunning())
-		                Thread.sleep(10);
+					while (!test.isRunning())
+						Thread.sleep(10);
+					while (test.isRunning())
+						Thread.sleep(10);
 
-		            test.close();
-		        }catch(Exception ex){
-		            ex.printStackTrace();
-		        }
+					test.close();
+				} catch (Exception ex)
+				{
+					ex.printStackTrace();
+				}
 			}
 		};
-		new Thread (son).start();
-	
-	}
+		new Thread(son).start();
 
+	}
 
 	public void sonWind()
 	{
@@ -169,28 +174,30 @@ public class CaseControllerImpl implements CaseController, Observer
 			@Override
 			public void run()
 			{
-				try{
-		            AudioInputStream ais = AudioSystem.getAudioInputStream(new File("son/wind.wav"));
-		            Clip test = AudioSystem.getClip();  
-	
-		            test.open(ais);
-		            test.start();
-	
-		            while (!test.isRunning())
-		                Thread.sleep(10);
-		            while (test.isRunning())
-		                Thread.sleep(10);
-	
-		            test.close();
-		        }catch(Exception ex){
-		            ex.printStackTrace();
-		        }
+				try
+				{
+					AudioInputStream ais = AudioSystem.getAudioInputStream(new File("son/wind.wav"));
+					Clip test = AudioSystem.getClip();
+
+					test.open(ais);
+					test.start();
+
+					while (!test.isRunning())
+						Thread.sleep(10);
+					while (test.isRunning())
+						Thread.sleep(10);
+
+					test.close();
+				} catch (Exception ex)
+				{
+					ex.printStackTrace();
+				}
 			}
 		};
-		new Thread (son).start();
-	
+		new Thread(son).start();
+
 	}
-	
+
 	public void sonWindZombi()
 	{
 		Runnable son = new Runnable()
@@ -198,28 +205,30 @@ public class CaseControllerImpl implements CaseController, Observer
 			@Override
 			public void run()
 			{
-				try{
-		            AudioInputStream ais = AudioSystem.getAudioInputStream(new File("son/zombiwind.wav"));
-		            Clip test = AudioSystem.getClip();  
-	
-		            test.open(ais);
-		            test.start();
-	
-		            while (!test.isRunning())
-		                Thread.sleep(10);
-		            while (test.isRunning())
-		                Thread.sleep(10);
-	
-		            test.close();
-		        }catch(Exception ex){
-		            ex.printStackTrace();
-		        }
+				try
+				{
+					AudioInputStream ais = AudioSystem.getAudioInputStream(new File("son/zombiwind.wav"));
+					Clip test = AudioSystem.getClip();
+
+					test.open(ais);
+					test.start();
+
+					while (!test.isRunning())
+						Thread.sleep(10);
+					while (test.isRunning())
+						Thread.sleep(10);
+
+					test.close();
+				} catch (Exception ex)
+				{
+					ex.printStackTrace();
+				}
 			}
 		};
-		new Thread (son).start();
-	
+		new Thread(son).start();
+
 	}
-	
+
 	public void sonPortal()
 	{
 		Runnable son = new Runnable()
@@ -227,25 +236,27 @@ public class CaseControllerImpl implements CaseController, Observer
 			@Override
 			public void run()
 			{
-				try{
-		            AudioInputStream ais = AudioSystem.getAudioInputStream(new File("son/portal.wav"));
-		            Clip test = AudioSystem.getClip();  
-	
-		            test.open(ais);
-		            test.start();
-	
-		            while (!test.isRunning())
-		                Thread.sleep(10);
-		            while (test.isRunning())
-		                Thread.sleep(10);
-	
-		            test.close();
-		        }catch(Exception ex){
-		            ex.printStackTrace();
-		        }
+				try
+				{
+					AudioInputStream ais = AudioSystem.getAudioInputStream(new File("son/portal.wav"));
+					Clip test = AudioSystem.getClip();
+
+					test.open(ais);
+					test.start();
+
+					while (!test.isRunning())
+						Thread.sleep(10);
+					while (test.isRunning())
+						Thread.sleep(10);
+
+					test.close();
+				} catch (Exception ex)
+				{
+					ex.printStackTrace();
+				}
 			}
 		};
-		new Thread (son).start();
-	
+		new Thread(son).start();
+
 	}
 }
