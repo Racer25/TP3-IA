@@ -499,7 +499,7 @@ randomDirection(CooXCurrent, CooYCurrent,Liste2):-
 		    ->  append(Liste, [(VoisinBas, CooYCurrent)], ListeInter)
 		    ;	(   (border(CooXCurrent, CooYCurrent, _, _, false, _), \+caseCovered(CooXCurrent, VoisinGauche))
 		        ->  append(Liste, [(CooXCurrent, VoisinGauche)], ListeInter)
-			;   voisin(CooXCurrent, CooYCurrent, NewCooX, NewCooY),
+			;   voisin((CooXCurrent, CooYCurrent), (NewCooX, NewCooY)),
 			    append(Liste, [(NewCooX, NewCooY)],ListeInter))))),
 	Liste2=ListeInter.
 
