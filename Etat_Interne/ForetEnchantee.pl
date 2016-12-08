@@ -426,12 +426,8 @@ expand(Parent,PathsoFar,ChildStates):-
 
 caseCovered2((X,Y)):-caseCovered(X,Y).
 
-no_risk2((X,Y)):-no_risk(X,Y).
-
 operator(Parent,Child):-
-writeln("Parent: "+Parent+", Child: "+Child),
  voisin(Parent, Child),
- %(caseUnknownNotRisky(Child);caseCovered2(Child))
  (caseUnknownNotRisky(Child)->
       !;
       caseCovered2(Child)).
@@ -451,15 +447,10 @@ searchSureWay([[State|Path]|RestFSet],Solution):-
 -> !;
 false),
  \+([[State|Path]|RestFSet]=[]),
- writeln("CONTINUE ESSAI"),
  caseCovered2(State),
- writeln("CONTINUE ;)"),
- writeln([[State|Path]|RestFSet]),
  expand(State,[State|Path],ChildStates),
- writeln(ChildStates),
  \+(ChildStates=[]),
  prune_l(ChildStates,P_ChildStates),
- writeln(P_ChildStates),
  \+(P_ChildStates=[]),
  append(RestFSet,P_ChildStates,NewFSet),
  \+(NewFSet=[]),
@@ -467,13 +458,9 @@ false),
 
 %Je passe au traitement de la queue dans le cas ou �a coince
 searchSureWay([_|RestFSet],Solution):-
-(no_risk(_,_)
--> !;
-!,
-false),
- \+([_|RestFSet]=[]),
-	writeln("CA COINCE"),
-	\+([_|RestFSet]=[]),
+(no_risk(_,_)-> !;
+!,false),
+\+([_|RestFSet]=[]),
  searchSureWay(RestFSet,Solution).
 
 %%%%%%%%%%%%%%%%%%%
@@ -487,14 +474,14 @@ false),
 %searchNearestRiskMonstruous%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 expand2(Parent,PathsoFar,ChildStates):-
- findall([Child|PathsoFar],operator2(Parent,Child),ChildStates).
+ setof([Child|PathsoFar],operator2(Parent,Child),ChildStates).
 
 riskMonstruous2((X,Y)):-riskMonstruous(X,Y);monstruous(X,Y).
 
 operator2(Parent,Child):-
  voisin(Parent,Child),
- (   \+riskMonstruous2(Child)->
- caseCovered2(Child);!).
+ (riskMonstruous2(Child)->!;
+ caseCovered2(Child)).
 
 %Search the riskMonstruous the nearest
 %STOP criteria: si j'arrive sur une case riskMonstruous
@@ -508,17 +495,23 @@ searchNearestRiskMonstruous([[State|Path]|_],[State|Path]):-
 % et ajoute � Solution
 searchNearestRiskMonstruous([[State|Path]|RestFSet],Solution):-
 	writeln(2+State),
+	(no_risk(_,_)-> false;!),
  caseCovered2(State),
  writeln(State+"caseRisqueMonstruous non Trouvee"),
  expand2(State,[State|Path],ChildStates),
+ \+(ChildStates=[]),
  prune_l(ChildStates,P_ChildStates),
+ \+(P_ChildStates=[]),
  append(RestFSet,P_ChildStates,NewFSet),
+ \+(NewFSet=[]),
   writeln("Recherche dans: "+NewFSet),
  searchNearestRiskMonstruous(NewFSet,Solution).
 
 %Je passe au traitement de la queue dans le cas ou �a coince
 searchNearestRiskMonstruous([_|RestFSet],Solution):-
 	writeln(3),
+	(no_risk(_,_)-> false;!),
+	\+([_|RestFSet]=[]),
  searchNearestRiskMonstruous(RestFSet,Solution).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
