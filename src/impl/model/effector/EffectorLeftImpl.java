@@ -25,5 +25,6 @@ public class EffectorLeftImpl implements Effector
 				this.character.getCurrentCase().getCoords()[1]-1};
 		CaseCharacter newCase=new CaseCharacterImpl(newCoord, false, false, false, false, false, false, new HashMap<DirectionEnum, Boolean>());
 		this.character.setCurrentCase(newCase);
+		this.character.setScore(this.character.getScore()-1);
 	}
 }

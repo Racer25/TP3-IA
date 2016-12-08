@@ -89,18 +89,15 @@ public class CaseControllerImpl implements CaseController, Observer
 
 		} else if (arg0 instanceof CaseMapImpl)
 		{
-			System.out.println("monstruous1");
 			if (arg1 instanceof Object[])
 			{
 				Object[] object = (Object[]) arg1;
 				if (object[0].equals("monstruous"))
 				{
-					if (!((boolean) object[1]))
-					{
-						imageCaillou();
-						((CaseViewImpl) maCaseView).setMonstruous(false);
-						((CaseViewImpl) maCaseView).revalidate();
-					}
+					imageCaillou();
+					((CaseViewImpl) maCaseView).setMonstruous(false);
+					((CaseViewImpl) maCaseView).revalidate();
+					((CaseViewImpl) maCaseView).repaint();
 				}
 			}
 		}
