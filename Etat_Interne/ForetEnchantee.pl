@@ -388,11 +388,12 @@ caseUnknownNotRisky((X,Y)):-
 	\+monstruous(X,Y).
 
 expand(Parent,PathsoFar,ChildStates):-
- findall([Child|PathsoFar],operator(Parent,Child),ChildStates).
+ setof([Child|PathsoFar],operator(Parent,Child),ChildStates).
 
 caseCovered2((X,Y)):-caseCovered(X,Y).
 
 operator(Parent,Child):-
+writeln("Parent: "+Parent+", Child: "+Child),
  voisin(Parent, Child),
  %(caseUnknownNotRisky(Child);caseCovered2(Child))
  (caseUnknownNotRisky(Child)->
@@ -415,7 +416,11 @@ searchSureWay([[State|Path]|RestFSet],Solution):-
  writeln("CONTINUE ;)"),
  writeln([[State|Path]|RestFSet]),
  expand(State,[State|Path],ChildStates),
+ writeln(ChildStates),
+ \+(ChildStates=[]),
  prune_l(ChildStates,P_ChildStates),
+ writeln(P_ChildStates),
+ \+(P_ChildStates=[]),
  append(RestFSet,P_ChildStates,NewFSet),
  \+(NewFSet=[]),
  searchSureWay(NewFSet,Solution).
