@@ -53,6 +53,7 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 					//The Character warned me that the level is complete or not
 					if((Boolean)object[1])
 					{
+						System.out.println("Level Complete!!!!!!!");
 						//The Character warned me that the level is complete
 						this.level++;
 						generateLevel();

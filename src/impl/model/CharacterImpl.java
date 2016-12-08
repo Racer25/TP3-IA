@@ -68,11 +68,11 @@ public class CharacterImpl extends Observable implements Character, Runnable
 			{
 				e.printStackTrace();
 			}
-			while(this.alive && this.active)
+			while(this.alive && this.active && !this.levelComplete)
 			{
 				try
 				{
-					Thread.sleep(2000);
+					Thread.sleep(1000);
 				} 
 				catch (InterruptedException e)
 				{

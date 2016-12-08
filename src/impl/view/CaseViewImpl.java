@@ -40,21 +40,25 @@ public class CaseViewImpl extends JPanel implements CaseView
 	private boolean windy;
 	
 	private JLabel label;
+	private JLabel rock;
 
 	public CaseViewImpl(CaseMap caseMap, CharacterViewImpl characterView)
 	{
 		//Creation with caseMap attributes
-		fall = caseMap.isFall();
-		monstruous = caseMap.isMonstruous();
-		portal = caseMap.isPortalPoint();
-		windy = caseMap.isWindy();
+		this.fall = caseMap.isFall();
+		this.monstruous = caseMap.isMonstruous();
+		this.portal = caseMap.isPortalPoint();
+		this.windy = caseMap.isWindy();
 		this.characterView = characterView;
 		this.setBackground(Color.WHITE);
 		this.setSize(50, 50);
 		this.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));	
-		label = new JLabel(this.characterView);
+		this.label = new JLabel(this.characterView);
+		this.label.setVisible(false);
 		this.add(label);
-		label.setVisible(false);
+		this.rock = new JLabel(new ImageIcon("img/rock.png"));
+		this.rock.setVisible(false);
+		this.add(this.rock);
 	}
 
 	@Override
@@ -112,6 +116,16 @@ public class CaseViewImpl extends JPanel implements CaseView
 	
 	public void setMonstruous(boolean monstruous) {
 		this.monstruous = monstruous;
+	}
+	
+	public JLabel getRock()
+	{
+		return rock;
+	}
+
+	public void setRock(JLabel rock)
+	{
+		this.rock = rock;
 	}
 
 }

@@ -28,6 +28,7 @@ public class CaseControllerImpl implements CaseController, Observer
 	private CharacterImpl character;
 	private AdventureMapImpl adventureMap;
 	private CharacterViewImpl characterView;
+	
 
 	public CaseControllerImpl(CharacterViewImpl characterView, AdventureMapImpl adventureMap, CaseMap maCase,
 			CaseView maCaseview, CharacterImpl character)
@@ -116,8 +117,7 @@ public class CaseControllerImpl implements CaseController, Observer
 			{
 				try
 				{
-					JLabel rock = new JLabel(new ImageIcon("img/rock.png"));
-					((CaseViewImpl) maCaseView).add(rock);
+					maCaseView.getRock().setVisible(true);
 					((CaseViewImpl) maCaseView).revalidate();
 					try
 					{
@@ -126,9 +126,8 @@ public class CaseControllerImpl implements CaseController, Observer
 					{
 						e.printStackTrace();
 					}
-					rock.setVisible(false);
+					maCaseView.getRock().setVisible(false);
 					((CaseViewImpl) maCaseView).revalidate();
-
 				} catch (Exception ex)
 				{
 					ex.printStackTrace();

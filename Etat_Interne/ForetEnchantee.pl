@@ -131,9 +131,7 @@ update_internal_state(CooXCurrentCase, CooYCurrentCase, Putrid, Windy, BordureDr
 	    ;	!)),
 
 	%Mise a jours des bordures pour la case actuelle
-	((BordureDroite; BordureGauche; BordureHaut; BordureBas)
-	->  asserta(border(CooXCurrentCase, CooYCurrentCase, BordureHaut, BordureDroite, BordureBas, BordureGauche))
-	;   !),
+	asserta(border(CooXCurrentCase, CooYCurrentCase, BordureHaut, BordureDroite, BordureBas, BordureGauche)),
 
 	 %Ajout des voisins
 	 (\+BordureHaut
@@ -154,14 +152,7 @@ update_internal_state(CooXCurrentCase, CooYCurrentCase, Putrid, Windy, BordureDr
 	(\+BordureGauche
 	->NewCoord4 is CooYCurrentCase-1,
 	  asserta(voisin((CooXCurrentCase,CooYCurrentCase),(CooXCurrentCase,NewCoord4)))
-	;  !),
-
-	%Ajout de la case actuelle dans les cases parcourues
-	asserta(caseCovered(CooXCurrentCase, CooYCurrentCase)),
-	(currentCase(_,_)
-	->  retract(currentCase(_,_))
-	;   !),
-	asserta(currentCase(CooXCurrentCase, CooYCurrentCase)).
+	;  !).
 
 
 
@@ -402,32 +393,37 @@ expand(Parent,PathsoFar,ChildStates):-
 caseCovered2((X,Y)):-caseCovered(X,Y).
 
 operator(Parent,Child):-
- voisin(Parent,Child),
- (\+caseUnknownNotRisky(Child)->
-    caseCovered2(Child)
- ;   ! ).
+ voisin(Parent, Child),
+ %(caseUnknownNotRisky(Child);caseCovered2(Child))
+ (caseUnknownNotRisky(Child)->
+      !;
+      caseCovered2(Child)).
 
 %BFS2
 %STOP criteria: si j'arrive sur une case inconnue non risqu�e
 searchSureWay([[State|Path]|_],[State|Path]):-
-	writeln(1),
+writeln("State: "+State),
+	writeln("STOP ESSAI"),
  caseUnknownNotRisky(State),
- writeln(State+"case Inconnue Non Risquee Trouvee").
+ writeln("STOP ;)").
 
 % Continue criteria si je ne viens pas d'ajouter une case inconnue non
 % risqu�e et ajoute � Solution
 searchSureWay([[State|Path]|RestFSet],Solution):-
- writeln(2),
- \+ caseUnknownNotRisky(State),
- writeln(State+caseInconnueNonRisqueeNonTrouvee),
+ writeln("CONTINUE ESSAI"),
+ caseCovered2(State),
+ writeln("CONTINUE ;)"),
+ writeln([[State|Path]|RestFSet]),
  expand(State,[State|Path],ChildStates),
  prune_l(ChildStates,P_ChildStates),
  append(RestFSet,P_ChildStates,NewFSet),
+ \+(NewFSet=[]),
  searchSureWay(NewFSet,Solution).
 
 %Je passe au traitement de la queue dans le cas ou �a coince
 searchSureWay([_|RestFSet],Solution):-
-	writeln(3),
+	writeln("CA COINCE"),
+	\+([_|RestFSet]=[]),
  searchSureWay(RestFSet,Solution).
 
 %%%%%%%%%%%%%%%%%%%
@@ -448,7 +444,7 @@ riskMonstruous2((X,Y)):-riskMonstruous(X,Y),\+riskFall(X,Y).
 operator2(Parent,Child):-
  voisin(Parent,Child),
  (   \+riskMonstruous2(Child)->
- caseCovered2(Child);true).
+ caseCovered2(Child);!).
 
 %Search the riskMonstruous the nearest
 %STOP criteria: si j'arrive sur une case riskMonstruous
@@ -462,7 +458,7 @@ searchNearestRiskMonstruous([[State|Path]|_],[State|Path]):-
 % et ajoute � Solution
 searchNearestRiskMonstruous([[State|Path]|RestFSet],Solution):-
 	writeln(2+State),
- \+ riskMonstruous2(State),
+ caseCovered2(State),
  writeln(State+"caseRisqueMonstruous non Trouvee"),
  expand2(State,[State|Path],ChildStates),
  prune_l(ChildStates,P_ChildStates),
@@ -512,14 +508,16 @@ randomDirection(CooXCurrent, CooYCurrent,Liste2):-
 
 
 
-prune_l([],[]):-!.
+prune_l([],[]):-writeln("J'essaye 1"),!.
 
 prune_l([[State|Path]|RestChilds],[[State|Path]|RestPChilds]):-
+	writeln("J'essaye 2"),
   \+ member(State,Path),
   !,
   prune_l(RestChilds,RestPChilds).
 
 prune_l([_|RestChilds],RestPChilds):-
+	writeln("J'essaye 3"),
   prune_l(RestChilds,RestPChilds).
 
 %On convertit les coordonn�es en directions
