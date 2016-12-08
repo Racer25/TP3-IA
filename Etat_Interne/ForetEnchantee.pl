@@ -8,6 +8,7 @@
 :-dynamic(riskFall/2).
 :-dynamic(currentCase/2).
 :-dynamic(voisin/2).
+:-dynamic(no_risk/2).
 
 % -----------------------------------------------------------------------
 % Methodes externes
@@ -23,6 +24,9 @@ update_internal_state(CooXCurrentCase, CooYCurrentCase, Putrid, Windy, BordureDr
 	asserta(caseCovered(CooXCurrentCase, CooYCurrentCase)),
 	(currentCase(_,_)
 	->  retract(currentCase(_,_))
+	;   !),
+	(no_risk(CooXCurrentCase,CooYCurrentCase)
+	->  retract(no_risk(CooXCurrentCase,CooYCurrentCase))
 	;   !),
 	asserta(currentCase(CooXCurrentCase, CooYCurrentCase)),
 
@@ -129,6 +133,30 @@ update_internal_state(CooXCurrentCase, CooYCurrentCase, Putrid, Windy, BordureDr
 	    ->	retract(riskFall(CooXCurrentCase, VoisinGauche)),
 	        update_risk_not_windy_case(CooXCurrentCase, VoisinGauche)
 	    ;	!)),
+	    
+	%Mise a jour de la liste des case non connues sans risque :)
+	((\+Windy,\+Putrid) ->
+		(\+BordureHaut
+	     ->	(\+caseCovered(VoisinHaut, CooYCurrentCase)
+		->  asserta(no_risk(VoisinHaut, CooYCurrentCase))
+		;    !)
+	    ;   !),
+	    (\+BordureDroite
+	     ->	(\+caseCovered(CooXCurrentCase, VoisinDroite)
+		->  asserta(no_risk(CooXCurrentCase, VoisinDroite))
+		;    !)
+	    ;    !),
+	    (\+BordureBas
+	     ->	(\+caseCovered(VoisinBas, CooYCurrentCase)
+		->  asserta(no_risk(VoisinBas, CooYCurrentCase))
+		;    !)
+	    ;    !),
+	    (\+BordureGauche
+	     ->	(\+caseCovered(CooXCurrentCase, VoisinGauche)
+		->  asserta(no_risk(CooXCurrentCase, VoisinGauche))
+		;    !)
+	    ;    !)
+	    ;    !),
 
 	%Mise a jours des bordures pour la case actuelle
 	asserta(border(CooXCurrentCase, CooYCurrentCase, BordureHaut, BordureDroite, BordureBas, BordureGauche)),
@@ -167,7 +195,8 @@ raz_internal_state():-
 	retractall(riskMonstruous(_,_)),
 	retractall(riskFall(_,_)),
 	retractall(currentCase(_,_)),
-	retractall(voisin(_,_)).
+	retractall(voisin(_,_)),
+	retractall(no_risk(_,_)).
 
 % Methode dont le but est de prendre une decision sur les actions a
 % faire. Elle retourne une liste d'action � effectuer et l'envoie a
@@ -411,6 +440,10 @@ writeln("State: "+State),
 % Continue criteria si je ne viens pas d'ajouter une case inconnue non
 % risqu�e et ajoute � Solution
 searchSureWay([[State|Path]|RestFSet],Solution):-
+(no_risk(_,_)
+-> !;
+false),
+ \+([[State|Path]|RestFSet]=[]),
  writeln("CONTINUE ESSAI"),
  caseCovered2(State),
  writeln("CONTINUE ;)"),
@@ -427,6 +460,11 @@ searchSureWay([[State|Path]|RestFSet],Solution):-
 
 %Je passe au traitement de la queue dans le cas ou �a coince
 searchSureWay([_|RestFSet],Solution):-
+(no_risk(_,_)
+-> !;
+writeln("Aucun voisin sans risque"),
+false),
+ \+([_|RestFSet]=[]),
 	writeln("CA COINCE"),
 	\+([_|RestFSet]=[]),
  searchSureWay(RestFSet,Solution).
