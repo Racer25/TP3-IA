@@ -23,10 +23,10 @@ update_internal_state(CooXCurrentCase, CooYCurrentCase, Putrid, Windy, BordureDr
 	%Ajout de la case actuelle dans les cases parcourues
 	asserta(caseCovered(CooXCurrentCase, CooYCurrentCase)),
 	(currentCase(_,_)
-	->  retract(currentCase(_,_))
+	->  retractall(currentCase(_,_))
 	;   !),
 	(no_risk(CooXCurrentCase,CooYCurrentCase)
-	->  retract(no_risk(CooXCurrentCase,CooYCurrentCase))
+	->  retractall(no_risk(CooXCurrentCase,CooYCurrentCase))
 	;   !),
 	asserta(currentCase(CooXCurrentCase, CooYCurrentCase)),
 
@@ -61,31 +61,31 @@ update_internal_state(CooXCurrentCase, CooYCurrentCase, Putrid, Windy, BordureDr
 	    VoisinBas is CooXCurrentCase+1,
 	    VoisinGauche is CooYCurrentCase-1,
 	    (	riskMonstruous(VoisinHaut,CooYCurrentCase)
-	    ->	retract(riskMonstruous(VoisinHaut,CooYCurrentCase)),
+	    ->	retractall(riskMonstruous(VoisinHaut,CooYCurrentCase)),
 	        update_risk_not_putrid_case(VoisinHaut, CooYCurrentCase)
 	    ;	!),
 	    (	 riskMonstruous(CooXCurrentCase, VoisinDroite)
-	    ->	retract( riskMonstruous(CooXCurrentCase, VoisinDroite)),
+	    ->	retractall( riskMonstruous(CooXCurrentCase, VoisinDroite)),
 	        update_risk_not_putrid_case(CooXCurrentCase, VoisinDroite)
 	    ;	!),
 	    (	riskMonstruous(VoisinBas, CooYCurrentCase)
-	    ->	retract( riskMonstruous(VoisinBas, CooYCurrentCase)),
+	    ->	retractall( riskMonstruous(VoisinBas, CooYCurrentCase)),
 	        update_risk_not_putrid_case(VoisinBas, CooYCurrentCase)
 	    ;	!),
 	    (	riskMonstruous(CooXCurrentCase, VoisinGauche)
-	    ->	retract(riskMonstruous(CooXCurrentCase, VoisinGauche)),
+	    ->	retractall(riskMonstruous(CooXCurrentCase, VoisinGauche)),
 	        update_risk_not_putrid_case(CooXCurrentCase, VoisinGauche)
 	    ;	!)),
 
 	%Si la case actuelle avait des risques ou etait monstrueuse alors on supprime ces risques (car etant sur cette case et n'etant pas mort cette case n'etait pas a risque.
 	(   riskMonstruous(CooXCurrentCase, CooYCurrentCase)
-	->  retract(riskMonstruous(CooXCurrentCase, CooYCurrentCase))
+	->  retractall(riskMonstruous(CooXCurrentCase, CooYCurrentCase))
 	;   !),
 	(   riskFall(CooXCurrentCase, CooYCurrentCase)
-	->  retract(riskFall(CooXCurrentCase, CooYCurrentCase))
+	->  retractall(riskFall(CooXCurrentCase, CooYCurrentCase))
 	;   !),
 	(   monstruous(CooXCurrentCase,CooYCurrentCase)
-	->  retract(monstruous(CooXCurrentCase,CooYCurrentCase))
+	->  retractall(monstruous(CooXCurrentCase,CooYCurrentCase))
 	;   !),
 
 	%Ajout de la case si la case est venteuse, si celle-ci a des voisins et qu'ils n'ont pas encore ete d�couverts alors elle lance update_risk_windy_case.
@@ -118,19 +118,19 @@ update_internal_state(CooXCurrentCase, CooYCurrentCase, Putrid, Windy, BordureDr
 	    VoisinBas is CooXCurrentCase+1,
 	    VoisinGauche is CooYCurrentCase-1,
 	    (	riskFall(VoisinHaut,CooYCurrentCase)
-	    ->	retract(riskFall(VoisinHaut,CooYCurrentCase)),
+	    ->	retractall(riskFall(VoisinHaut,CooYCurrentCase)),
 	        update_risk_not_windy_case(VoisinHaut, CooYCurrentCase)
 	    ;	!),
 	    (	 riskFall(CooXCurrentCase, VoisinDroite)
-	    ->	retract( riskFall(CooXCurrentCase, VoisinDroite)),
+	    ->	retractall( riskFall(CooXCurrentCase, VoisinDroite)),
 	        update_risk_not_windy_case(CooXCurrentCase, VoisinDroite)
 	    ;	!),
 	    (	riskFall(VoisinBas, CooYCurrentCase)
-	    ->	retract( riskFall(VoisinBas, CooYCurrentCase)),
+	    ->	retractall( riskFall(VoisinBas, CooYCurrentCase)),
 	        update_risk_not_windy_case(VoisinBas, CooYCurrentCase)
 	    ;	!),
 	    (	riskFall(CooXCurrentCase, VoisinGauche)
-	    ->	retract(riskFall(CooXCurrentCase, VoisinGauche)),
+	    ->	retractall(riskFall(CooXCurrentCase, VoisinGauche)),
 	        update_risk_not_windy_case(CooXCurrentCase, VoisinGauche)
 	    ;	!)),
 
@@ -329,16 +329,16 @@ detection_monster(CooX, CooY):-
 	;   !),
 	(   Compteur==1
 	->  (riskMonstruous(VoisinHaut,CooY)
-	    ->	retract(riskMonstruous(VoisinHaut,CooY)),
+	    ->	retractall(riskMonstruous(VoisinHaut,CooY)),
 		asserta(monstruous(VoisinHaut, CooY))
 	    ;	(riskMonstruous(CooX, VoisinDroite)
-		->  retract(riskMonstruous(CooX, VoisinDroite)),
+		->  retractall(riskMonstruous(CooX, VoisinDroite)),
 		    asserta(monstruous(CooX, VoisinDroite))
 		;   (riskMonstruous(VoisinBas, CooY)
-		      ->  retract(riskMonstruous(VoisinBas,CooY)),
+		      ->  retractall(riskMonstruous(VoisinBas,CooY)),
 			  asserta(monstruous(VoisinBas,CooY))
 		      ;	  (riskMonstruous(CooX, VoisinGauche)
-			  ->  retract(riskMonstruous(CooX, VoisinGauche)),
+			  ->  retractall(riskMonstruous(CooX, VoisinGauche)),
 			      asserta(monstruous(CooX, VoisinGauche))
 			  ;   !))))
 	;   !).
@@ -395,16 +395,16 @@ detection_fall(CooX, CooY):-
 	;   !),
 	(   Compteur==1
 	->  (riskFall(VoisinHaut,CooY)
-	    ->	retract(riskFall(VoisinHaut,CooY)),
+	    ->	retractall(riskFall(VoisinHaut,CooY)),
 		asserta(fall(VoisinHaut, CooY))
 	    ;	(riskFall(CooX, VoisinDroite)
-		->  retract(riskFall(CooX, VoisinDroite)),
+		->  retractall(riskFall(CooX, VoisinDroite)),
 		    asserta(fall(CooX, VoisinDroite))
 		;   (riskFall(VoisinBas, CooY)
-		      ->  retract(riskFall(VoisinBas,CooY)),
+		      ->  retractall(riskFall(VoisinBas,CooY)),
 			  asserta(fall(VoisinBas,CooY))
 		      ;	  (riskFall(CooX, VoisinGauche)
-			  ->  retract(riskFall(CooX, VoisinGauche)),
+			  ->  retractall(riskFall(CooX, VoisinGauche)),
 			      asserta(fall(CooX, VoisinGauche))
 			  ;   !))))
 	;   !).
