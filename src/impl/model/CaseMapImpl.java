@@ -3,6 +3,8 @@ package impl.model;
 import java.util.HashMap;
 import java.util.Observable;
 
+import javax.swing.plaf.synth.SynthSeparatorUI;
+
 import contract.model.CaseMap;
 import utils.DirectionEnum;
 
@@ -60,8 +62,6 @@ public class CaseMapImpl extends Observable implements CaseMap
 	public void setPutrid(boolean putrid)
 	{
 		this.putrid = putrid;
-		notifyObservers(new Object[]{"putrid", putrid});
-		setChanged();
 	}
 	public boolean isMonstruous()
 	{
@@ -69,6 +69,7 @@ public class CaseMapImpl extends Observable implements CaseMap
 	}
 	public void setMonstruous(boolean monstruous)
 	{
+		System.out.println("SetMonster **************************************");
 		this.monstruous = monstruous;
 		notifyObservers(new Object[]{"monstruous", monstruous});
 		setChanged();

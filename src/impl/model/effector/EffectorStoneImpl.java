@@ -20,6 +20,7 @@ public class EffectorStoneImpl implements Effector
 	public void doIt()
 	{
 		CaseMap caseAttacked = null;
+		this.character.setScore(this.character.getScore()-10);
 		int lineCurrentCase=character.getCurrentCase().getCoords()[0]+map.getChangeReference()[0];
 		int columnCurrentCase=character.getCurrentCase().getCoords()[1]+map.getChangeReference()[1];
 		//case attacked depends on the character orientation!!!
@@ -55,6 +56,7 @@ public class EffectorStoneImpl implements Effector
              }
 		 if(caseAttacked!=null)
 		 {
+			 //caseAttacked.setMonstruous(true); 
 			 caseAttacked.setMonstruous(false);
 		 }
 	}
