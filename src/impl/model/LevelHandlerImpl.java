@@ -71,7 +71,6 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 				}
 				else if(object[0].equals("case"))
 				{
-					character.setScore((int) (character.getScore()-1));
 					System.out.println("je change de case!");
 					CaseCharacter newCaseCharacter=(CaseCharacter) object[1];
 					//We take the new CaseMap for sensors

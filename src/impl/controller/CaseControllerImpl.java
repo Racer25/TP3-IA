@@ -46,6 +46,8 @@ public class CaseControllerImpl implements CaseController, Observer
 	@Override
 	public void update(Observable arg0, Object arg1)
 	{
+		System.out.println("***********************Update*****************************************");
+		
 		if (arg0 instanceof CharacterImpl)
 		{
 			if (arg1 instanceof Object[])
@@ -87,21 +89,15 @@ public class CaseControllerImpl implements CaseController, Observer
 				}
 			}
 
-		} else if (arg0 instanceof CaseMapImpl)
+		} 
+		else if (arg0 instanceof CaseMapImpl || arg0 instanceof CaseMap)
 		{
-			if (arg1 instanceof Object[])
-			{
-				Object[] object = (Object[]) arg1;
-				if (object[0].equals("monstruous"))
-				{
-					imageCaillou();
-					((CaseViewImpl) maCaseView).setMonstruous(false);
-					((CaseViewImpl) maCaseView).revalidate();
-					((CaseViewImpl) maCaseView).repaint();
-				}
-			}
+			System.out.println("imagecaillou*****************************************");
+			imageCaillou();
+			((CaseViewImpl) maCaseView).setMonstruous(false);
+			((CaseViewImpl) maCaseView).revalidate();
+			((CaseViewImpl) maCaseView).repaint();
 		}
-
 	}
 
 	public void imageCaillou()
