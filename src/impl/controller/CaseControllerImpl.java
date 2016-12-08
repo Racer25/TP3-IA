@@ -28,7 +28,6 @@ public class CaseControllerImpl implements CaseController, Observer
 	private CharacterImpl character;
 	private AdventureMapImpl adventureMap;
 	private CharacterViewImpl characterView;
-	
 
 	public CaseControllerImpl(CharacterViewImpl characterView, AdventureMapImpl adventureMap, CaseMap maCase,
 			CaseView maCaseview, CharacterImpl character)
