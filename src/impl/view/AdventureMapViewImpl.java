@@ -72,7 +72,6 @@ public class AdventureMapViewImpl extends JPanel implements AdventureMapView, Ob
 	{
 		// TODO Auto-generated method stub
 		
-		
 		this.myMap = (AdventureMap) arg1;
 		this.removeAll();
 		this.validate();

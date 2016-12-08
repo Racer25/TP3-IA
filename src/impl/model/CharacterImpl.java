@@ -150,7 +150,7 @@ public class CharacterImpl extends Observable implements Character, Runnable
 					actions.add(2);
 					*/
 					//Realisation des actions tant qu'il est vivant
-					int k=0;
+					/*int k=0;
 					while(k<actions.size() && this.alive && !this.levelComplete && this.active)
 					{
 						System.out.println("action: "+actions.get(k));
@@ -209,9 +209,9 @@ public class CharacterImpl extends Observable implements Character, Runnable
 							e.printStackTrace();
 						}
 						k++;
-					}
+					}*/
 					//this.effectorUp.doIt();
-					//this.effectorStone.doIt();
+					this.effectorStone.doIt();
 				}
 			}
 

@@ -1,5 +1,6 @@
 package impl.controller;
 
+import java.awt.Image;
 import java.io.File;
 import java.util.Observable;
 import java.util.Observer;
@@ -96,7 +97,9 @@ public class CaseControllerImpl implements CaseController, Observer
 				{
 					if(!((boolean) object[1]))
 					{
-						imageCaillou();		
+						imageCaillou();
+						((CaseViewImpl) maCaseView).setMonstruous(false);
+						((CaseViewImpl) maCaseView).revalidate();
 						((CaseViewImpl) maCaseView).repaint();
 					}
 				}
@@ -248,4 +251,6 @@ public class CaseControllerImpl implements CaseController, Observer
 		new Thread (son).start();
 	
 	}
+	
+	
 }

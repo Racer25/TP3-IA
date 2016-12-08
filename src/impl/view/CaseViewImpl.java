@@ -33,6 +33,7 @@ public class CaseViewImpl extends JPanel implements CaseView
 	private boolean fall;
 	private boolean portal;
 	private boolean character;
+	private CharacterViewImpl characterView;
 	
 	//Combinable attributes
 	private boolean putrid;
@@ -47,10 +48,11 @@ public class CaseViewImpl extends JPanel implements CaseView
 		monstruous = caseMap.isMonstruous();
 		portal = caseMap.isPortalPoint();
 		windy = caseMap.isWindy();
+		this.characterView = characterView;
 		this.setBackground(Color.WHITE);
 		this.setSize(50, 50);
 		this.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));	
-		label = new JLabel(characterView);
+		label = new JLabel(this.characterView);
 		this.add(label);
 		label.setVisible(false);
 	}
@@ -106,6 +108,10 @@ public class CaseViewImpl extends JPanel implements CaseView
 	public void setCharacterVisible(boolean visible)
 	{
 		label.setVisible(visible);
+	}
+	
+	public void setMonstruous(boolean monstruous) {
+		this.monstruous = monstruous;
 	}
 
 }
