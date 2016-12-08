@@ -46,7 +46,6 @@ public class CaseControllerImpl implements CaseController, Observer
 	@Override
 	public void update(Observable arg0, Object arg1)
 	{
-		System.out.println("***********************Update*****************************************");
 		
 		if (arg0 instanceof CharacterImpl)
 		{
@@ -92,7 +91,6 @@ public class CaseControllerImpl implements CaseController, Observer
 		} 
 		else if (arg0 instanceof CaseMapImpl || arg0 instanceof CaseMap)
 		{
-			System.out.println("imagecaillou*****************************************");
 			imageCaillou();
 			((CaseViewImpl) maCaseView).setMonstruous(false);
 			((CaseViewImpl) maCaseView).revalidate();

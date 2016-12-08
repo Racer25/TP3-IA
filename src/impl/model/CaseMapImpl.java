@@ -69,7 +69,6 @@ public class CaseMapImpl extends Observable implements CaseMap
 	}
 	public void setMonstruous(boolean monstruous)
 	{
-		System.out.println("SetMonster **************************************");
 		this.monstruous = monstruous;
 		notifyObservers(new Object[]{"monstruous", monstruous});
 		setChanged();
