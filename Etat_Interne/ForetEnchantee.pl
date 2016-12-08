@@ -133,7 +133,7 @@ update_internal_state(CooXCurrentCase, CooYCurrentCase, Putrid, Windy, BordureDr
 	    ->	retract(riskFall(CooXCurrentCase, VoisinGauche)),
 	        update_risk_not_windy_case(CooXCurrentCase, VoisinGauche)
 	    ;	!)),
-	    
+
 	%Mise a jour de la liste des case non connues sans risque :)
 	((\+Windy,\+Putrid) ->
 		(\+BordureHaut
@@ -159,27 +159,32 @@ update_internal_state(CooXCurrentCase, CooYCurrentCase, Putrid, Windy, BordureDr
 	    ;    !),
 
 	%Mise a jours des bordures pour la case actuelle
-	asserta(border(CooXCurrentCase, CooYCurrentCase, BordureHaut, BordureDroite, BordureBas, BordureGauche)),
+	(\+border(CooXCurrentCase, CooYCurrentCase, BordureHaut, BordureDroite, BordureBas, BordureGauche)->
+	asserta(border(CooXCurrentCase, CooYCurrentCase, BordureHaut, BordureDroite, BordureBas, BordureGauche));!),
 
 	 %Ajout des voisins
 	 (\+BordureHaut
 	 ->NewCoord1 is CooXCurrentCase-1,
-	   asserta(voisin((CooXCurrentCase,CooYCurrentCase),(NewCoord1,CooYCurrentCase)))
+	 (\+voisin((CooXCurrentCase,CooYCurrentCase),(NewCoord1,CooYCurrentCase))->
+	 asserta(voisin((CooXCurrentCase,CooYCurrentCase),(NewCoord1,CooYCurrentCase)));!)
 	 ;   !),
 
 	 (\+BordureDroite
 	 ->NewCoord2 is CooYCurrentCase+1,
-	   asserta(voisin((CooXCurrentCase,CooYCurrentCase),(CooXCurrentCase,NewCoord2)))
+	 (\+voisin((CooXCurrentCase,CooYCurrentCase),(CooXCurrentCase,NewCoord2))->
+	 asserta(voisin((CooXCurrentCase,CooYCurrentCase),(CooXCurrentCase,NewCoord2)));!)
 	 ;   !),
 
 	 (\+BordureBas
 	 ->NewCoord3 is CooXCurrentCase+1,
-	   asserta(voisin((CooXCurrentCase,CooYCurrentCase),(NewCoord3,CooYCurrentCase)))
+	 (\+voisin((CooXCurrentCase,CooYCurrentCase),(NewCoord3,CooYCurrentCase))->
+	 asserta(voisin((CooXCurrentCase,CooYCurrentCase),(NewCoord3,CooYCurrentCase)));!)
 	 ;  !),
 
 	(\+BordureGauche
 	->NewCoord4 is CooYCurrentCase-1,
-	  asserta(voisin((CooXCurrentCase,CooYCurrentCase),(CooXCurrentCase,NewCoord4)))
+	(\+voisin((CooXCurrentCase,CooYCurrentCase),(CooXCurrentCase,NewCoord4))->
+	asserta(voisin((CooXCurrentCase,CooYCurrentCase),(CooXCurrentCase,NewCoord4)));!)
 	;  !).
 
 
@@ -421,6 +426,8 @@ expand(Parent,PathsoFar,ChildStates):-
 
 caseCovered2((X,Y)):-caseCovered(X,Y).
 
+no_risk2((X,Y)):-no_risk(X,Y).
+
 operator(Parent,Child):-
 writeln("Parent: "+Parent+", Child: "+Child),
  voisin(Parent, Child),
@@ -462,7 +469,7 @@ false),
 searchSureWay([_|RestFSet],Solution):-
 (no_risk(_,_)
 -> !;
-writeln("Aucun voisin sans risque"),
+!,
 false),
  \+([_|RestFSet]=[]),
 	writeln("CA COINCE"),
@@ -482,7 +489,7 @@ false),
 expand2(Parent,PathsoFar,ChildStates):-
  findall([Child|PathsoFar],operator2(Parent,Child),ChildStates).
 
-riskMonstruous2((X,Y)):-riskMonstruous(X,Y),\+riskFall(X,Y).
+riskMonstruous2((X,Y)):-riskMonstruous(X,Y);monstruous(X,Y).
 
 operator2(Parent,Child):-
  voisin(Parent,Child),
@@ -551,7 +558,7 @@ randomDirection(CooXCurrent, CooYCurrent,Liste2):-
 
 
 
-prune_l([],[]):-writeln("J'essaye 1"),!.
+prune_l([],[]):-!.
 
 prune_l([[State|Path]|RestChilds],[[State|Path]|RestPChilds]):-
 	writeln("J'essaye 2"),
