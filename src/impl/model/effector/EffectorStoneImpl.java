@@ -56,7 +56,7 @@ public class EffectorStoneImpl implements Effector
              }
 		 if(caseAttacked!=null)
 		 {
-			 caseAttacked.setMonstruous(true); 
+			 //caseAttacked.setMonstruous(true); 
 			 caseAttacked.setMonstruous(false);
 		 }
 	}
