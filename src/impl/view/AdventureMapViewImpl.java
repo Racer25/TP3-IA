@@ -37,6 +37,7 @@ public class AdventureMapViewImpl extends JPanel implements AdventureMapView, Ob
 		this.myMap = myMap;
 		this.setLayout(new GridLayout(this.myMap.getTaille(), this.myMap.getTaille()));
 		this.casesView=new CaseView[this.myMap.getTaille()][this.myMap.getTaille()];
+		
 		this.caseControllers=new ArrayList<CaseController>();
 		for(int i=0; i<this.myMap.getTaille(); i++)
 		{
@@ -70,14 +71,21 @@ public class AdventureMapViewImpl extends JPanel implements AdventureMapView, Ob
 	@Override
 	public void update(Observable arg0, Object arg1) 
 	{
-		// TODO Auto-generated method stub
-		
 		this.myMap = (AdventureMap) arg1;
 		this.removeAll();
 		this.validate();
 		
 		this.setLayout(new GridLayout(this.myMap.getTaille(), this.myMap.getTaille()));
 		this.casesView=new CaseView[this.myMap.getTaille()][this.myMap.getTaille()];
+		
+		//Désactivation ancien caseController
+		for(CaseController caseController: this.caseControllers)
+		{
+			character.deleteObserver((CaseControllerImpl) caseController);
+		}
+		
+		
+		
 		this.caseControllers=new ArrayList<CaseController>();
 		for(int i=0; i<this.myMap.getTaille(); i++)
 		{
