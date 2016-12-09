@@ -103,8 +103,8 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 	public void generateLevel()
 	{
 		int dim=this.level+2;
-		int nbFall=dim*dim*15/100;
-		int nbMonstruous=dim*dim*15/100;
+		int nbFall=dim*dim*8/100;
+		int nbMonstruous=dim*dim*8/100;
 		//Generate Map
 		this.generator.createMap(dim, nbFall, nbMonstruous);
 		/************************TEST************************/
