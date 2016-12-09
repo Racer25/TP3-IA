@@ -57,7 +57,7 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 						//The Character warned me that the level is complete
 						this.level++;
 						generateLevel();
-						character.setScore((int) (character.getScore()+10*Math.pow(generator.getAdventureMap().getTaille(),2)));
+						character.setScore((int) (character.getScore()+10*Math.pow(generator.getAdventureMap().getTaille()-1,2)));
 					}
 				}
 				else if(object[0].equals("alive"))
@@ -91,9 +91,9 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 					if(newCase.isFall() || newCase.isMonstruous())
 					{
 						System.out.println("Je meurs");
-						character.setScore((int) (character.getScore()-10*Math.pow(generator.getAdventureMap().getTaille(),2)));
 						this.character.setAlive(false);
 						generateLevel();
+						character.setScore((int) (character.getScore()-10*Math.pow(generator.getAdventureMap().getTaille()-1,2)));
 					}
 				}
 			}
