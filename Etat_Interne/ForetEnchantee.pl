@@ -495,7 +495,7 @@ searchNearestRiskMonstruous([[State|Path]|_],[State|Path]):-
 % et ajoute � Solution
 searchNearestRiskMonstruous([[State|Path]|RestFSet],Solution):-
 	writeln(2+State),
-	(no_risk(_,_)-> false;!),
+	((riskMonstruous(_,_);monstruous(_,_))-> !;false),
  caseCovered2(State),
  writeln(State+"caseRisqueMonstruous non Trouvee"),
  expand2(State,[State|Path],ChildStates),
@@ -510,7 +510,7 @@ searchNearestRiskMonstruous([[State|Path]|RestFSet],Solution):-
 %Je passe au traitement de la queue dans le cas ou �a coince
 searchNearestRiskMonstruous([_|RestFSet],Solution):-
 	writeln(3),
-	(no_risk(_,_)-> false;!),
+	((riskMonstruous(_,_);monstruous(_,_))-> !;false),
 	\+([_|RestFSet]=[]),
  searchNearestRiskMonstruous(RestFSet,Solution).
 
@@ -528,21 +528,26 @@ searchNearestRiskMonstruous([_|RestFSet],Solution):-
 randomDirection(CooXCurrent, CooYCurrent,Liste2):-
 	writeln("RANDOOOOOOOOOOM"),
 	Liste=[(CooXCurrent,CooYCurrent)],
-	VoisinHaut is CooXCurrent-1,
-	VoisinDroite is CooYCurrent+1,
-	VoisinBas is CooXCurrent+1,
-	VoisinGauche is CooYCurrent-1,
-	(   (border(CooXCurrent, CooYCurrent, false, _, _, _), \+caseCovered(VoisinHaut, CooYCurrent))
-	    ->	append(Liste,[(VoisinHaut, CooYCurrent)],ListeInter)
-	    ;	(   (border(CooXCurrent, CooYCurrent, _, false, _, _), \+caseCovered(CooXCurrent, VoisinDroite))
-		->  append(Liste, [(CooXCurrent, VoisinDroite)], ListeInter)
-		;   (   (border(CooXCurrent, CooYCurrent, _, _, false, _), \+caseCovered(VoisinBas, CooYCurrent))
-		    ->  append(Liste, [(VoisinBas, CooYCurrent)], ListeInter)
-		    ;	(   (border(CooXCurrent, CooYCurrent, _, _, false, _), \+caseCovered(CooXCurrent, VoisinGauche))
-		        ->  append(Liste, [(CooXCurrent, VoisinGauche)], ListeInter)
-			;   voisin((CooXCurrent, CooYCurrent), (NewCooX, NewCooY)),
-			    append(Liste, [(NewCooX, NewCooY)],ListeInter))))),
-	Liste2=ListeInter.
+	setof((XChild, YChild),voisin((CooXCurrent,CooYCurrent), (XChild, YChild)),ListeVoisinsPossibles),
+	length(ListeVoisinsPossibles,Length),
+	random_between(0,Length,RandomIndex),
+	nth0(RandomIndex,ListeVoisinsPossibles,Direction),
+	append(Liste,[Direction],Liste2).
+	%VoisinHaut is CooXCurrent-1,
+	%VoisinDroite is CooYCurrent+1,
+	%VoisinBas is CooXCurrent+1,
+	%VoisinGauche is CooYCurrent-1,
+	%(   (border(CooXCurrent, CooYCurrent, false, _, _, _), \+caseCovered(VoisinHaut, CooYCurrent))
+	%    ->	append(Liste,[(VoisinHaut, CooYCurrent)],ListeInter)
+	%    ;	(   (border(CooXCurrent, CooYCurrent, _, false, _, _), \+caseCovered(CooXCurrent, VoisinDroite))
+	%	->  append(Liste, [(CooXCurrent, VoisinDroite)], ListeInter)
+	%	;   (   (border(CooXCurrent, CooYCurrent, _, _, false, _), \+caseCovered(VoisinBas, CooYCurrent))
+	%	    ->  append(Liste, [(VoisinBas, CooYCurrent)], ListeInter)
+	%	    ;	(   (border(CooXCurrent, CooYCurrent, _, _, false, _), \+caseCovered(CooXCurrent, VoisinGauche))
+	%	        ->  append(Liste, [(CooXCurrent, VoisinGauche)], ListeInter)
+	%		;   voisin((CooXCurrent, CooYCurrent), (NewCooX, NewCooY)),
+	%		    append(Liste, [(NewCooX, NewCooY)],ListeInter))))),
+	%Liste2=ListeInter.
 
 
 %%%%%%%%%%%%%%%%%%%%%
