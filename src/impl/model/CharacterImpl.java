@@ -399,6 +399,8 @@ public class CharacterImpl extends Observable implements Character, Runnable
 	public void setActive(Boolean active)
 	{
 		this.active = active;
+		notifyObservers(new Object[]{"active", active});
+		setChanged();
 	}
 	
 	private Integer transformToInteger(String maString)
