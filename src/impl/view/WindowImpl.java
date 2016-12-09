@@ -23,12 +23,15 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import contract.controller.BoutonController;
 import contract.model.AdventureMap;
 import contract.model.AdventureMapGenerator;
 import impl.model.AdventureMapGeneratorImpl;
 import contract.view.LifeView;
 import contract.view.ScoreView;
 import contract.view.Window;
+import impl.controller.BoutonControllerImpl;
 import impl.controller.MoveButtonListenerImpl;
 import impl.model.AdventureMapImpl;
 import impl.model.CharacterImpl;
@@ -159,6 +162,8 @@ public class WindowImpl extends JFrame implements Window
 		JButton buttonMove=new JButton("MOVE");
 		buttonMove.addActionListener(new MoveButtonListenerImpl(character,myMap));
 		panelButton.add(buttonMove);
+		
+		BoutonController observerBouton = new BoutonControllerImpl(character,buttonMove);
 		
 		instructions.add(instructions1,instructions1Constraints);
 		instructions.add(instructions2,instructions2Constraints);
