@@ -105,10 +105,11 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 	{
 		int dim=this.level+2;
 		
-		int taux = new Random().nextInt(4) + 7;
+		int taux1 = new Random().nextInt(4) + 8;
+		int taux2 = new Random().nextInt(4) + 8;
 		
-		int nbFall=dim*dim*taux/100;
-		int nbMonstruous=dim*dim*taux/100;
+		int nbFall=dim*dim*taux1/100;
+		int nbMonstruous=dim*dim*taux2/100;
 		//Generate Map
 		this.generator.createMap(dim, nbFall, nbMonstruous);
 		/************************TEST************************/
