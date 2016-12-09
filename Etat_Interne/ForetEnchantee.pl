@@ -213,14 +213,14 @@ takeDecisions(Reponse):-
 	(   searchSureWay([[(CooX, CooY)]], SolutionSecure)
 	->  writeln("Chemin s�r trouv�"),
 	    length(SolutionSecure, LengthSolutionSecure),
-	    (	LengthSolutionSecure=<10
+	    (	LengthSolutionSecure=<11
 	    -> inverseur(SolutionSecure, ListeSecure),
 	       converter_coo_direction("Secure", ListeSecure,[],_,ListeFinale),
 	       Reponse=ListeFinale
 
 	    ; ( searchNearestRiskMonstruous([[(CooX, CooY)]],SolutionMonstruous)
 	      ->  length(SolutionMonstruous, LengthSolutionMonstruous),
-	          Calcul is LengthSolutionSecure-10-LengthSolutionMonstruous,
+	          Calcul is LengthSolutionSecure-11-LengthSolutionMonstruous,
 	         (	  Calcul>0
 	          ->   inverseur(SolutionMonstruous, ListeMonstruous),
 		       converter_coo_direction("Monster", ListeMonstruous, [], _, ListeFinale),

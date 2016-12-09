@@ -16,5 +16,5 @@ public interface Character
 	public CaseCharacter getCurrentCase();
 	public void setCurrentCase(CaseCharacter currentCase);
 	
-	public boolean consultPrologFile();
+	public void consultPrologFile();
 }

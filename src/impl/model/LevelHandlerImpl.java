@@ -14,7 +14,6 @@ import contract.model.CaseCharacter;
 import contract.model.CaseMap;
 import contract.model.LevelHandler;
 import impl.model.effector.EffectorDownImpl;
-import impl.model.effector.EffectorExitImpl;
 import impl.model.effector.EffectorLeftImpl;
 import impl.model.effector.EffectorRightImpl;
 import impl.model.effector.EffectorStoneImpl;
@@ -58,7 +57,7 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 						//The Character warned me that the level is complete
 						this.level++;
 						generateLevel();
-						character.setScore((int) (character.getScore()+10*Math.pow(generator.getAdventureMap().getTaille(),2)));
+						character.setScore((int) (character.getScore()+10*Math.pow(generator.getAdventureMap().getTaille()-1,2)));
 					}
 				}
 				else if(object[0].equals("alive"))
@@ -92,9 +91,9 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 					if(newCase.isFall() || newCase.isMonstruous())
 					{
 						System.out.println("Je meurs");
-						character.setScore((int) (character.getScore()-10*Math.pow(generator.getAdventureMap().getTaille(),2)));
 						this.character.setAlive(false);
 						generateLevel();
+						character.setScore((int) (character.getScore()-10*Math.pow(generator.getAdventureMap().getTaille()-1,2)));
 					}
 				}
 			}
@@ -167,7 +166,6 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 		this.character.setEffectorDown(new EffectorDownImpl(character));
 		this.character.setEffectorLeft(new EffectorLeftImpl(character));
 		this.character.setEffectorStone(new EffectorStoneImpl(character, this.generator.getAdventureMap()));
-		this.character.setEffectorExit(new EffectorExitImpl(character));
 	}
 	
 	public boolean consultPrologFile() {
