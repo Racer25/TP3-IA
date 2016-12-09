@@ -37,7 +37,9 @@ public class CharacterViewImpl extends ImageIcon implements Observer{
 			path = "img/steveleft.png";
 		}
 		Image image =  Toolkit.getDefaultToolkit().getImage(path);
+		
 		this.setImage(image);
+		
 	}
 
 	@Override
@@ -73,5 +75,4 @@ public class CharacterViewImpl extends ImageIcon implements Observer{
 			}
 		}
 	}
-	
 }

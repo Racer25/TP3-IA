@@ -2,11 +2,14 @@ package impl.view;
 
 
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import contract.controller.CaseController;
@@ -50,6 +53,7 @@ public class AdventureMapViewImpl extends JPanel implements AdventureMapView, Ob
 						(CaseViewImpl)casesView[i][j], 
 						character));
 				this.add((CaseViewImpl) casesView[i][j]);
+				
 				if(this.myMap.getCasesMap()[i][j].isSpawnPoint())
 				{
 					((CaseViewImpl) casesView[i][j]).setCharacterVisible(true);

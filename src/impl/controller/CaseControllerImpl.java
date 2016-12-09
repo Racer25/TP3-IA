@@ -9,6 +9,7 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 
 import contract.controller.CaseController;
@@ -36,7 +37,7 @@ public class CaseControllerImpl implements CaseController, Observer
 		this.maCaseView = maCaseview;
 		this.character = character;
 		this.adventureMap = adventureMap;
-		this.characterView = characterView;
+		this.characterView = characterView;		
 		
 		((CaseMapImpl) maCase).addObserver(this);
 		character.addObserver(this);
@@ -69,7 +70,7 @@ public class CaseControllerImpl implements CaseController, Observer
 						System.out.println("ChangeRef(" + this.adventureMap.getChangeReference()[0] + ";"
 								+ adventureMap.getChangeReference()[1] + ")");
 						System.out.println("////////////////////////////////////////////");
-
+						
 						((CaseViewImpl) maCaseView).setCharacterVisible(true);
 						if (maCase.isPortalPoint())
 						{

@@ -53,7 +53,7 @@ public class CaseViewImpl extends JPanel implements CaseView
 		this.characterView = characterView;
 		this.setBackground(Color.WHITE);
 		this.setSize(50, 50);
-		this.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));	
+		this.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));			
 		this.label = new JLabel(this.characterView);
 		this.label.setVisible(false);
 		this.add(label);
@@ -151,6 +151,8 @@ public class CaseViewImpl extends JPanel implements CaseView
 	public void setCharacterVisible(boolean visible)
 	{
 		label.setVisible(visible);
+		Image newimg = ((CharacterViewImpl) label.getIcon()).getImage().getScaledInstance(this.getWidth()/2, this.getWidth()-10,  java.awt.Image.SCALE_SMOOTH);
+		characterView.setImage(newimg);
 	}
 	
 	public void setMonstruous(boolean monstruous) {
