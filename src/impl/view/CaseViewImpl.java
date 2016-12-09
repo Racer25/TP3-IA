@@ -49,6 +49,7 @@ public class CaseViewImpl extends JPanel implements CaseView
 		this.monstruous = caseMap.isMonstruous();
 		this.portal = caseMap.isPortalPoint();
 		this.windy = caseMap.isWindy();
+		this.putrid = caseMap.isPutrid();
 		this.characterView = characterView;
 		this.setBackground(Color.WHITE);
 		this.setSize(50, 50);
@@ -67,7 +68,26 @@ public class CaseViewImpl extends JPanel implements CaseView
 		super.paintComponent(g);
 		Image background = null;
 		try {
-			if(windy)
+			if(windy&&putrid)
+			{
+				if(monstruous)
+				{
+					background = ImageIO.read(new File("img/zombiewindputrid.jpg"));
+				}
+				else if(fall)
+				{
+					background = ImageIO.read(new File("img/fallwindputrid.jpg"));
+				}
+				else if(portal)
+				{
+					background = ImageIO.read(new File("img/portalwindputrid.jpg"));
+				}
+				else
+				{
+					background = ImageIO.read(new File("img/bedrockwindputrid.jpg"));
+				}
+			}
+			else if(windy)
 			{
 				if(monstruous)
 				{
@@ -75,7 +95,7 @@ public class CaseViewImpl extends JPanel implements CaseView
 				}
 				else if(fall)
 				{
-					background = ImageIO.read(new File("img/fall.jpg"));
+					background = ImageIO.read(new File("img/fallwind.jpg"));
 				}
 				else if(portal)
 				{
@@ -84,6 +104,25 @@ public class CaseViewImpl extends JPanel implements CaseView
 				else
 				{
 					background = ImageIO.read(new File("img/bedrockwind.jpg"));
+				}
+			}
+			else if(putrid)
+			{
+				if(monstruous)
+				{
+					background = ImageIO.read(new File("img/zombieputrid.jpg"));
+				}
+				else if(fall)
+				{
+					background = ImageIO.read(new File("img/fallputrid.jpg"));
+				}
+				else if(portal)
+				{
+					background = ImageIO.read(new File("img/portalputrid.jpg"));
+				}
+				else
+				{
+					background = ImageIO.read(new File("img/bedrockputrid.jpg"));
 				}
 			}
 			else if(monstruous)
