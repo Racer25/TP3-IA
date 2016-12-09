@@ -56,173 +56,180 @@ public class CharacterImpl extends Observable implements Character, Runnable
 	@Override
 	public void run()
 	{
-		boolean consultation = consultPrologFile();
+		//Consult the prolog file (just once)
+		consultPrologFile();
 		while(true)
 		{
-			//Actualisation evenry 0.1 second
-			try
-			{
-				Thread.sleep(100);
-			} 
-			catch (InterruptedException e)
-			{
-				e.printStackTrace();
-			}
+			//Actualisation every 0.1 second
+			wait(100);
 			while(this.alive && this.active && !this.levelComplete)
 			{
-				try
-				{
-					Thread.sleep(200);
-				} 
-				catch (InterruptedException e)
-				{
-					e.printStackTrace();
-				}
-				//MAJ case actuelle
-				updateCurrentCase();
+				//Actualisation frequency
+				wait(200);
 				
+				//Observe my environnement
+				ObserveMyCase();
+				
+				//Am I arrived??
 				if(this.currentCase.isPortalPoint())
 				{
 					this.setLevelComplete(true);
-					System.out.println("C'est le portail !!!! *********************************");
+					System.out.println("The exit, finally!!");
 				}
+				//I'm not arrived...
 				else
 				{
+					//Send current case informations to prolog
+					updateInternalStateInProlog();					
 					
-					//Envoie des informations à prolog
-					System.out.println("Depuis java:");
-					System.out.println("BordureDroite: "+!this.currentCase.getPossibleDirections().get(DirectionEnum.RIGHT));
-					System.out.println("BordureGauche: "+!this.currentCase.getPossibleDirections().get(DirectionEnum.LEFT));
-					System.out.println("BordureHaut: "+!this.currentCase.getPossibleDirections().get(DirectionEnum.UP));
-					System.out.println("BordureBas: "+!this.currentCase.getPossibleDirections().get(DirectionEnum.DOWN)+"\n");
-			
-					Query internalStateQuery = new Query(new Compound("update_internal_state", new Term[] 
-							{
-									new org.jpl7.Integer(this.currentCase.getCoords()[0]), 
-									new org.jpl7.Integer(this.currentCase.getCoords()[1]),
-									new Atom(Boolean.toString(this.currentCase.isPutrid())),
-									new Atom(Boolean.toString(this.currentCase.isWindy())),
-									new Atom(Boolean.toString(!this.currentCase.getPossibleDirections().get(DirectionEnum.RIGHT))),
-									new Atom(Boolean.toString(!this.currentCase.getPossibleDirections().get(DirectionEnum.LEFT))),
-									new Atom(Boolean.toString(!this.currentCase.getPossibleDirections().get(DirectionEnum.UP))),
-									new Atom(Boolean.toString(!this.currentCase.getPossibleDirections().get(DirectionEnum.DOWN)))
-							}));
-					boolean updateInternalState=internalStateQuery.hasSolution();
-					internalStateQuery.close();
+					//Obtain a list of actions (1 integer=1 action) by searching the best way
+					//to win points
+					List<Integer> actions=chooseActionsToRealiseFromPrologState();
 					
-					
-					//Recuperation des actions a realiser
-					List<Integer> actions=new ArrayList<Integer>();
-					Query q = new Query(new Compound("takeDecisions", new Term[] { new Variable("Reponse")}));
-
-					System.out.println("Envoi de requête takeDecisions");
-					while(q.hasMoreSolutions())
-					{
-						Map<String, Term> actionList = q.nextSolution();
-						for (Term action : actionList.get("Reponse").args()) 
-						{
-							if(action.isInteger())
-							{
-								if(!action.toString().equals("'[]'"))
-								{
-									actions.add(Integer.valueOf(action.toString()));
-								    System.out.println("ajout de l'action: "+action);
-								}
-							}
-							//format du dernier terme de la liste: '[|]'(4, '[]')
-							else if(!action.toString().equals("'[]'"))
-							{
-								String maString=action.toString().substring(6, action.toString().length());
-								actions.add(transformToInteger(maString));
-								System.out.println("ajout de l'action: "+transformToInteger(maString));
-							}
-						}
-					}
-					q.close();
-		
-					/*TEST
-					List<Integer> actions=new ArrayList<Integer>();
-					actions.add(4);
-					actions.add(3);
-					actions.add(2);
-					actions.add(2);
-					actions.add(6);
-					actions.add(2);
-					*/
-					//Realisation des actions tant qu'il est vivant
-					int k=0;
-					while(k<actions.size() && this.alive && !this.levelComplete && this.active)
-					{
-						System.out.println("action: "+actions.get(k));
-						switch (actions.get(k)) 
-						{
-				            case 1:
-				            	System.out.println("Haut");
-				            	this.setOrientation(OrientationEnum.UP);
-				            	this.effectorUp.doIt();
-				            	break;
-				            case 2:
-				            	System.out.println("Droite");
-				            	this.setOrientation(OrientationEnum.RIGHT);
-				            	this.effectorRight.doIt();
-				                break;
-				            case 3:
-				            	System.out.println("Down");
-				            	this.setOrientation(OrientationEnum.DOWN);
-				            	this.effectorDown.doIt();
-				            	break;
-				            case 4:
-				            	System.out.println("Gauche");
-				            	this.setOrientation(OrientationEnum.LEFT);
-				            	this.effectorLeft.doIt();
-				                break;
-				            case 5:
-								System.out.println("CaillouHaut");
-								this.setOrientation(OrientationEnum.UP);
-								this.effectorStone.doIt();
-								break;
-				            case 6:
-								System.out.println("CaillouDroite");
-								this.setOrientation(OrientationEnum.RIGHT);
-								this.effectorStone.doIt();
-								break;
-				            case 7:
-								System.out.println("CaillouBas");
-								this.setOrientation(OrientationEnum.DOWN);
-								this.effectorStone.doIt();
-								break;
-				            case 8:
-								System.out.println("CaillouGauche");
-								this.setOrientation(OrientationEnum.LEFT);
-								this.effectorStone.doIt();
-								break;
-				            default: 
-				            	System.out.println("Erreur dans l'entier retourné par prolog");
-				                break;
-			            }
-						try
-						{
-							Thread.sleep(200);
-						} catch (InterruptedException e)
-						{
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						k++;
-					}
-					//this.effectorUp.doIt();
-					//this.effectorStone.doIt();
+					//Do the actions
+					realiseActions(actions);
 				}
 			}
 
 		}
 	}
 	
-	public boolean consultPrologFile() {
+	public void consultPrologFile() {
 		Query q1=new Query("consult", new Term[]{new Atom("Etat_Interne/ForetEnchantee.pl")});
-		return q1.hasSolution();
+		q1.hasSolution();
 	}
 	
+
+	private void ObserveMyCase()
+	{
+		this.currentCase.setPortalPoint((Boolean) this.sensorLight.answer());
+		this.currentCase.setPutrid((Boolean) this.sensorPutrid.answer());
+		this.currentCase.setWindy((Boolean) this.sensorWindy.answer());
+		this.currentCase.setPossibleDirections((HashMap<DirectionEnum, Boolean>) this.sensorDirections.answer());
+	}
+	
+	public void updateInternalStateInProlog()
+	{
+		//Envoie des informations à prolog
+		Query internalStateQuery = new Query(new Compound("update_internal_state", new Term[] 
+				{
+						new org.jpl7.Integer(this.currentCase.getCoords()[0]), 
+						new org.jpl7.Integer(this.currentCase.getCoords()[1]),
+						new Atom(Boolean.toString(this.currentCase.isPutrid())),
+						new Atom(Boolean.toString(this.currentCase.isWindy())),
+						new Atom(Boolean.toString(!this.currentCase.getPossibleDirections().get(DirectionEnum.RIGHT))),
+						new Atom(Boolean.toString(!this.currentCase.getPossibleDirections().get(DirectionEnum.LEFT))),
+						new Atom(Boolean.toString(!this.currentCase.getPossibleDirections().get(DirectionEnum.UP))),
+						new Atom(Boolean.toString(!this.currentCase.getPossibleDirections().get(DirectionEnum.DOWN)))
+				}));
+		internalStateQuery.hasSolution();
+		internalStateQuery.close();
+	}
+	
+	public List<Integer> chooseActionsToRealiseFromPrologState()
+	{
+		List<Integer> actions=new ArrayList<Integer>();
+		
+		Query q = new Query(new Compound("takeDecisions", new Term[] { new Variable("Reponse")}));
+
+		System.out.println("Envoi de requête takeDecisions");
+		while(q.hasMoreSolutions())
+		{
+			Map<String, Term> actionList = q.nextSolution();
+			for (Term action : actionList.get("Reponse").args()) 
+			{
+				if(action.isInteger())
+				{
+					if(!action.toString().equals("'[]'"))
+					{
+						actions.add(Integer.valueOf(action.toString()));
+					    System.out.println("ajout de l'action: "+action);
+					}
+				}
+				//format du certains termes de la liste: '[|]'(4, '[]').....
+				else if(!action.toString().equals("'[]'"))
+				{
+					String maString=action.toString().substring(6, action.toString().length());
+					actions.add(transformToInteger(maString));
+					System.out.println("ajout de l'action: "+transformToInteger(maString));
+				}
+			}
+		}
+		q.close();
+		return actions;
+	}
+	
+	private void realiseActions(List<Integer> actions)
+	{
+		int k=0;
+		while(k<actions.size() && this.alive && !this.levelComplete && this.active)
+		{
+			System.out.println("action: "+actions.get(k));
+			switch (actions.get(k)) 
+			{
+	            case 1:
+	            	System.out.println("Haut");
+	            	this.setOrientation(OrientationEnum.UP);
+	            	this.effectorUp.doIt();
+	            	break;
+	            case 2:
+	            	System.out.println("Droite");
+	            	this.setOrientation(OrientationEnum.RIGHT);
+	            	this.effectorRight.doIt();
+	                break;
+	            case 3:
+	            	System.out.println("Down");
+	            	this.setOrientation(OrientationEnum.DOWN);
+	            	this.effectorDown.doIt();
+	            	break;
+	            case 4:
+	            	System.out.println("Gauche");
+	            	this.setOrientation(OrientationEnum.LEFT);
+	            	this.effectorLeft.doIt();
+	                break;
+	            case 5:
+					System.out.println("CaillouHaut");
+					this.setOrientation(OrientationEnum.UP);
+					this.effectorStone.doIt();
+					break;
+	            case 6:
+					System.out.println("CaillouDroite");
+					this.setOrientation(OrientationEnum.RIGHT);
+					this.effectorStone.doIt();
+					break;
+	            case 7:
+					System.out.println("CaillouBas");
+					this.setOrientation(OrientationEnum.DOWN);
+					this.effectorStone.doIt();
+					break;
+	            case 8:
+					System.out.println("CaillouGauche");
+					this.setOrientation(OrientationEnum.LEFT);
+					this.effectorStone.doIt();
+					break;
+	            default: 
+	            	System.out.println("Erreur dans l'entier retourné par prolog");
+	                break;
+            }
+			wait(200);
+			k++;
+		}
+	}
+	
+	private Integer transformToInteger(String maString)
+	{
+		Integer res= null;
+		try
+		{
+			res=Integer.valueOf(maString);
+		}
+		catch(NumberFormatException e)
+		{
+			return transformToInteger(maString.substring(0, maString.length()-1));
+		}
+		return res;
+	}
+
 	public Boolean isAlive()
 	{
 		return alive;
@@ -382,14 +389,6 @@ public class CharacterImpl extends Observable implements Character, Runnable
 	{
 		this.sensorDirections = sensorDirections;
 	}
-	
-	private void updateCurrentCase()
-	{
-		this.currentCase.setPortalPoint((Boolean) this.sensorLight.answer());
-		this.currentCase.setPutrid((Boolean) this.sensorPutrid.answer());
-		this.currentCase.setWindy((Boolean) this.sensorWindy.answer());
-		this.currentCase.setPossibleDirections((HashMap<DirectionEnum, Boolean>) this.sensorDirections.answer());
-	}
 
 	public Boolean isActive()
 	{
@@ -403,17 +402,15 @@ public class CharacterImpl extends Observable implements Character, Runnable
 		setChanged();
 	}
 	
-	private Integer transformToInteger(String maString)
+	private void wait(int timeInMilleseconds)
 	{
-		Integer res= null;
 		try
 		{
-			res=Integer.valueOf(maString);
-		}
-		catch(NumberFormatException e)
+			Thread.sleep(timeInMilleseconds);
+		} 
+		catch (InterruptedException e)
 		{
-			return transformToInteger(maString.substring(0, maString.length()-1));
+			e.printStackTrace();
 		}
-		return res;
 	}
 }
