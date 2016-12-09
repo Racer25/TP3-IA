@@ -93,18 +93,18 @@ public class LifeViewImpl extends JPanel implements LifeView, Observer
 								part3.setBackground(Color.YELLOW);
 								part4.setBackground(Color.WHITE);
 		
-								Thread.sleep(500);
+								Thread.sleep(200);
 		
 								part1.setBackground(Color.ORANGE);
 								part2.setBackground(Color.ORANGE);
 								part3.setBackground(Color.WHITE);
 		
-								Thread.sleep(500);
+								Thread.sleep(200);
 		
 								part1.setBackground(Color.RED);
 								part2.setBackground(Color.WHITE);
 		
-								Thread.sleep(500);
+								Thread.sleep(200);
 		
 								part1.setBackground(Color.WHITE);
 							} 
@@ -116,7 +116,7 @@ public class LifeViewImpl extends JPanel implements LifeView, Observer
 					};
 					new Thread (die).start();
 					try {
-						Thread.sleep(1500);
+						Thread.sleep(600);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

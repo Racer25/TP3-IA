@@ -23,10 +23,10 @@ update_internal_state(CooXCurrentCase, CooYCurrentCase, Putrid, Windy, BordureDr
 	%Ajout de la case actuelle dans les cases parcourues
 	asserta(caseCovered(CooXCurrentCase, CooYCurrentCase)),
 	(currentCase(_,_)
-	->  retract(currentCase(_,_))
+	->  retractall(currentCase(_,_))
 	;   !),
 	(no_risk(CooXCurrentCase,CooYCurrentCase)
-	->  retract(no_risk(CooXCurrentCase,CooYCurrentCase))
+	->  retractall(no_risk(CooXCurrentCase,CooYCurrentCase))
 	;   !),
 	asserta(currentCase(CooXCurrentCase, CooYCurrentCase)),
 
@@ -61,31 +61,31 @@ update_internal_state(CooXCurrentCase, CooYCurrentCase, Putrid, Windy, BordureDr
 	    VoisinBas is CooXCurrentCase+1,
 	    VoisinGauche is CooYCurrentCase-1,
 	    (	riskMonstruous(VoisinHaut,CooYCurrentCase)
-	    ->	retract(riskMonstruous(VoisinHaut,CooYCurrentCase)),
+	    ->	retractall(riskMonstruous(VoisinHaut,CooYCurrentCase)),
 	        update_risk_not_putrid_case(VoisinHaut, CooYCurrentCase)
 	    ;	!),
 	    (	 riskMonstruous(CooXCurrentCase, VoisinDroite)
-	    ->	retract( riskMonstruous(CooXCurrentCase, VoisinDroite)),
+	    ->	retractall( riskMonstruous(CooXCurrentCase, VoisinDroite)),
 	        update_risk_not_putrid_case(CooXCurrentCase, VoisinDroite)
 	    ;	!),
 	    (	riskMonstruous(VoisinBas, CooYCurrentCase)
-	    ->	retract( riskMonstruous(VoisinBas, CooYCurrentCase)),
+	    ->	retractall( riskMonstruous(VoisinBas, CooYCurrentCase)),
 	        update_risk_not_putrid_case(VoisinBas, CooYCurrentCase)
 	    ;	!),
 	    (	riskMonstruous(CooXCurrentCase, VoisinGauche)
-	    ->	retract(riskMonstruous(CooXCurrentCase, VoisinGauche)),
+	    ->	retractall(riskMonstruous(CooXCurrentCase, VoisinGauche)),
 	        update_risk_not_putrid_case(CooXCurrentCase, VoisinGauche)
 	    ;	!)),
 
 	%Si la case actuelle avait des risques ou etait monstrueuse alors on supprime ces risques (car etant sur cette case et n'etant pas mort cette case n'etait pas a risque.
 	(   riskMonstruous(CooXCurrentCase, CooYCurrentCase)
-	->  retract(riskMonstruous(CooXCurrentCase, CooYCurrentCase))
+	->  retractall(riskMonstruous(CooXCurrentCase, CooYCurrentCase))
 	;   !),
 	(   riskFall(CooXCurrentCase, CooYCurrentCase)
-	->  retract(riskFall(CooXCurrentCase, CooYCurrentCase))
+	->  retractall(riskFall(CooXCurrentCase, CooYCurrentCase))
 	;   !),
 	(   monstruous(CooXCurrentCase,CooYCurrentCase)
-	->  retract(monstruous(CooXCurrentCase,CooYCurrentCase))
+	->  retractall(monstruous(CooXCurrentCase,CooYCurrentCase))
 	;   !),
 
 	%Ajout de la case si la case est venteuse, si celle-ci a des voisins et qu'ils n'ont pas encore ete d�couverts alors elle lance update_risk_windy_case.
@@ -118,19 +118,19 @@ update_internal_state(CooXCurrentCase, CooYCurrentCase, Putrid, Windy, BordureDr
 	    VoisinBas is CooXCurrentCase+1,
 	    VoisinGauche is CooYCurrentCase-1,
 	    (	riskFall(VoisinHaut,CooYCurrentCase)
-	    ->	retract(riskFall(VoisinHaut,CooYCurrentCase)),
+	    ->	retractall(riskFall(VoisinHaut,CooYCurrentCase)),
 	        update_risk_not_windy_case(VoisinHaut, CooYCurrentCase)
 	    ;	!),
 	    (	 riskFall(CooXCurrentCase, VoisinDroite)
-	    ->	retract( riskFall(CooXCurrentCase, VoisinDroite)),
+	    ->	retractall( riskFall(CooXCurrentCase, VoisinDroite)),
 	        update_risk_not_windy_case(CooXCurrentCase, VoisinDroite)
 	    ;	!),
 	    (	riskFall(VoisinBas, CooYCurrentCase)
-	    ->	retract( riskFall(VoisinBas, CooYCurrentCase)),
+	    ->	retractall( riskFall(VoisinBas, CooYCurrentCase)),
 	        update_risk_not_windy_case(VoisinBas, CooYCurrentCase)
 	    ;	!),
 	    (	riskFall(CooXCurrentCase, VoisinGauche)
-	    ->	retract(riskFall(CooXCurrentCase, VoisinGauche)),
+	    ->	retractall(riskFall(CooXCurrentCase, VoisinGauche)),
 	        update_risk_not_windy_case(CooXCurrentCase, VoisinGauche)
 	    ;	!)),
 
@@ -329,16 +329,16 @@ detection_monster(CooX, CooY):-
 	;   !),
 	(   Compteur==1
 	->  (riskMonstruous(VoisinHaut,CooY)
-	    ->	retract(riskMonstruous(VoisinHaut,CooY)),
+	    ->	retractall(riskMonstruous(VoisinHaut,CooY)),
 		asserta(monstruous(VoisinHaut, CooY))
 	    ;	(riskMonstruous(CooX, VoisinDroite)
-		->  retract(riskMonstruous(CooX, VoisinDroite)),
+		->  retractall(riskMonstruous(CooX, VoisinDroite)),
 		    asserta(monstruous(CooX, VoisinDroite))
 		;   (riskMonstruous(VoisinBas, CooY)
-		      ->  retract(riskMonstruous(VoisinBas,CooY)),
+		      ->  retractall(riskMonstruous(VoisinBas,CooY)),
 			  asserta(monstruous(VoisinBas,CooY))
 		      ;	  (riskMonstruous(CooX, VoisinGauche)
-			  ->  retract(riskMonstruous(CooX, VoisinGauche)),
+			  ->  retractall(riskMonstruous(CooX, VoisinGauche)),
 			      asserta(monstruous(CooX, VoisinGauche))
 			  ;   !))))
 	;   !).
@@ -395,16 +395,16 @@ detection_fall(CooX, CooY):-
 	;   !),
 	(   Compteur==1
 	->  (riskFall(VoisinHaut,CooY)
-	    ->	retract(riskFall(VoisinHaut,CooY)),
+	    ->	retractall(riskFall(VoisinHaut,CooY)),
 		asserta(fall(VoisinHaut, CooY))
 	    ;	(riskFall(CooX, VoisinDroite)
-		->  retract(riskFall(CooX, VoisinDroite)),
+		->  retractall(riskFall(CooX, VoisinDroite)),
 		    asserta(fall(CooX, VoisinDroite))
 		;   (riskFall(VoisinBas, CooY)
-		      ->  retract(riskFall(VoisinBas,CooY)),
+		      ->  retractall(riskFall(VoisinBas,CooY)),
 			  asserta(fall(VoisinBas,CooY))
 		      ;	  (riskFall(CooX, VoisinGauche)
-			  ->  retract(riskFall(CooX, VoisinGauche)),
+			  ->  retractall(riskFall(CooX, VoisinGauche)),
 			      asserta(fall(CooX, VoisinGauche))
 			  ;   !))))
 	;   !).
@@ -426,12 +426,8 @@ expand(Parent,PathsoFar,ChildStates):-
 
 caseCovered2((X,Y)):-caseCovered(X,Y).
 
-no_risk2((X,Y)):-no_risk(X,Y).
-
 operator(Parent,Child):-
-writeln("Parent: "+Parent+", Child: "+Child),
  voisin(Parent, Child),
- %(caseUnknownNotRisky(Child);caseCovered2(Child))
  (caseUnknownNotRisky(Child)->
       !;
       caseCovered2(Child)).
@@ -451,15 +447,10 @@ searchSureWay([[State|Path]|RestFSet],Solution):-
 -> !;
 false),
  \+([[State|Path]|RestFSet]=[]),
- writeln("CONTINUE ESSAI"),
  caseCovered2(State),
- writeln("CONTINUE ;)"),
- writeln([[State|Path]|RestFSet]),
  expand(State,[State|Path],ChildStates),
- writeln(ChildStates),
  \+(ChildStates=[]),
  prune_l(ChildStates,P_ChildStates),
- writeln(P_ChildStates),
  \+(P_ChildStates=[]),
  append(RestFSet,P_ChildStates,NewFSet),
  \+(NewFSet=[]),
@@ -467,13 +458,9 @@ false),
 
 %Je passe au traitement de la queue dans le cas ou �a coince
 searchSureWay([_|RestFSet],Solution):-
-(no_risk(_,_)
--> !;
-!,
-false),
- \+([_|RestFSet]=[]),
-	writeln("CA COINCE"),
-	\+([_|RestFSet]=[]),
+(no_risk(_,_)-> !;
+!,false),
+\+([_|RestFSet]=[]),
  searchSureWay(RestFSet,Solution).
 
 %%%%%%%%%%%%%%%%%%%
@@ -487,14 +474,14 @@ false),
 %searchNearestRiskMonstruous%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 expand2(Parent,PathsoFar,ChildStates):-
- findall([Child|PathsoFar],operator2(Parent,Child),ChildStates).
+ setof([Child|PathsoFar],operator2(Parent,Child),ChildStates).
 
 riskMonstruous2((X,Y)):-riskMonstruous(X,Y);monstruous(X,Y).
 
 operator2(Parent,Child):-
  voisin(Parent,Child),
- (   \+riskMonstruous2(Child)->
- caseCovered2(Child);!).
+ (riskMonstruous2(Child)->!;
+ caseCovered2(Child)).
 
 %Search the riskMonstruous the nearest
 %STOP criteria: si j'arrive sur une case riskMonstruous
@@ -508,17 +495,23 @@ searchNearestRiskMonstruous([[State|Path]|_],[State|Path]):-
 % et ajoute � Solution
 searchNearestRiskMonstruous([[State|Path]|RestFSet],Solution):-
 	writeln(2+State),
+	((riskMonstruous(_,_);monstruous(_,_))-> !;false),
  caseCovered2(State),
  writeln(State+"caseRisqueMonstruous non Trouvee"),
  expand2(State,[State|Path],ChildStates),
+ \+(ChildStates=[]),
  prune_l(ChildStates,P_ChildStates),
+ \+(P_ChildStates=[]),
  append(RestFSet,P_ChildStates,NewFSet),
+ \+(NewFSet=[]),
   writeln("Recherche dans: "+NewFSet),
  searchNearestRiskMonstruous(NewFSet,Solution).
 
 %Je passe au traitement de la queue dans le cas ou �a coince
 searchNearestRiskMonstruous([_|RestFSet],Solution):-
 	writeln(3),
+	((riskMonstruous(_,_);monstruous(_,_))-> !;false),
+	\+([_|RestFSet]=[]),
  searchNearestRiskMonstruous(RestFSet,Solution).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -535,21 +528,26 @@ searchNearestRiskMonstruous([_|RestFSet],Solution):-
 randomDirection(CooXCurrent, CooYCurrent,Liste2):-
 	writeln("RANDOOOOOOOOOOM"),
 	Liste=[(CooXCurrent,CooYCurrent)],
-	VoisinHaut is CooXCurrent-1,
-	VoisinDroite is CooYCurrent+1,
-	VoisinBas is CooXCurrent+1,
-	VoisinGauche is CooYCurrent-1,
-	(   (border(CooXCurrent, CooYCurrent, false, _, _, _), \+caseCovered(VoisinHaut, CooYCurrent))
-	    ->	append(Liste,[(VoisinHaut, CooYCurrent)],ListeInter)
-	    ;	(   (border(CooXCurrent, CooYCurrent, _, false, _, _), \+caseCovered(CooXCurrent, VoisinDroite))
-		->  append(Liste, [(CooXCurrent, VoisinDroite)], ListeInter)
-		;   (   (border(CooXCurrent, CooYCurrent, _, _, false, _), \+caseCovered(VoisinBas, CooYCurrent))
-		    ->  append(Liste, [(VoisinBas, CooYCurrent)], ListeInter)
-		    ;	(   (border(CooXCurrent, CooYCurrent, _, _, false, _), \+caseCovered(CooXCurrent, VoisinGauche))
-		        ->  append(Liste, [(CooXCurrent, VoisinGauche)], ListeInter)
-			;   voisin((CooXCurrent, CooYCurrent), (NewCooX, NewCooY)),
-			    append(Liste, [(NewCooX, NewCooY)],ListeInter))))),
-	Liste2=ListeInter.
+	setof((XChild, YChild),voisin((CooXCurrent,CooYCurrent), (XChild, YChild)),ListeVoisinsPossibles),
+	length(ListeVoisinsPossibles,Length),
+	random_between(0,Length,RandomIndex),
+	nth0(RandomIndex,ListeVoisinsPossibles,Direction),
+	append(Liste,[Direction],Liste2).
+	%VoisinHaut is CooXCurrent-1,
+	%VoisinDroite is CooYCurrent+1,
+	%VoisinBas is CooXCurrent+1,
+	%VoisinGauche is CooYCurrent-1,
+	%(   (border(CooXCurrent, CooYCurrent, false, _, _, _), \+caseCovered(VoisinHaut, CooYCurrent))
+	%    ->	append(Liste,[(VoisinHaut, CooYCurrent)],ListeInter)
+	%    ;	(   (border(CooXCurrent, CooYCurrent, _, false, _, _), \+caseCovered(CooXCurrent, VoisinDroite))
+	%	->  append(Liste, [(CooXCurrent, VoisinDroite)], ListeInter)
+	%	;   (   (border(CooXCurrent, CooYCurrent, _, _, false, _), \+caseCovered(VoisinBas, CooYCurrent))
+	%	    ->  append(Liste, [(VoisinBas, CooYCurrent)], ListeInter)
+	%	    ;	(   (border(CooXCurrent, CooYCurrent, _, _, false, _), \+caseCovered(CooXCurrent, VoisinGauche))
+	%	        ->  append(Liste, [(CooXCurrent, VoisinGauche)], ListeInter)
+	%		;   voisin((CooXCurrent, CooYCurrent), (NewCooX, NewCooY)),
+	%		    append(Liste, [(NewCooX, NewCooY)],ListeInter))))),
+	%Liste2=ListeInter.
 
 
 %%%%%%%%%%%%%%%%%%%%%

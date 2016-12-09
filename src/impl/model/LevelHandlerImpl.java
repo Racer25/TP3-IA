@@ -3,6 +3,7 @@ package impl.model;
 import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Random;
 
 import org.jpl7.Atom;
 import org.jpl7.Query;
@@ -103,8 +104,12 @@ public class LevelHandlerImpl implements LevelHandler, Observer
 	public void generateLevel()
 	{
 		int dim=this.level+2;
-		int nbFall=dim*dim*15/100;
-		int nbMonstruous=dim*dim*15/100;
+		
+		int taux1 = new Random().nextInt(4) + 8;
+		int taux2 = new Random().nextInt(4) + 8;
+		
+		int nbFall=dim*dim*taux1/100;
+		int nbMonstruous=dim*dim*taux2/100;
 		//Generate Map
 		this.generator.createMap(dim, nbFall, nbMonstruous);
 		/************************TEST************************/
