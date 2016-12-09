@@ -184,7 +184,7 @@ public class WindowImpl extends JFrame implements Window
 		right.add(actions);
 		right.add(faceView);
 		
-		
+		this.setMinimumSize(new Dimension(1000, 600));
 		this.setVisible(true);
 	
 	}
